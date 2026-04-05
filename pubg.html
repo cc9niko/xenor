@@ -8,7 +8,6 @@
         /* Ümumi tənzimləmələr */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        /* Smooth keçid üçün başlanğıc vəziyyəti */
         body { 
             background-color: #121212; 
             color: #ffffff; 
@@ -17,7 +16,6 @@
         }
         body.loaded { opacity: 1; }
 
-        /* Başlıq (Header) */
         header { 
             background-color: #1a1a1a; padding: 20px 50px; 
             display: flex; justify-content: space-between; align-items: center; 
@@ -28,15 +26,9 @@
         nav ul li a { color: #fff; text-decoration: none; font-size: 16px; transition: color 0.3s; cursor: pointer; }
         nav ul li a:hover { color: #ff4655; }
 
-        /* Səhifə Başlığı və ID Girişi */
-        .page-header { text-align: center; padding: 50px 20px 20px; }
+        .page-header { text-align: center; padding: 50px 20px 40px; }
         .page-header h1 { font-size: 36px; color: #f2a900; margin-bottom: 10px; text-transform: uppercase; }
-        .page-header p { color: #ccc; margin-bottom: 30px; font-size: 16px; }
-        
-        .id-input-box { background-color: #1e1e1e; max-width: 400px; margin: 0 auto 40px; padding: 20px; border-radius: 8px; border: 1px solid #333; }
-        .id-input-box label { display: block; text-align: left; margin-bottom: 10px; font-size: 14px; color: #aaa; }
-        .id-input-box input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #444; background-color: #121212; color: #fff; font-size: 16px; outline: none; }
-        .id-input-box input:focus { border-color: #f2a900; }
+        .page-header p { color: #ccc; font-size: 16px; }
 
         /* UC Paketləri */
         .packages-container { max-width: 1200px; margin: 0 auto 50px; padding: 0 20px; }
@@ -47,7 +39,7 @@
             text-align: center; padding: 30px 20px; transition: 0.3s; 
             border: 1px solid #333; display: flex; flex-direction: column; justify-content: space-between; 
         }
-        .card:hover { transform: translateY(-5px); border-color: #f2a900; box-shadow: 0 5px 15px rgba(242, 169, 0, 0.15); }
+        .card:hover { transform: translateY(-5px); border-color: #f2a900; box-shadow: 0 5px 15px rgba(242, 169, 0, 0.2); }
         
         .uc-amount { font-size: 32px; font-weight: bold; color: #f2a900; margin-bottom: 5px; }
         .uc-text { font-size: 14px; color: #aaa; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
@@ -60,82 +52,128 @@
         }
         .card:hover .buy-btn { background-color: #f2a900; color: #121212; }
 
-        /* Footer */
+        /* MODAL (Qaydalar Pəncərəsi) */
+        .modal {
+            display: none; 
+            position: fixed; z-index: 9999; 
+            left: 0; top: 0; width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #f2a900;
+            position: relative;
+            animation: modalFade 0.4s ease;
+        }
+        @keyframes modalFade { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+        
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #777; }
+        .close-modal:hover { color: #fff; }
+
+        .modal-h2 { color: #f2a900; margin-bottom: 15px; font-size: 22px; }
+        .rules-list { text-align: left; margin: 20px 0; color: #ddd; line-height: 1.6; }
+        .rules-list li { margin-bottom: 10px; list-style: none; display: flex; align-items: flex-start; gap: 10px; }
+        
+        .go-support-btn {
+            display: block;
+            background-color: #ff4655;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .go-support-btn:hover { background-color: #ff2d3d; transform: scale(1.02); }
+
         footer { background-color: #1a1a1a; text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 50px; }
         footer p { color: #777; font-size: 14px; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 15px; }
-        }
+        @media (max-width: 768px) { header { padding: 20px; } }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="index.html" class="logo transition-link">Glidox Shop</a>
+        <a href="index.html" class="logo">Glidox Shop</a>
         <nav>
             <ul>
-                <li><a href="index.html" class="transition-link">Geri Qayıt</a></li>
+                <li><a href="index.html">Geri Qayıt</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="page-header">
         <h1>PUBG Mobile UC</h1>
-        <p>Sürətli və etibarlı UC yükləməsi.</p>
-        
-        <div class="id-input-box">
-            <label for="playerId">PUBG Mobile Oyuncu ID-nizi daxil edin:</label>
-            <input type="text" id="playerId" placeholder="Məsələn: 5123456789">
-        </div>
+        <p>Sürətli və etibarlı UC yükləməsi üçün paket seçin.</p>
     </div>
 
     <section class="packages-container">
         <div class="grid">
-            <div class="card"><div><div class="uc-amount">10</div><div class="uc-text">UC</div><div class="price">0.80 AZN</div></div><button class="buy-btn">Satın Al</button></div>
-            <div class="card"><div><div class="uc-amount">60</div><div class="uc-text">UC</div><div class="price">2.00 AZN</div></div><button class="buy-btn">Satın Al</button></div>
-            <div class="card"><div><div class="uc-amount">325</div><div class="uc-text">UC</div><div class="price">9.20 AZN</div></div><button class="buy-btn">Satın Al</button></div>
-            <div class="card"><div><div class="uc-amount">660</div><div class="uc-text">UC</div><div class="price">17.00 AZN</div></div><button class="buy-btn">Satın Al</button></div>
-            <div class="card"><div><div class="uc-amount">1800</div><div class="uc-text">UC</div><div class="price">44.00 AZN</div></div><button class="buy-btn">Satın Al</button></div>
-            <div class="card"><div><div class="uc-amount">3850</div><div class="uc-text">UC</div><div class="price">84.00 AZN</div></div><button class="buy-btn">Satın Al</button></div>
-            <div class="card"><div><div class="uc-amount">8100</div><div class="uc-text">UC</div><div class="price">163.00 AZN</div></div><button class="buy-btn">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">10</div><div class="uc-text">UC</div><div class="price">0.80 AZN</div></div><button class="buy-btn" onclick="showRules('10 UC')">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">60</div><div class="uc-text">UC</div><div class="price">2.00 AZN</div></div><button class="buy-btn" onclick="showRules('60 UC')">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">325</div><div class="uc-text">UC</div><div class="price">9.20 AZN</div></div><button class="buy-btn" onclick="showRules('325 UC')">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">660</div><div class="uc-text">UC</div><div class="price">17.00 AZN</div></div><button class="buy-btn" onclick="showRules('660 UC')">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">1800</div><div class="uc-text">UC</div><div class="price">44.00 AZN</div></div><button class="buy-btn" onclick="showRules('1800 UC')">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">3850</div><div class="uc-text">UC</div><div class="price">84.00 AZN</div></div><button class="buy-btn" onclick="showRules('3850 UC')">Satın Al</button></div>
+            <div class="card"><div><div class="uc-amount">8100</div><div class="uc-text">UC</div><div class="price">163.00 AZN</div></div><button class="buy-btn" onclick="showRules('8100 UC')">Satın Al</button></div>
         </div>
     </section>
+
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeRules()">&times;</span>
+            <h2 class="modal-h2">Sifariş Qaydaları</h2>
+            <p id="selectedPackage" style="color: #ccc; margin-bottom: 10px;"></p>
+            
+            <div class="rules-list">
+                <li><span>📍</span> Dəstək xidmətinə keçid etdikdən sonra nə qədər UC almaq istədiyinizi bildirin.</li>
+                <li><span>🆔</span> Oyunçu ID-nizi (UID) mesajda qeyd edin.</li>
+                <li><span>📸</span> Ödəniş etdikdən sonra çekin (qəbzin) şəklini bura göndərin.</li>
+            </div>
+
+            <p style="font-size: 12px; color: #888;">* Sifarişiniz operator tərəfindən anında emal olunacaq.</p>
+            
+            <a href="destek.html" class="go-support-btn">Dəstək xidmətinə keçid et</a>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2026 Glidox Shop. Bütün hüquqlar qorunur.</p>
     </footer>
 
     <script>
-        // Səhifə tam yüklənəndə üzə çıxması
         window.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("loaded");
         });
 
-        // Geri qayıt düyməsi üçün smooth keçid
-        document.querySelectorAll('.transition-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetUrl = this.getAttribute('href');
-                document.body.style.opacity = '0';
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 600);
-            });
-        });
+        const modal = document.getElementById("rulesModal");
+        const packageText = document.getElementById("selectedPackage");
 
-        // Satın al düyməsinə klik funksiyası (Nümunə)
-        document.querySelectorAll('.buy-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = document.getElementById('playerId').value;
-                if(!id) {
-                    alert("Zəhmət olmasa PUBG ID-nizi daxil edin!");
-                } else {
-                    alert(id + " ID-si üçün sifariş qəbul edildi!");
-                }
-            });
-        });
+        function showRules(packageName) {
+            packageText.innerText = "Seçilən paket: " + packageName;
+            modal.style.display = "flex";
+        }
+
+        function closeRules() {
+            modal.style.display = "none";
+        }
+
+        // Modal kənarına basanda bağlansın
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeRules();
+            }
+        }
     </script>
 
 </body>
