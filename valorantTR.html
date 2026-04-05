@@ -52,27 +52,6 @@
         .game-hero span { color: var(--primary); text-shadow: 0 0 15px rgba(255, 70, 85, 0.5); }
 
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        
-        .input-group {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        .input-group label { display: block; margin-bottom: 15px; font-family: 'Orbitron', sans-serif; color: var(--text-dim); }
-        .input-group input {
-            width: 100%; max-width: 400px;
-            padding: 15px;
-            background: #000;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 18px;
-            font-family: 'Orbitron', sans-serif;
-        }
 
         .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         
@@ -97,9 +76,52 @@
             text-decoration: none; text-align: center; border-radius: 8px;
             font-family: 'Orbitron', sans-serif; font-weight: bold;
             transition: 0.4s; box-shadow: 0 0 20px rgba(255, 70, 85, 0.3);
-            border: 1px solid var(--primary);
+            border: 1px solid var(--primary); cursor: pointer;
         }
         .buy-now-btn:hover { background: transparent; color: var(--primary); transform: scale(1.05); }
+
+        /* MODAL STILI */
+        .modal {
+            display: none; 
+            position: fixed; z-index: 9999; 
+            left: 0; top: 0; width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.9);
+            backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #161616;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid var(--primary);
+            position: relative;
+            animation: modalFade 0.4s ease-out;
+        }
+        @keyframes modalFade { from {opacity: 0; transform: scale(0.95);} to {opacity: 1; transform: scale(1);} }
+        
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #555; }
+        .close-modal:hover { color: #fff; }
+
+        .modal-h2 { font-family: 'Orbitron'; color: var(--primary); margin-bottom: 20px; }
+        .rules-list { text-align: left; margin: 25px 0; background: #000; padding: 20px; border-radius: 8px; border-left: 3px solid var(--primary); }
+        .rules-list p { margin-bottom: 12px; font-size: 14px; color: #ddd; line-height: 1.6; }
+
+        .support-btn {
+            display: block;
+            background: var(--primary);
+            color: white;
+            padding: 16px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            font-family: 'Orbitron';
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .support-btn:hover { filter: brightness(1.2); letter-spacing: 1px; }
 
         footer { text-align: center; padding: 40px; color: #555; font-size: 13px; }
     </style>
@@ -113,43 +135,54 @@
 
     <div class="game-hero">
         <h1>VALORANT <span>TR VP</span></h1>
-        <p style="color: #ccc; margin-top: 10px;">Türkiyə regionu üçün ən ucuz VP yükləmə xidməti</p>
+        <p style="color: #ccc; margin-top: 10px;">Türkiyə regionu üçün uyğun paketi seçin</p>
     </div>
 
     <div class="container">
-        <div class="input-group">
-            <label>RIOT ID (Məs: Glidox#TR1)</label>
-            <input type="text" placeholder="Riot Name #Tag" id="riot-id-tr">
-        </div>
-
         <div class="price-grid">
-            <div class="price-card" onclick="selectCard(this)">
+            <div class="price-card" onclick="selectCard(this, '375 VP')">
                 <span class="item-amount">375 VP</span>
                 <span class="price-tag">6.00 AZN</span>
             </div>
-            <div class="price-card" onclick="selectCard(this)">
+            <div class="price-card" onclick="selectCard(this, '825 VP')">
                 <span class="item-amount">825 VP</span>
                 <span class="price-tag">12.00 AZN</span>
             </div>
-            <div class="price-card" onclick="selectCard(this)">
+            <div class="price-card" onclick="selectCard(this, '1700 VP')">
                 <span class="item-amount">1700 VP</span>
                 <span class="price-tag">23.00 AZN</span>
             </div>
-            <div class="price-card" onclick="selectCard(this)">
+            <div class="price-card" onclick="selectCard(this, '2925 VP')">
                 <span class="item-amount">2925 VP</span>
                 <span class="price-tag">38.00 AZN</span>
             </div>
-            <div class="price-card" onclick="selectCard(this)">
+            <div class="price-card" onclick="selectCard(this, '4325 VP')">
                 <span class="item-amount">4325 VP</span>
                 <span class="price-tag">55.50 AZN</span>
             </div>
-            <div class="price-card" onclick="selectCard(this)">
+            <div class="price-card" onclick="selectCard(this, '8900 VP')">
                 <span class="item-amount">8900 VP</span>
                 <span class="price-tag">109.00 AZN</span>
             </div>
         </div>
 
-        <a href="#" class="buy-now-btn" onclick="order()">SİFARİŞİ TAMAMLA</a>
+        <button class="buy-now-btn" onclick="openModal()">SİFARİŞİ TAMAMLA</button>
+    </div>
+
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 class="modal-h2">TR VP SİFARİŞİ</h2>
+            
+            <div class="rules-list">
+                <p>🛒 <b>Seçilən Paket:</b> <span id="modal-pkg" style="color: var(--primary); font-weight: bold;">Seçilməyib</span></p>
+                <p>💬 Dəstək xidmətinə seçdiyiniz paketi bildirin.</p>
+                <p>🎮 Riot ID (Məs: Glidox#TR1) məlumatınızı göndərin.</p>
+                <p>🧾 Ödəniş etdikdən sonra qəbzin şəklini paylaşın.</p>
+            </div>
+
+            <a href="destek.html" class="support-btn">Dəstək xidmətinə keç</a>
+        </div>
     </div>
 
     <footer>&copy; 2026 GLIDOX SHOP - Bütün hüquqlar qorunur</footer>
@@ -157,28 +190,31 @@
     <script>
         window.addEventListener("DOMContentLoaded", () => document.body.classList.add("loaded"));
 
-        function selectCard(element) {
+        let selectedVP = "";
+
+        function selectCard(element, name) {
             document.querySelectorAll('.price-card').forEach(card => card.classList.remove('active'));
             element.classList.add('active');
+            selectedVP = name;
         }
 
-        function order() {
-            const userId = document.getElementById('riot-id-tr').value;
-            const selectedCard = document.querySelector('.price-card.active');
-            
-            if(!userId) {
-                alert("Zəhmət olmasa Riot ID daxil edin!");
-                return;
-            }
-            if(!selectedCard) {
+        function openModal() {
+            if(!selectedVP) {
                 alert("Zəhmət olmasa bir paket seçin!");
                 return;
             }
-            
-            const amount = selectedCard.querySelector('.item-amount').innerText;
-            const price = selectedCard.querySelector('.price-tag').innerText;
-            
-            alert(`Valorant Türkiyə Sifarişi!\nID: ${userId}\nPaket: ${amount}\nQiymət: ${price}\n\nYaxın zamanda sizinlə əlaqə saxlanılacaq.`);
+            document.getElementById('modal-pkg').innerText = selectedVP;
+            document.getElementById('rulesModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('rulesModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('rulesModal')) {
+                closeModal();
+            }
         }
     </script>
 </body>
