@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glidox Shop | Oyun İçi Satış Mərkəzi</title>
+    <style>
+        /* Ümumi tənzimləmələr */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #121212; color: #ffffff; }
+
+        /* Başlıq (Header) */
+        header { background-color: #1a1a1a; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff4655; }
+        .logo { font-size: 28px; font-weight: bold; color: #ff4655; text-transform: uppercase; letter-spacing: 2px; }
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav ul li a { color: #fff; text-decoration: none; font-size: 16px; transition: color 0.3s; }
+        nav ul li a:hover { color: #ff4655; }
+
+        /* Ana Bölmə (Hero Section) */
+        .hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%); }
+        .hero h1 { font-size: 48px; margin-bottom: 20px; color: #fff; }
+        .hero p { font-size: 18px; color: #ccc; margin-bottom: 30px; }
+        .hero-btn { background-color: #ff4655; color: #fff; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: 0.3s; }
+        .hero-btn:hover { background-color: #e03e4b; }
+
+        /* Oyunlar Bölməsi */
+        .games-container { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+        .section-title { text-align: center; font-size: 32px; margin-bottom: 40px; color: #ff4655; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+
+        /* Kartların Dizaynı */
+        .card { background-color: #1e1e1e; border-radius: 10px; overflow: hidden; text-align: center; transition: transform 0.3s; border: 1px solid #333; }
+        .card:hover { transform: translateY(-10px); border-color: #ff4655; box-shadow: 0 10px 20px rgba(255, 70, 85, 0.2); }
+        .card-img { width: 100%; height: 200px; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        
+        /* Şəkil əvəzinə müvəqqəti rəngli arxa planlar */
+        .pubg-img { background: linear-gradient(to right, #f2a900, #b27a00); }
+        .ff-img { background: linear-gradient(to right, #ff4b2b, #ff416c); }
+        .roblox-img { background: linear-gradient(to right, #434343, #000000); }
+        .valorant-img { background: linear-gradient(to right, #ff4655, #0f1923); }
+
+        .card-content { padding: 20px; }
+        .card h3 { font-size: 22px; margin-bottom: 10px; color: #fff; }
+        .card p { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+        .buy-btn { display: inline-block; background-color: transparent; border: 2px solid #ff4655; color: #ff4655; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: 0.3s; }
+        .card:hover .buy-btn { background-color: #ff4655; color: #fff; }
+
+        /* Alt hissə (Footer) */
+        footer { background-color: #1a1a1a; text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 50px; }
+        footer p { color: #777; font-size: 14px; }
+
+        /* Telefon üçün (Responsive) */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+            .hero h1 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Glidox Shop</div>
+        <nav>
+            <ul>
+                <li><a href="#">Ana Səhifə</a></li>
+                <li><a href="#games">Oyunlar</a></li>
+                <li><a href="#">Qaydalar</a></li>
+                <li><a href="#">Əlaqə</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Glidox Shop-a Xoş Gəlmisiniz!</h1>
+        <p>Sürətli, etibarlı və ən sərfəli oyun içi alış-veriş platforması. Sifarişləriniz anında təslim edilir.</p>
+        <a href="#games" class="hero-btn">Məhsullara Bax</a>
+    </section>
+
+    <section id="games" class="games-container">
+        <h2 class="section-title">Kataloq</h2>
+        <div class="grid">
+            
+            <div class="card">
+                <div class="card-img pubg-img">PUBG</div>
+                <div class="card-content">
+                    <h3>PUBG Mobile</h3>
+                    <p>Global hesablar üçün ən ucuz UC paketləri.</p>
+                    <a href="#" class="buy-btn">UC Al</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img ff-img">Free Fire</div>
+                <div class="card-content">
+                    <h3>Free Fire</h3>
+                    <p>Sürətli yüklənən Free Fire Elmasları (Diamonds).</p>
+                    <a href="#" class="buy-btn">Elmas Al</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img roblox-img">Roblox</div>
+                <div class="card-content">
+                    <h3>Roblox</h3>
+                    <p>Oyun təcrübənizi artırmaq üçün sərfəli Robux.</p>
+                    <a href="#" class="buy-btn">Robux Al</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img valorant-img">Valorant</div>
+                <div class="card-content">
+                    <h3>Valorant</h3>
+                    <p>TR və EU serverləri üçün Valorant Points (VP).</p>
+                    <a href="#" class="buy-btn">VP Al</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Glidox Shop. Bütün hüquqlar qorunur.</p>
+    </footer>
+
+</body>
+</html>
