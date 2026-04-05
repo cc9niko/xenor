@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Mobile UC | Glidox Shop</title>
+    <style>
+        /* Ümumi tənzimləmələr */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #121212; color: #ffffff; }
+
+        /* Başlıq (Header) */
+        header { background-color: #1a1a1a; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff4655; }
+        .logo { font-size: 28px; font-weight: bold; color: #ff4655; text-transform: uppercase; text-decoration: none; letter-spacing: 2px; }
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav ul li a { color: #fff; text-decoration: none; font-size: 16px; transition: color 0.3s; }
+        nav ul li a:hover { color: #ff4655; }
+
+        /* Səhifə Başlığı və ID Girişi */
+        .page-header { text-align: center; padding: 50px 20px 20px; }
+        .page-header h1 { font-size: 36px; color: #f2a900; margin-bottom: 10px; text-transform: uppercase; }
+        .page-header p { color: #ccc; margin-bottom: 30px; font-size: 16px; }
+        
+        .id-input-box { background-color: #1e1e1e; max-width: 400px; margin: 0 auto 40px; padding: 20px; border-radius: 8px; border: 1px solid #333; }
+        .id-input-box label { display: block; text-align: left; margin-bottom: 10px; font-size: 14px; color: #aaa; }
+        .id-input-box input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #444; background-color: #121212; color: #fff; font-size: 16px; outline: none; }
+        .id-input-box input:focus { border-color: #f2a900; }
+
+        /* UC Paketləri */
+        .packages-container { max-width: 1200px; margin: 0 auto 50px; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+
+        .card { background-color: #1e1e1e; border-radius: 10px; overflow: hidden; text-align: center; padding: 30px 20px; transition: transform 0.3s; border: 1px solid #333; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-5px); border-color: #f2a900; box-shadow: 0 5px 15px rgba(242, 169, 0, 0.15); }
+        
+        .uc-amount { font-size: 32px; font-weight: bold; color: #f2a900; margin-bottom: 5px; }
+        .uc-text { font-size: 14px; color: #aaa; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .price { font-size: 24px; color: #fff; margin-bottom: 20px; font-weight: bold; }
+        
+        .buy-btn { background-color: transparent; border: 2px solid #f2a900; color: #f2a900; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: 0.3s; cursor: pointer; width: 100%; }
+        .card:hover .buy-btn { background-color: #f2a900; color: #121212; }
+
+        /* Footer */
+        footer { background-color: #1a1a1a; text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: auto; }
+        footer p { color: #777; font-size: 14px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Glidox Shop</a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Geri Qayıt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page-header">
+        <h1>PUBG Mobile UC</h1>
+        <p>Sürətli və etibarlı UC yükləməsi.</p>
+        
+        <div class="id-input-box">
+            <label for="playerId">PUBG Mobile Oyuncu ID-nizi daxil edin:</label>
+            <input type="text" id="playerId" placeholder="Məsələn: 5123456789">
+        </div>
+    </div>
+
+    <section class="packages-container">
+        <div class="grid">
+            
+            <div class="card">
+                <div>
+                    <div class="uc-amount">10</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">0.80 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="uc-amount">60</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">2.00 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="uc-amount">325</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">10.00 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="uc-amount">660</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">18.00 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="uc-amount">1800</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">45.00 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="uc-amount">3850</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">84.00 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+            <div class="card">
+                <div>
+                    <div class="uc-amount">8100</div>
+                    <div class="uc-text">UC</div>
+                    <div class="price">163.00 AZN</div>
+                </div>
+                <button class="buy-btn">Satın Al</button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Glidox Shop. Bütün hüquqlar qorunur.</p>
+    </footer>
+
+</body>
+</html>
