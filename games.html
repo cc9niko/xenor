@@ -81,32 +81,32 @@
         }
         
         .card-img { 
-            height: 200px; 
+            height: 180px; 
             background-size: cover;
             background-position: center;
             position: relative;
         }
 
-        /* Oyunların Şəkilləri */
+        /* --- ŞƏKİLLƏR --- */
         .pubg-bg { background-image: url('https://static0.xdaimages.com/wordpress/wp-content/uploads/2018/06/pubg.jpg?w=1200&h=675&fit=crop'); }
         .ff-bg { background-image: url('https://a-static.besthdwallpaper.com/mission-landscape-map-garena-free-fire-video-game-wallpaper-2400x1350-73457_50.jpg'); }
         .roblox-bg { background-image: url('https://images.tynker.com/blog/wp-content/uploads/20250401220809/robloxxjpg-1.jpg'); }
         .val-bg { background-image: url('https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg'); }
 
-        .card-content { padding: 30px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-content h3 { font-size: 22px; margin-bottom: 10px; font-family: 'Poppins', sans-serif; }
-        .card-content p { color: var(--text-dim); font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
+        .card-content { padding: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-content h3 { font-size: 20px; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .card-content p { color: var(--text-dim); font-size: 13px; margin-bottom: 20px; line-height: 1.4; }
 
         .buy-btn { 
             display: block; 
             background-color: var(--primary); 
             color: #fff; 
-            padding: 14px; 
+            padding: 12px; 
             text-decoration: none; 
             font-weight: bold; 
             border-radius: 8px; 
             font-family: 'Orbitron', sans-serif;
-            font-size: 13px; 
+            font-size: 12px; 
             transition: 0.3s; 
             border: 1px solid var(--primary);
             letter-spacing: 1px;
@@ -115,14 +115,6 @@
             background-color: transparent; 
             color: var(--primary); 
             box-shadow: 0 0 20px rgba(255, 70, 85, 0.4);
-        }
-
-        /* Valorant hələ hazır deyilsə bu klas qala bilər, amma FF üçün sildik */
-        .coming-soon {
-            opacity: 0.6;
-            pointer-events: none;
-            background: #333;
-            border-color: #333;
         }
 
         footer { 
@@ -154,7 +146,7 @@
 
     <div class="page-header">
         <h2>Oyun <span>Kataloqu</span></h2>
-        <p>Sürətli yükləmə və ən uyğun qiymətlər üçün seçimini et.</p>
+        <p>Regionu seç və sürətli yükləmədən yararlan.</p>
     </div>
 
     <section class="container">
@@ -164,8 +156,8 @@
                 <div class="card-img pubg-bg"></div>
                 <div class="card-content">
                     <div>
-                        <h3>UC Satışı</h3>
-                        <p>Global və TR region üçün anında ID-yə yükləmə xidməti.</p>
+                        <h3>PUBG Mobile</h3>
+                        <p>Global və TR region üçün anında UC yükləmə xidməti.</p>
                     </div>
                     <a href="pubg.html" class="buy-btn">UC SATIN AL</a>
                 </div>
@@ -175,7 +167,7 @@
                 <div class="card-img ff-bg"></div>
                 <div class="card-content">
                     <div>
-                        <h3>Elmas Satışı</h3>
+                        <h3>Free Fire</h3>
                         <p>Ən ucuz FF Elmas paketləri ilə hesabını gücləndir.</p>
                     </div>
                     <a href="freefire.html" class="buy-btn">ELMAS AL</a>
@@ -186,7 +178,7 @@
                 <div class="card-img roblox-bg"></div>
                 <div class="card-content">
                     <div>
-                        <h3>Robux Satışı</h3>
+                        <h3>Roblox</h3>
                         <p>Roblox dünyasında fərqlənmək üçün Robux əldə et.</p>
                     </div>
                     <a href="roblox.html" class="buy-btn">ROBUX AL</a>
@@ -197,10 +189,21 @@
                 <div class="card-img val-bg"></div>
                 <div class="card-content">
                     <div>
-                        <h3>VP Satışı</h3>
-                        <p>Valorant Points (VP) ilə yeni skinlərini indi al.</p>
+                        <h3>Valorant (Avropa)</h3>
+                        <p>EU Region hesablar üçün sürətli VP yükləmə.</p>
                     </div>
-                    <a href="#" class="buy-btn coming-soon">TEZLİKLƏ</a>
+                    <a href="valorantEU.html" class="buy-btn">VP SATIN AL</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img val-bg"></div>
+                <div class="card-content">
+                    <div>
+                        <h3>Valorant (Türkiyə)</h3>
+                        <p>TR Region hesablar üçün ən uyğun qiymətə VP-lər.</p>
+                    </div>
+                    <a href="valorantTR.html" class="buy-btn">VP SATIN AL</a>
                 </div>
             </div>
 
