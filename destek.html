@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glidox Shop | Canlı Dəstək</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4655;
+            --bg-dark: #0a0a0a;
+            --card-bg: #161616;
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: #fff; 
+            font-family: 'Poppins', sans-serif; 
+            display: flex; justify-content: center; align-items: center; height: 100vh;
+        }
+
+        /* --- Giriş Ekranı --- */
+        #login-screen {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #222;
+            width: 350px;
+        }
+        #login-screen h2 { font-family: 'Orbitron'; margin-bottom: 25px; font-size: 20px; }
+        .user-select-btn {
+            display: block; width: 100%; padding: 15px; margin-bottom: 10px;
+            background: #222; border: 1px solid #333; color: white;
+            border-radius: 8px; cursor: pointer; font-family: 'Orbitron'; transition: 0.3s;
+        }
+        .user-select-btn:hover { border-color: var(--primary); background: #2a2a2a; }
+
+        /* --- Chat Ekranı (Gizli) --- */
+        #chat-screen {
+            display: none;
+            width: 100%; max-width: 500px; height: 80vh;
+            background: var(--card-bg); border-radius: 15px;
+            flex-direction: column; border: 1px solid #222;
+        }
+
+        .chat-header {
+            padding: 20px; background: #111; border-bottom: 1px solid #222;
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+        .chat-header h3 { font-family: 'Orbitron'; font-size: 14px; }
+
+        .messages-area {
+            flex-grow: 1; padding: 20px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .msg { padding: 10px 15px; border-radius: 10px; font-size: 14px; max-width: 80%; }
+        .msg.admin { background: #333; align-self: flex-start; }
+        .msg.me { background: var(--primary); align-self: flex-end; }
+
+        .input-area { padding: 20px; display: flex; gap: 10px; background: #111; border-radius: 0 0 15px 15px; }
+        input { flex-grow: 1; background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 5px; color: #fff; outline: none; }
+        .send-btn { background: var(--primary); border: none; padding: 0 20px; border-radius: 5px; color: #fff; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2>Kimsən?</h2>
+        <button class="user-select-btn" onclick="startChat('Niko')">Mən Niko-yam</button>
+        <button class="user-select-btn" onclick="startChat('Eli')">Mən Əli-yəm</button>
+        <p style="font-size: 12px; color: var(--text-dim); margin-top: 20px;">Səhifəyə daxil olmaq üçün adını seç.</p>
+    </div>
+
+    <div id="chat-screen">
+        <div class="chat-header">
+            <h3 id="user-title">Xoş gəldin</h3>
+            <a href="index.html" style="color: var(--primary); text-decoration: none; font-size: 12px;">ÇIXIŞ</a>
+        </div>
+        <div class="messages-area" id="msgBox">
+            <div class="msg admin">Salam! Adminlə əlaqə üçün mesaj yazın.</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Mesajınızı yazın...">
+            <button class="send-btn" onclick="send()">GÖNDƏR</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = "";
+
+        function startChat(name) {
+            currentUser = name;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('chat-screen').style.display = 'flex';
+            document.getElementById('user-title').innerText = "Müştəri: " + name;
+        }
+
+        function send() {
+            const input = document.getElementById('userInput');
+            const box = document.getElementById('msgBox');
+
+            if(input.value.trim() !== "") {
+                // Səhifədə mesajı göstər
+                const div = document.createElement('div');
+                div.className = "msg me";
+                div.innerText = input.value;
+                box.appendChild(div);
+
+                // TELEGRAMA GÖNDƏRMƏ MƏNTİQİ
+                const botToken = "BOT_TOKENINI_BURA_YAZ";
+                const chatId = "SENIN_CHAT_ID_BURA_YAZ";
+                const text = `🔔 YENİ MESAJ\n👤 Kimdən: ${currentUser}\n💬 Mesaj: ${input.value}`;
+
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`);
+
+                input.value = "";
+                box.scrollTop = box.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
