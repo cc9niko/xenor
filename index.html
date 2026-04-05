@@ -18,7 +18,7 @@
             background-color: var(--bg-dark); 
             color: #ffffff; 
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Səhifə sürüşməsin (scroll), çünki tək bölmədir */
+            overflow: hidden; /* Ana səhifədə scroll ehtiyacı yoxdur */
             opacity: 0; 
             transition: opacity 0.8s ease-in-out; 
         }
@@ -40,12 +40,15 @@
             text-decoration: none; letter-spacing: 3px; text-transform: uppercase; 
         }
         nav ul { list-style: none; display: flex; gap: 30px; }
-        nav ul li a { color: #fff; text-decoration: none; font-size: 14px; text-transform: uppercase; transition: 0.3s; font-family: 'Orbitron', sans-serif; }
+        nav ul li a { 
+            color: #fff; text-decoration: none; font-size: 14px; 
+            text-transform: uppercase; transition: 0.3s; font-family: 'Orbitron', sans-serif; 
+        }
         nav ul li a:hover { color: var(--primary); }
 
-        /* --- Premium Hero (Oyunlarsız Versiya) --- */
+        /* --- Premium Hero Section --- */
         .hero {
-            height: 100vh; /* Tam ekran boyu */
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -55,6 +58,7 @@
             text-align: center;
         }
 
+        /* Hərəkətli duman effekti */
         .hero::before {
             content: '';
             position: absolute;
@@ -130,7 +134,7 @@
         <a href="index.html" class="logo">Glidox</a>
         <nav>
             <ul>
-                <li><a href="katalog.html">Kataloq</a></li>
+                <li><a href="games.html">Oyunlar</a></li>
                 <li><a href="#">Dəstək</a></li>
             </ul>
         </nav>
@@ -141,8 +145,8 @@
             <h1>GLIDOX <span>SHOP</span></h1>
             <p>Azərbaycanın ən sürətli və etibarlı oyunçu platforması. Eksklüziv imkanlar sizi gözləyir.</p>
             <div class="hero-btns">
-                <a href="katalog.html" class="main-btn">Kataloqu Aç</a>
-                <a href="#" class="secondary-btn">VIP Dəstək</a>
+                <a href="games.html" class="main-btn">Oyunları Gör</a>
+                <a href="#" class="secondary-btn">Dəstək Al</a>
             </div>
         </div>
         <div class="hero-bottom-glow"></div>
