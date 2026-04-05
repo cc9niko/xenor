@@ -25,7 +25,6 @@
         
         body.loaded { opacity: 1; }
 
-        /* --- Header --- */
         header { 
             background-color: rgba(22, 22, 22, 0.95); 
             backdrop-filter: blur(10px);
@@ -40,28 +39,14 @@
             text-decoration: none; letter-spacing: 3px; text-transform: uppercase; 
         }
         nav ul { list-style: none; display: flex; gap: 30px; }
-        nav ul li a { 
-            color: #fff; text-decoration: none; font-size: 14px; 
-            font-family: 'Orbitron', sans-serif; text-transform: uppercase; transition: 0.3s; 
-        }
+        nav ul li a { color: #fff; text-decoration: none; font-size: 14px; font-family: 'Orbitron'; text-transform: uppercase; transition: 0.3s; }
         nav ul li a:hover { color: var(--primary); }
 
-        /* --- Səhifə Başlığı --- */
-        .page-header {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(to bottom, #0f0f0f, var(--bg-dark));
-        }
-        .page-header h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
+        .page-header { text-align: center; padding: 60px 20px; background: linear-gradient(to bottom, #0f0f0f, var(--bg-dark)); }
+        .page-header h2 { font-family: 'Orbitron', sans-serif; font-size: 32px; letter-spacing: 4px; text-transform: uppercase; }
         .page-header h2 span { color: var(--primary); }
         .page-header p { color: var(--text-dim); margin-top: 10px; font-size: 14px; }
 
-        /* --- Oyun Kartları Grid --- */
         .container { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
 
@@ -84,10 +69,9 @@
             height: 180px; 
             background-size: cover;
             background-position: center;
-            position: relative;
         }
 
-        /* --- ŞƏKİLLƏR --- */
+        /* Oyun Şəkilləri */
         .pubg-bg { background-image: url('https://static0.xdaimages.com/wordpress/wp-content/uploads/2018/06/pubg.jpg?w=1200&h=675&fit=crop'); }
         .ff-bg { background-image: url('https://a-static.besthdwallpaper.com/mission-landscape-map-garena-free-fire-video-game-wallpaper-2400x1350-73457_50.jpg'); }
         .roblox-bg { background-image: url('https://images.tynker.com/blog/wp-content/uploads/20250401220809/robloxxjpg-1.jpg'); }
@@ -201,7 +185,7 @@
                 <div class="card-content">
                     <div>
                         <h3>Valorant (Türkiyə)</h3>
-                        <p>TR Region hesablar üçün ən uyğun qiymətə VP-lər.</p>
+                        <p>TR Region hesablar üçün ən ucuz qiymətə VP-lər.</p>
                     </div>
                     <a href="valorantTR.html" class="buy-btn">VP SATIN AL</a>
                 </div>
@@ -219,6 +203,5 @@
             document.body.classList.add("loaded");
         });
     </script>
-
 </body>
 </html>
