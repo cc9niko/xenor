@@ -10,7 +10,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
-        /* Sidebar */
         .sidebar { width: 260px; background: #0a0a0a; border-right: 1px solid var(--accent); padding: 25px 15px; display: flex; flex-direction: column; overflow-y: auto; }
         .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 20px; font-weight: bold; margin-bottom: 30px; text-align: center; letter-spacing: 2px; }
         .nav-group { margin-bottom: 20px; }
@@ -21,31 +20,27 @@
         }
         .nav-btn:hover, .nav-btn.active { background: rgba(255, 70, 85, 0.1); color: var(--primary); font-weight: 600; }
 
-        /* Workspace */
         .workspace { flex: 1; padding: 30px; overflow-y: auto; background: radial-gradient(circle at top right, #0d0d0d, #050505); }
         .section { display: none; animation: slideUp 0.4s ease; }
         .section.active { display: block; }
         @keyframes slideUp { from {opacity: 0; transform: translateY(15px);} to {opacity: 1; transform: translateY(0);} }
 
-        /* Cards & Grids */
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .card { background: var(--card); border: 1px solid var(--accent); padding: 20px; border-radius: 12px; }
         .card h3 { font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 10px; font-family: 'Orbitron'; }
         .card .val { font-size: 28px; font-family: 'Orbitron'; color: #fff; }
 
-        /* Catalog Selectors */
         .catalog-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
         .cat-btn { padding: 8px 12px; background: #1a1a1a; border: 1px solid var(--accent); color: #fff; cursor: pointer; border-radius: 5px; font-size: 11px; transition: 0.2s; }
         .cat-btn.active { background: var(--primary); border-color: var(--primary); }
 
-        /* Table */
         .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--card); border-radius: 10px; overflow: hidden; }
         .data-table th { background: #1a1a1a; padding: 12px; text-align: left; font-family: 'Orbitron'; font-size: 10px; color: var(--primary); }
         .data-table td { padding: 12px; border-bottom: 1px solid var(--accent); font-size: 12px; }
 
-        /* Inputs & Buttons */
         input, select { width: 100%; background: #000; border: 1px solid var(--accent); padding: 10px; color: #fff; border-radius: 6px; font-size: 13px; margin-top: 5px; }
-        .btn-action { background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; width: 100%; margin-top: 10px; font-size: 11px; }
+        .btn-action { background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; width: 100%; margin-top: 10px; font-size: 11px; transition: 0.3s; }
+        .btn-action:hover { opacity: 0.8; box-shadow: 0 0 10px var(--primary); }
         .badge { padding: 3px 7px; border-radius: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; }
         .pending { background: rgba(255, 165, 0, 0.1); color: orange; }
         .completed { background: rgba(0, 255, 136, 0.1); color: var(--green); }
@@ -55,20 +50,17 @@
 
     <aside class="sidebar">
         <div class="logo">GLIDOX ADMIN</div>
-        
         <div class="nav-group">
             <span class="nav-label">İdarəetmə</span>
             <button class="nav-btn active" onclick="nav('dashboard')">📊 Dashboard</button>
             <button class="nav-btn" onclick="nav('orders')">📦 Sifarişlər</button>
             <button class="nav-btn" onclick="nav('products')">💎 Qiymət & Kataloq</button>
         </div>
-
         <div class="nav-group">
             <span class="nav-label">Marketinq</span>
             <button class="nav-btn" onclick="nav('promo')">🎟️ Promo Kodlar</button>
             <button class="nav-btn" onclick="nav('settings')">⚙️ Sayt Ayarları</button>
         </div>
-
         <div class="nav-group">
             <span class="nav-label">Təhlükəsizlik</span>
             <button class="nav-btn" onclick="nav('blacklist')">🚫 Qara Siyahı</button>
@@ -76,7 +68,6 @@
     </aside>
 
     <main class="workspace">
-        
         <section id="dashboard" class="section active">
             <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Ümumi Baxış</h2>
             <div class="grid-3">
@@ -86,118 +77,84 @@
             </div>
             <div class="card" style="width: 100%;">
                 <h3>Son Aktivlik</h3>
-                <p style="color:#555; font-size:12px">Bütün sistemlər normal işləyir.</p>
+                <p id="system-status" style="color:var(--green); font-size:12px">Bütün sistemlər normal işləyir.</p>
             </div>
-        </section>
-
-        <section id="orders" class="section">
-            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Sifarişlər</h2>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Müştəri / Tarix</th>
-                        <th>Məhsul</th>
-                        <th>Məbləğ</th>
-                        <th>Status</th>
-                        <th>Əməl</th>
-                    </tr>
-                </thead>
-                <tbody id="orders-list">
-                    </tbody>
-            </table>
         </section>
 
         <section id="products" class="section">
             <h2 style="font-family: 'Orbitron'; margin-bottom: 15px;">Qiymət İdarəetməsi</h2>
             <div class="catalog-selector">
-                <button class="cat-btn active" onclick="loadCatalog('roblox', this)">ROBLOX</button>
+                <button class="cat-btn" onclick="loadCatalog('roblox', this)">ROBLOX</button>
                 <button class="cat-btn" onclick="loadCatalog('pubg', this)">PUBG</button>
                 <button class="cat-btn" onclick="loadCatalog('steambalans', this)">STEAM</button>
-                <button class="cat-btn" onclick="loadCatalog('mobilelegends', this)">MLBB</button>
+                <button class="cat-btn" onclick="loadCatalog('mlbb', this)">MLBB</button>
                 <button class="cat-btn" onclick="loadCatalog('valorantTR', this)">VALORANT TR</button>
-                <button class="cat-btn" onclick="loadCatalog('valorantEU', this)">VALORANT EU</button>
                 <button class="cat-btn" onclick="loadCatalog('applebalans', this)">APPLE</button>
-                <button class="cat-btn" onclick="loadCatalog('freefire', this)">FREE FIRE</button>
-                <button class="cat-btn" onclick="loadCatalog('deltaforce', this)">DELTA FORCE</button>
-                <button class="cat-btn" onclick="loadCatalog('standoff', this)">STANDOFF 2</button>
-                <button class="cat-btn" onclick="loadCatalog('weplay', this)">WEPLAY</button>
-                <button class="cat-btn" onclick="loadCatalog('discord', this)">DISCORD</button>
                 <button class="cat-btn" style="border-style:dashed" onclick="addPkg()">+ Yeni Paket</button>
             </div>
             <div id="product-grid" class="grid-3"></div>
         </section>
 
-        <section id="settings" class="section">
-            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Sayt Ayarları</h2>
-            <div class="grid-3">
-                <div class="card">
-                    <h3>Duyuru Lenti (Announcement)</h3>
-                    <input type="text" id="inp-announce" placeholder="Yazını daxil et...">
-                    <button class="btn-action" onclick="updateSetting('announcement')">Yadda Saxla</button>
-                </div>
-                <div class="card">
-                    <h3>Ödəniş Metodları</h3>
-                    <div style="font-size:12px; margin-top:10px;">
-                        <label><input type="checkbox" checked> M10 Aktiv</label><br>
-                        <label><input type="checkbox" checked> Million Aktiv</label>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="blacklist" class="section">
-            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Qara Siyahı</h2>
-            <div class="card" style="max-width: 400px;">
-                <h3>İstifadəçi Blokla</h3>
-                <input type="text" id="inp-block-id" placeholder="Oyun ID və ya IP">
-                <button class="btn-action" style="background:#555" onclick="alert('Bloklandı')">Blok siyahısına əlavə et</button>
-            </div>
-        </section>
-
-    </main>
+        </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, set, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // FIREBASE CONFIG (Öz məlumatlarını bura yaz)
         const firebaseConfig = {
             apiKey: "AIzaSy...",
             databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "glidoxshop",
-            appId: "1:123258254071:web:ae147159986886134a59f2"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        let selectedGame = 'roblox';
+        let selectedGame = '';
 
-        // NAVIGATION
+        // OYUN PAKET SİYAHISI (Firebase-də olmasa belə burada görünəcəklər)
+        const gamePackages = {
+            "roblox": ["80_Robux", "400_Robux", "800_Robux", "1700_Robux"],
+            "applebalans": ["2_USD", "4_USD", "5_USD", "10_USD"],
+            "mlbb": [
+                "Weekly_Pass", "Twilight_Pass", "5_Diamonds", "12_Diamonds", 
+                "19_Diamonds", "28_Diamonds", "44_Diamonds", "59_Diamonds", 
+                "85_Diamonds", "170_Diamonds", "240_Diamonds", "296_Diamonds", 
+                "408_Diamonds", "568_Diamonds", "875_Diamonds", "2010_Diamonds"
+            ]
+        };
+
         window.nav = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
+            if(event) event.target.classList.add('active');
         };
 
-        // CATALOG LOGIC
         window.loadCatalog = (game, btn) => {
             selectedGame = game;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = "Gözləyin...";
+
             onValue(ref(db, 'prices/' + game), (snap) => {
-                const grid = document.getElementById('product-grid');
                 grid.innerHTML = "";
-                snap.forEach(child => {
+                const dbData = snap.val() || {};
+                
+                // Əgər koddakı siyahıda (gamePackages) varsa, onları göstər
+                const packagesToShow = gamePackages[game] || Object.keys(dbData);
+
+                packagesToShow.forEach(pkgKey => {
+                    const price = dbData[pkgKey] || "0.00";
                     grid.innerHTML += `
                         <div class="card">
                             <div style="display:flex; justify-content:space-between">
-                                <h3>${child.key.replace('_',' ')}</h3>
-                                <span onclick="delPkg('${child.key}')" style="cursor:pointer; opacity:0.3">🗑️</span>
+                                <h3>${pkgKey.replace(/_/g,' ')}</h3>
+                                <span onclick="delPkg('${pkgKey}')" style="cursor:pointer; opacity:0.3">🗑️</span>
                             </div>
-                            <input type="text" id="p-${child.key}" value="${child.val()}">
-                            <button class="btn-action" onclick="savePrice('${child.key}')">Yadda Saxla</button>
+                            <input type="text" id="p-${pkgKey}" value="${price}">
+                            <button class="btn-action" onclick="savePrice('${pkgKey}')">Yadda Saxla</button>
                         </div>`;
                 });
             });
@@ -205,58 +162,28 @@
 
         window.savePrice = (key) => {
             const val = document.getElementById('p-' + key).value;
-            set(ref(db, `prices/${selectedGame}/${key}`), val).then(() => alert("Yeniləndi"));
+            set(ref(db, `prices/${selectedGame}/${key}`), val)
+                .then(() => alert(key + " üçün qiymət yeniləndi!"))
+                .catch(err => alert("Xəta: " + err.message));
+        };
+
+        window.delPkg = (key) => {
+            if(confirm(key + " silinsin?")) {
+                remove(ref(db, `prices/${selectedGame}/${key}`));
+            }
         };
 
         window.addPkg = () => {
-            const name = prompt("Paket adı (məs: 1000_Robux):");
+            const name = prompt("Paket adı (məs: 500_Diamonds):");
             const price = prompt("Qiymət:");
             if(name && price) set(ref(db, `prices/${selectedGame}/${name}`), price);
         };
 
-        window.delPkg = (key) => {
-            if(confirm("Silinsin?")) remove(ref(db, `prices/${selectedGame}/${key}`));
-        };
-
-        // ORDERS LOGIC
-        onValue(ref(db, 'orders'), (snap) => {
-            const list = document.getElementById('orders-list');
-            let count = 0;
-            list.innerHTML = "";
-            snap.forEach(child => {
-                const o = child.val();
-                if(o.status === 'pending') count++;
-                list.innerHTML += `
-                    <tr>
-                        <td>${o.customerName}<br><small>${child.key}</small></td>
-                        <td>${o.packageName}</td>
-                        <td style="color:var(--green)">${o.price} AZN</td>
-                        <td><span class="badge ${o.status}">${o.status}</span></td>
-                        <td>
-                            <select onchange="updateStatus('${child.key}', this.value)">
-                                <option value="">Seç</option>
-                                <option value="completed">Tamamla</option>
-                                <option value="cancelled">Ləğv et</option>
-                            </select>
-                        </td>
-                    </tr>`;
-            });
-            document.getElementById('stat-orders').innerText = count;
+        // İlk yükləmə
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstBtn = document.querySelector('.cat-btn');
+            if(firstBtn) loadCatalog('roblox', firstBtn);
         });
-
-        window.updateStatus = (id, st) => {
-            if(st) update(ref(db, 'orders/' + id), { status: st });
-        };
-
-        // SETTINGS LOGIC
-        window.updateSetting = (key) => {
-            const val = document.getElementById('inp-announce').value;
-            set(ref(db, 'settings/' + key), val).then(() => alert("Ayarlar yeniləndi"));
-        };
-
-        // Initial Load
-        document.addEventListener('DOMContentLoaded', () => loadCatalog('roblox', document.querySelector('.cat-btn')));
-
     </script>
 </body>
 </html>
