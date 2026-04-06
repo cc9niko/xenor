@@ -3,91 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Glidox Pro v5.5 | Ultimate Control</title>
+    <title>Glidox Pro v6.0 | Final Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff4655; --bg: #050505; --card: #111; --text: #eee; --green: #00ff88; --gold: #ffd700; --accent: #222; }
+        :root { --primary: #ff4655; --bg: #050505; --card: #0e0e0e; --text: #eee; --green: #00ff88; --gold: #ffd700; --accent: #222; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        body { background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
         /* Auth Screen */
         #auth-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .auth-card { background: #0a0a0a; padding: 30px; border: 1px solid var(--accent); border-radius: 20px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 0 30px rgba(255, 70, 85, 0.1); }
-        
-        /* Header & Nav */
-        header { background: #080808; border-bottom: 1px solid var(--accent); padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Orbitron'; font-size: 14px; color: var(--primary); border: 1px solid var(--primary); padding: 5px 10px; }
+        .auth-card { background: #0a0a0a; padding: 30px; border: 1px solid var(--accent); border-radius: 20px; width: 100%; max-width: 400px; text-align: center; }
 
-        nav { background: #0a0a0a; border-bottom: 1px solid var(--accent); display: flex; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-        nav::-webkit-scrollbar { display: none; }
-        .nav-link { padding: 15px 20px; color: #666; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.3s; border-bottom: 2px solid transparent; }
+        /* Header */
+        header { background: #000; border-bottom: 1px solid var(--accent); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .logo { font-family: 'Orbitron'; font-size: 14px; color: var(--primary); letter-spacing: 2px; }
+
+        /* Navigation - Mobildə aşağıda, PC-də yuxarıda */
+        nav { background: #080808; border-bottom: 1px solid var(--accent); display: flex; overflow-x: auto; white-space: nowrap; flex-shrink: 0; }
+        .nav-link { padding: 15px 20px; color: #555; cursor: pointer; font-size: 12px; font-weight: 600; text-transform: uppercase; border-bottom: 2px solid transparent; transition: 0.3s; }
         .nav-link.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(255, 70, 85, 0.05); }
 
         /* Main Workspace */
-        main { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 80px; }
-        .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        main { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
+        .section { display: none; max-width: 1000px; margin: 0 auto; }
+        .section.active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Components */
-        .card { background: var(--card); border: 1px solid var(--accent); padding: 20px; border-radius: 12px; margin-bottom: 15px; }
+        /* UI Cards */
+        .card { background: var(--card); border: 1px solid var(--accent); padding: 20px; border-radius: 15px; margin-bottom: 15px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         
-        input, select, textarea { width: 100%; background: #000; border: 1px solid #333; padding: 14px; color: #fff; border-radius: 8px; margin-top: 8px; outline: none; font-size: 14px; }
-        .btn { background: var(--primary); color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-family: 'Orbitron'; margin-top: 10px; transition: 0.3s; }
-        .btn:active { transform: scale(0.98); }
-        .btn-sm { padding: 8px; font-size: 12px; margin-top: 5px; }
+        input, select, textarea { width: 100%; background: #000; border: 1px solid #333; padding: 15px; color: #fff; border-radius: 10px; margin-top: 10px; outline: none; font-size: 14px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        .btn { background: var(--primary); color: #fff; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; font-family: 'Orbitron'; margin-top: 10px; }
         
-        /* Table Styles */
-        .table-wrapper { overflow-x: auto; background: var(--card); border-radius: 12px; border: 1px solid var(--accent); }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #222; font-size: 13px; }
-        th { color: var(--primary); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+        /* Game Selection Chips */
+        .game-bar { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; margin-bottom: 10px; scrollbar-width: none; }
+        .game-bar::-webkit-scrollbar { display: none; }
+        .game-chip { padding: 10px 20px; background: #151515; border-radius: 50px; font-size: 11px; cursor: pointer; border: 1px solid var(--accent); white-space: nowrap; color: #888; font-family: 'Orbitron'; }
+        .game-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 15px rgba(255, 70, 85, 0.3); }
 
-        /* Games List (Special) */
-        .game-bar { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 10px; }
-        .game-chip { padding: 10px 18px; background: #1a1a1a; border-radius: 30px; font-size: 12px; cursor: pointer; border: 1px solid var(--accent); white-space: nowrap; }
-        .game-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        /* Log Screen */
+        .log-box { background: #000; border: 1px solid #1a1a1a; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 12px; color: var(--green); min-height: 300px; line-height: 1.8; }
+        .log-item { border-bottom: 1px solid #111; padding: 5px 0; display: block; }
+        .log-time { color: #555; margin-right: 10px; }
+        .log-user { color: var(--gold); font-weight: bold; }
 
-        .owner-only { display: none; }
-        .owner-border { border-color: var(--gold) !important; }
+        @media (max-width: 768px) {
+            header { padding: 12px 15px; }
+            nav { position: fixed; bottom: 0; left: 0; right: 0; border-bottom: none; border-top: 1px solid var(--accent); z-index: 1000; justify-content: space-around; }
+            .nav-link { padding: 12px 10px; font-size: 10px; flex: 1; text-align: center; border-bottom: none; border-top: 2px solid transparent; }
+            .nav-link.active { border-top-color: var(--primary); border-bottom-color: transparent; }
+            main { padding-bottom: 80px; }
+        }
     </style>
 </head>
 <body>
 
     <div id="auth-screen">
         <div class="auth-card">
-            <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">GLIDOX CORE</h2>
-            <input type="text" id="adm-name" placeholder="Adınız...">
-            <input type="password" id="adm-pass" placeholder="Məxfi Şifrə...">
-            <button class="btn" onclick="login()">SİSTEMƏ DAXİL OL</button>
+            <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:10px;">GLIDOX ACCESS</h2>
+            <p style="font-size:12px; color:#555; margin-bottom:20px;">Xahiş olunur məlumatları daxil edin</p>
+            <input type="text" id="adm-name" placeholder="Adınız (məs: Eli)">
+            <input type="password" id="adm-pass" placeholder="Məxfi Şifrə">
+            <button class="btn" onclick="login()">DAXİL OL</button>
         </div>
     </div>
 
     <header>
-        <div class="logo">GLIDOX v5.5</div>
-        <div id="user-info" style="font-size: 11px; color: var(--green); font-family: 'Orbitron';">OFFLINE</div>
+        <div class="logo">GLIDOX PRO</div>
+        <div id="user-badge" style="font-size:10px; font-family:'Orbitron'; color:var(--gold)">MÜŞAHİDƏÇİ</div>
     </header>
 
-    <nav id="main-nav">
-        <div class="nav-link active" onclick="tab('dash')">📊 DASHBOARD</div>
-        <div class="nav-link" onclick="tab('prices')">💎 QİYMƏTLƏR</div>
-        <div class="nav-link" onclick="tab('promo')">🎟️ PROMO</div>
-        <div class="nav-link" onclick="tab('ann')">📢 DUYURU</div>
-        <div class="nav-link" onclick="tab('bl')">🚫 BLACKLIST</div>
-        <div class="nav-link owner-only" onclick="tab('logs')">📜 LOQLAR</div>
+    <nav>
+        <div class="nav-link active" onclick="tab('dash')">📊 Dash</div>
+        <div class="nav-link" onclick="tab('prices')">💎 Qiymət</div>
+        <div class="nav-link" onclick="tab('promo')">🎟️ Promo</div>
+        <div class="nav-link" onclick="tab('ann')">📢 Duyuru</div>
+        <div class="nav-link" onclick="tab('bl')">🚫 Blacklist</div>
+        <div class="nav-link owner-only" id="nav-logs" style="display:none;" onclick="tab('logs')">📜 Loqlar</div>
     </nav>
 
     <main>
         <section id="dash" class="section active">
+            <h3 style="margin-bottom:20px; font-family:'Orbitron'; font-size:16px;">Xoş gəldiniz, <span id="welcome-name">...</span></h3>
             <div class="grid">
                 <div class="card">
-                    <p style="font-size:11px; color:#555;">BUGÜNKÜ SATIŞ</p>
-                    <h2 id="stat-sales" style="font-family:'Orbitron'">0 AZN</h2>
+                    <p style="font-size:11px; color:#555; letter-spacing:1px;">GÜNLÜK SATIŞ</p>
+                    <h2 style="font-family:'Orbitron'; margin-top:5px;">0 AZN</h2>
                 </div>
-                <div class="card owner-only owner-border">
-                    <p style="font-size:11px; color:var(--gold);">XALİS MƏNFƏƏT</p>
-                    <h2 id="stat-profit" style="font-family:'Orbitron'; color:var(--green)">0 AZN</h2>
+                <div class="card owner-only" style="display:none; border-color:var(--gold)">
+                    <p style="font-size:11px; color:var(--gold);">MƏNFƏƏT (AYLIQ)</p>
+                    <h2 style="font-family:'Orbitron'; margin-top:5px; color:var(--green)">+0 AZN</h2>
                 </div>
             </div>
         </section>
@@ -99,45 +106,34 @@
 
         <section id="promo" class="section">
             <div class="card">
-                <input type="text" id="p-name" placeholder="Kod adı">
-                <input type="number" id="p-val" placeholder="Endirim %">
-                <button class="btn" onclick="savePromo()">KODU YARAT</button>
+                <input type="text" id="p-name" placeholder="KOD ADI">
+                <input type="number" id="p-val" placeholder="ENDİRİM %">
+                <button class="btn" onclick="savePromo()">YARAT</button>
             </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Kod</th><th>Faiz</th><th>Hərəkət</th></tr></thead>
-                    <tbody id="p-body"></tbody>
-                </table>
-            </div>
+            <div id="promo-list" class="grid"></div>
         </section>
 
         <section id="ann" class="section">
             <div class="card">
-                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px;">SAYT DUYURUSU</h3>
-                <textarea id="ann-msg" rows="4" placeholder="Mesajınız..."></textarea>
-                <select id="ann-mode">
-                    <option value="active">Aktiv</option>
-                    <option value="inactive">Deaktiv</option>
+                <textarea id="ann-text" rows="5" placeholder="Saytda görünəcək mesaj..."></textarea>
+                <select id="ann-status">
+                    <option value="active">AKTİV</option>
+                    <option value="inactive">DEAKTİV</option>
                 </select>
-                <button class="btn" onclick="saveAnn()">DUYURUNU YAYIMLA</button>
+                <button class="btn" onclick="saveAnn()">YADDA SAXLA</button>
             </div>
         </section>
 
         <section id="bl" class="section">
             <div class="card">
-                <input type="text" id="bl-val" placeholder="IP və ya Oyun ID">
-                <button class="btn" style="background:#ff0000" onclick="saveBL()">BLOKLA</button>
+                <input type="text" id="bl-input" placeholder="IP və ya User ID">
+                <button class="btn" style="background:red" onclick="saveBL()">QARA SİYAHIYA SAL</button>
             </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Data</th><th>Tarix</th><th>Sil</th></tr></thead>
-                    <tbody id="bl-body"></tbody>
-                </table>
-            </div>
+            <div id="bl-list" class="grid"></div>
         </section>
 
         <section id="logs" class="section">
-            <div id="log-list" style="font-family:monospace; font-size:12px; color:var(--green); line-height:1.6"></div>
+            <div class="log-box" id="log-content">Loqlar yüklənir...</div>
         </section>
     </main>
 
@@ -155,34 +151,44 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let user = ""; let role = "";
+        let currentUser = "";
+        let currentRole = "";
         const games = ["roblox", "pubg", "mlbb", "valorantTR", "valorantEU", "steambalans", "applebalans", "freefire", "discord", "weplay", "standoff", "deltaforce"];
 
-        // LOGIN
         window.login = async () => {
             const n = document.getElementById('adm-name').value;
             const p = document.getElementById('adm-pass').value;
-            if(!n || !p) return alert("Boş buraxmayın!");
+            if(!n || !p) return alert("Ad və şifrə mütləqdir!");
 
             const snap = await get(ref(db, 'security'));
             const data = snap.val();
 
-            if(p === data.owner_pass) role = "owner";
-            else if(p === data.admin_pass) role = "admin";
-            else return alert("Xətalı şifrə!");
+            if(p === data.owner_pass) currentRole = "owner";
+            else if(p === data.admin_pass) currentRole = "admin";
+            else return alert("Şifrə yanlışdır!");
 
-            user = n;
+            currentUser = n;
             document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('user-info').innerText = `${role.toUpperCase()}: ${user}`;
-            
-            if(role === 'owner') document.querySelectorAll('.owner-only').forEach(el => el.style.display = 'block');
-            
-            initSystem();
-            logAction(`Sistemə giriş etdi.`);
+            document.getElementById('welcome-name').innerText = n;
+            document.getElementById('user-badge').innerText = currentRole.toUpperCase();
+
+            if(currentRole === 'owner') {
+                document.querySelectorAll('.owner-only').forEach(el => el.style.display = 'block');
+                document.getElementById('nav-logs').style.display = 'block';
+                syncLogs();
+            }
+
+            logAction("Sistemə giriş etdi.");
+            initApp();
         };
 
-        async function logAction(act) {
-            await push(ref(db, 'logs'), { u: user, a: act, t: new Date().toLocaleString() });
+        function logAction(action) {
+            const time = new Date().toLocaleString('az-AZ');
+            push(ref(db, 'logs'), {
+                admin: currentUser,
+                action: action,
+                time: time
+            });
         }
 
         window.tab = (id) => {
@@ -192,110 +198,89 @@
             event.target.classList.add('active');
         };
 
-        function initSystem() {
-            // Build Game Chips
+        function initApp() {
+            // Chips
             const chipBox = document.getElementById('game-chips');
             chipBox.innerHTML = games.map(g => `<div class="game-chip" onclick="loadPrices('${g}')">${g.toUpperCase()}</div>`).join('');
-            loadPrices('roblox'); // Default
+            loadPrices('roblox');
 
-            // Sync Promos
+            // Promos
             onValue(ref(db, 'promocodes'), snap => {
-                const b = document.getElementById('p-body'); b.innerHTML = "";
-                snap.forEach(c => {
-                    b.innerHTML += `<tr><td>${c.key}</td><td>${c.val().percent}%</td><td><button onclick="delPromo('${c.key}')">❌</button></td></tr>`;
+                const list = document.getElementById('promo-list'); list.innerHTML = "";
+                snap.forEach(p => {
+                    list.innerHTML += `<div class="card"><b>${p.key}</b> (${p.val().percent}%) <button class="btn" style="padding:5px; margin:0" onclick="delPromo('${p.key}')">SİL</button></div>`;
                 });
             });
 
-            // Sync Blacklist
+            // Blacklist
             onValue(ref(db, 'blacklist'), snap => {
-                const b = document.getElementById('bl-body'); b.innerHTML = "";
-                snap.forEach(c => {
-                    b.innerHTML += `<tr><td>${c.val().d}</td><td>${c.val().t}</td><td><button onclick="delBL('${c.key}')">❌</button></td></tr>`;
+                const list = document.getElementById('bl-list'); list.innerHTML = "";
+                snap.forEach(b => {
+                    list.innerHTML += `<div class="card">ID: ${b.val().d} <button class="btn" style="padding:5px; margin:0; background:#333" onclick="delBL('${b.key}')">AZAD ET</button></div>`;
                 });
             });
-
-            // Sync Announcement
-            get(ref(db, 'announcement')).then(snap => {
-                if(snap.exists()){
-                    document.getElementById('ann-msg').value = snap.val().text;
-                    document.getElementById('ann-mode').value = snap.val().status;
-                }
-            });
-
-            if(role === 'owner') {
-                onValue(ref(db, 'logs'), snap => {
-                    const lBox = document.getElementById('log-list'); lBox.innerHTML = "";
-                    snap.forEach(l => {
-                        const d = l.val();
-                        lBox.innerHTML = `<div>[${d.t}] <b>${d.u}</b>: ${d.a}</div>` + lBox.innerHTML;
-                    });
-                });
-            }
         }
 
-        // PRICE LOGIC
         window.loadPrices = (game) => {
             document.querySelectorAll('.game-chip').forEach(c => c.classList.remove('active'));
             event?.target?.classList?.add('active');
-            
             onValue(ref(db, `prices/${game}`), snap => {
                 const grid = document.getElementById('price-grid'); grid.innerHTML = "";
                 const data = snap.val() || {};
-                Object.keys(data).forEach(key => {
-                    grid.innerHTML += `<div class="card">
-                        <p style="color:var(--primary); font-size:12px; font-weight:bold">${key}</p>
-                        <input type="text" value="${data[key]}" id="val-${game}-${key}">
-                        <button class="btn btn-sm" onclick="savePrice('${game}','${key}')">YADDA SAXLA</button>
-                    </div>`;
+                Object.keys(data).forEach(k => {
+                    grid.innerHTML += `<div class="card"><p style="font-size:11px; color:var(--primary)">${k}</p>
+                    <input type="text" value="${data[k]}" id="in-${game}-${k}">
+                    <button class="btn" style="padding:8px; font-size:10px" onclick="savePrice('${game}','${k}')">YENİLƏ</button></div>`;
                 });
             });
         };
 
         window.savePrice = (g, k) => {
-            const v = document.getElementById(`val-${g}-${k}`).value;
+            const v = document.getElementById(`in-${g}-${k}`).value;
             set(ref(db, `prices/${g}/${k}`), v).then(() => {
-                logAction(`${g} paketini (${k}) ${v} AZN olaraq dəyişdi.`);
-                alert("Yadda saxlanıldı!");
+                logAction(`${g.toUpperCase()} (${k}) qiymətini ${v} etdi.`);
+                alert("Yeniləndi!");
             });
         };
 
-        // PROMO LOGIC
         window.savePromo = () => {
             const n = document.getElementById('p-name').value;
             const v = document.getElementById('p-val').value;
-            if(!n || !v) return;
-            set(ref(db, `promocodes/${n}`), { percent: v }).then(() => {
-                logAction(`Yeni promokod yaratdı: ${n} (${v}%)`);
-                document.getElementById('p-name').value = "";
-            });
-        };
-        window.delPromo = (k) => {
-            if(confirm("Silinsin?")) remove(ref(db, `promocodes/${k}`)).then(() => logAction(`${k} promokodunu sildi.`));
+            set(ref(db, `promocodes/${n}`), { percent: v }).then(() => logAction(`Yeni promo yaratdı: ${n}`));
         };
 
-        // ANNOUNCEMENT LOGIC
+        window.delPromo = (k) => remove(ref(db, `promocodes/${k}`)).then(() => logAction(`${k} promosunu sildi.`));
+
         window.saveAnn = () => {
-            const t = document.getElementById('ann-msg').value;
-            const s = document.getElementById('ann-mode').value;
+            const t = document.getElementById('ann-text').value;
+            const s = document.getElementById('ann-status').value;
             set(ref(db, 'announcement'), { text: t, status: s }).then(() => {
-                logAction(`Duyurunu yenilədi.`);
-                alert("Duyuru yayındadı!");
+                logAction("Duyurunu yenilədi.");
+                alert("Uğurlu!");
             });
         };
 
-        // BLACKLIST LOGIC
         window.saveBL = () => {
-            const v = document.getElementById('bl-val').value;
-            if(!v) return;
-            push(ref(db, 'blacklist'), { d: v, t: new Date().toLocaleDateString() }).then(() => {
-                logAction(`${v} datasını blacklistə əlavə etdi.`);
-                document.getElementById('bl-val').value = "";
-            });
-        };
-        window.delBL = (k) => {
-            remove(ref(db, `blacklist/${k}`)).then(() => logAction(`Blacklistdən bir qeydi sildi.`));
+            const v = document.getElementById('bl-input').value;
+            push(ref(db, 'blacklist'), { d: v, t: new Date().toLocaleDateString() }).then(() => logAction(`${v} blacklistə atıldı.`));
         };
 
+        window.delBL = (k) => remove(ref(db, `blacklist/${k}`));
+
+        function syncLogs() {
+            onValue(ref(db, 'logs'), snap => {
+                const box = document.getElementById('log-content'); box.innerHTML = "";
+                snap.forEach(l => {
+                    const d = l.val();
+                    // undefined xətasının qarşısını almaq üçün yoxlanış:
+                    const admin = d.admin || "Sistem";
+                    const action = d.action || "Məlumat yoxdur";
+                    const time = d.time || "Naməlum";
+                    
+                    box.innerHTML = `<div class="log-item"><span class="log-time">[${time}]</span> <span class="log-user">${admin}</span>: ${action}</div>` + box.innerHTML;
+                });
+            });
+        }
     </script>
 </body>
 </html>
