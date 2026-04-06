@@ -3,75 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glidox | Admin Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Glidox | Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff4655; --bg: #0a0a0a; --card: #161616; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; padding: 40px 20px; }
-        .admin-container { max-width: 600px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #222; }
-        h1 { font-family: 'Orbitron'; color: var(--primary); text-align: center; margin-bottom: 30px; font-size: 22px; }
-        
-        .price-row { 
-            display: flex; align-items: center; justify-content: space-between; 
-            margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #222; 
+        :root { --primary: #ff4655; --bg: #050505; --card: #111; --text: #eee; --green: #00ff88; --accent: #222; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar Navigation */
+        .sidebar { width: 280px; background: #0a0a0a; border-right: 1px solid var(--accent); padding: 30px 15px; display: flex; flex-direction: column; overflow-y: auto; }
+        .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 20px; font-weight: bold; margin-bottom: 35px; text-align: center; letter-spacing: 2px; }
+        .nav-group { margin-bottom: 25px; }
+        .nav-label { font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 10px; display: block; font-family: 'Orbitron'; }
+        .nav-btn { 
+            width: 100%; padding: 12px 15px; background: transparent; border: none; color: #888; 
+            text-align: left; cursor: pointer; border-radius: 8px; font-size: 13px; transition: 0.3s; display: block; margin-bottom: 5px;
         }
-        label { font-size: 14px; font-weight: 600; }
+        .nav-btn:hover, .nav-btn.active { background: rgba(255, 70, 85, 0.1); color: var(--primary); font-weight: 600; }
+
+        /* Main Workspace */
+        .workspace { flex: 1; padding: 40px; overflow-y: auto; background: radial-gradient(circle at top right, #0d0d0d, #050505); }
+        .section { display: none; animation: slideUp 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes slideUp { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
+
+        /* Dashboard Cards */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: var(--card); border: 1px solid var(--accent); padding: 25px; border-radius: 15px; position: relative; overflow: hidden; }
+        .card h3 { font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 15px; }
+        .card .val { font-size: 32px; font-family: 'Orbitron'; color: #fff; }
+        .card .trend { color: var(--green); font-size: 12px; margin-top: 10px; }
+
+        /* Tables */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border-radius: 10px; overflow: hidden; }
+        .data-table th { background: #1a1a1a; padding: 15px; text-align: left; font-family: 'Orbitron'; font-size: 11px; color: var(--primary); }
+        .data-table td { padding: 15px; border-bottom: 1px solid var(--accent); font-size: 13px; }
         
-        .input-group { display: flex; gap: 10px; }
-        input { 
-            background: #000; border: 1px solid #333; color: white; 
-            padding: 8px 12px; border-radius: 5px; width: 80px; text-align: center; 
+        /* Product & Catalog Management */
+        .catalog-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+        .cat-btn { padding: 8px 15px; background: #1a1a1a; border: 1px solid var(--accent); color: #fff; cursor: pointer; border-radius: 5px; font-size: 12px; }
+        .cat-btn.active { background: var(--primary); border-color: var(--primary); }
+
+        /* Forms & Inputs */
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; color: #888; margin-bottom: 8px; }
+        input, select, textarea { 
+            width: 100%; background: #000; border: 1px solid var(--accent); padding: 12px; 
+            color: #fff; border-radius: 8px; font-family: 'Poppins'; 
         }
         input:focus { border-color: var(--primary); outline: none; }
+        .btn-action { background: var(--primary); color: #fff; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; width: 100%; }
 
-        button { 
-            background: var(--primary); color: white; border: none; 
-            padding: 8px 15px; border-radius: 5px; cursor: pointer; 
-            font-family: 'Orbitron'; font-size: 10px; transition: 0.3s;
-        }
-        button:hover { opacity: 0.8; transform: scale(1.05); }
-        
-        .status-msg { text-align: center; font-size: 12px; margin-top: 20px; color: #44ff44; display: none; }
+        /* Badge Styles */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .pending { background: rgba(255, 165, 0, 0.2); color: orange; }
+        .completed { background: rgba(0, 255, 136, 0.2); color: var(--green); }
+        .cancelled { background: rgba(255, 70, 85, 0.2); color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <div class="admin-container">
-        <h1>GLIDOX ADMİN PANEL</h1>
+    <aside class="sidebar">
+        <div class="logo">GLIDOX COMMAND</div>
         
-        <div id="price-list">
-            <div class="price-row">
-                <label>300 Robux (AZN)</label>
-                <div class="input-group">
-                    <input type="text" id="inp-rbx_300" placeholder="0.00">
-                    <button onclick="updatePrice('rbx_300')">Yadda Saxla</button>
-                </div>
-            </div>
+        <div class="nav-group">
+            <span class="nav-label">Analitika</span>
+            <button class="nav-btn active" onclick="nav('dashboard')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="nav('finans')">💰 Gəlir-Xərc (Analiz)</button>
+        </div>
 
-            <div class="price-row">
-                <label>800 Robux (AZN)</label>
-                <div class="input-group">
-                    <input type="text" id="inp-rbx_800" placeholder="0.00">
-                    <button onclick="updatePrice('rbx_800')">Yadda Saxla</button>
-                </div>
-            </div>
+        <div class="nav-group">
+            <span class="nav-label">Satış</span>
+            <button class="nav-btn" onclick="nav('orders')">📦 Sifarişlər</button>
+            <button class="nav-btn" onclick="nav('inventory')">🔑 Kod Bazası (Stok)</button>
+        </div>
 
-            <div class="price-row">
-                <label>2000 Robux (AZN)</label>
-                <div class="input-group">
-                    <input type="text" id="inp-rbx_2000" placeholder="0.00">
-                    <button onclick="updatePrice('rbx_2000')">Yadda Saxla</button>
-                </div>
+        <div class="nav-group">
+            <span class="nav-label">Kataloq</span>
+            <button class="nav-btn" onclick="nav('products')">💎 Qiymət İdarəetməsi</button>
+            <button class="nav-btn" onclick="nav('promo')">🎟️ Promo Kodlar</button>
+        </div>
+
+        <div class="nav-group">
+            <span class="nav-label">Müştəri</span>
+            <button class="nav-btn" onclick="nav('support')">💬 Canlı Dəstək</button>
+            <button class="nav-btn" onclick="nav('blacklist')">🚫 Qara Siyahı</button>
+        </div>
+
+        <div class="nav-group">
+            <span class="nav-label">Sistem</span>
+            <button class="nav-btn" onclick="nav('settings')">⚙️ Ayarlar (Ödəniş/Rəng)</button>
+            <button class="nav-btn" onclick="nav('logs')">📜 Təhlükəsizlik Loqları</button>
+        </div>
+    </aside>
+
+    <main class="workspace">
+        
+        <section id="dashboard" class="section active">
+            <h2 style="font-family: 'Orbitron'; margin-bottom: 30px;">Xoş Gəldin, Admin</h2>
+            <div class="grid-3">
+                <div class="card"><h3>Gündəlik Satış</h3><div class="val" id="dash-daily">0 AZN</div><div class="trend">↑ 12% keçən aydan</div></div>
+                <div class="card"><h3>Aktiv Sifarişlər</h3><div class="val" id="dash-active">0</div><div class="trend" style="color: #888;">Gözləmədə olan</div></div>
+                <div class="card"><h3>Ziyarətçi Sayı</h3><div class="val">1,240</div><div class="trend">Live: 42 nəfər</div></div>
+            </div>
+        </section>
+
+        <section id="products" class="section">
+            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Məhsul və Qiymət</h2>
+            <div class="catalog-selector">
+                <button class="cat-btn active" onclick="loadCatalog('roblox')">Roblox</button>
+                <button class="cat-btn" onclick="loadCatalog('pubg')">PUBG Mobile</button>
+                <button class="cat-btn" onclick="loadCatalog('netflix')">Netflix</button>
+                <button class="cat-btn" style="background: var(--primary);" onclick="addNewGame()">+ Yeni Oyun</button>
             </div>
             
-            </div>
+            <div id="product-list" class="grid-3">
+                </div>
+        </section>
 
-        <p id="status" class="status-msg">Qiymət uğurla yeniləndi! ✅</p>
-    </div>
+        <section id="orders" class="section">
+            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Sifariş Tarixçəsi</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Müştəri/ID</th>
+                        <th>Məhsul</th>
+                        <th>Qiymət</th>
+                        <th>Status</th>
+                        <th>Əməl</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table-body">
+                    </tbody>
+            </table>
+        </section>
+
+        <section id="settings" class="section">
+            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Sistem Ayarları</h2>
+            <div class="card" style="margin-bottom: 20px;">
+                <h3>Aktiv Duyurular (Announcement Bar)</h3>
+                <div class="input-group">
+                    <input type="text" id="setting-announce" placeholder="Məs: Bu gün bütün UC-lərə 5% endirim!">
+                </div>
+                <button class="btn-action" onclick="saveSetting('announcement')">Aktivləşdir / Yenilə</button>
+            </div>
+            <div class="card">
+                <h3>Ödəniş Metodları Switcher</h3>
+                <div style="display: flex; gap: 20px;">
+                    <label><input type="checkbox" checked> M10</label>
+                    <label><input type="checkbox" checked> Million</label>
+                    <label><input type="checkbox" checked> Kartdan Karta</label>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set, update, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8",
@@ -86,35 +176,76 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Qiyməti Yeniləmə Funksiyası
-        window.updatePrice = function(itemKey) {
-            const newValue = document.getElementById('inp-' + itemKey).value;
-            
-            if(newValue === "") {
-                alert("Zəhmət olmasa qiymət daxil edin!");
-                return;
-            }
+        // --- NAVIGATION LOGIC ---
+        window.nav = function(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        };
 
-            set(ref(db, 'prices/roblox/' + itemKey), newValue)
-            .then(() => {
-                const status = document.getElementById('status');
-                status.style.display = 'block';
-                setTimeout(() => { status.style.display = 'none'; }, 2000);
-            })
-            .catch((error) => {
-                alert("Xəta baş verdi: " + error.message);
+        // --- CATALOG & PRICE LOADING ---
+        window.loadCatalog = function(game) {
+            const productRef = ref(db, 'prices/' + game);
+            onValue(productRef, (snapshot) => {
+                const container = document.getElementById('product-list');
+                container.innerHTML = "";
+                snapshot.forEach(child => {
+                    container.innerHTML += `
+                        <div class="card">
+                            <h3>${child.key.toUpperCase()}</h3>
+                            <div class="input-group">
+                                <label>Qiymət (AZN)</label>
+                                <input type="text" id="price-${game}-${child.key}" value="${child.val()}">
+                            </div>
+                            <button class="btn-action" style="font-size: 10px;" onclick="updateItemPrice('${game}', '${child.key}')">Yadda Saxla</button>
+                        </div>
+                    `;
+                });
             });
         };
 
-        // Mövcud qiymətləri xanalara avtomatik doldurmaq (isteğe bağlı)
-        const keys = ['rbx_300', 'rbx_800', 'rbx_2000'];
-        keys.forEach(key => {
-            get(ref(db, 'prices/roblox/' + key)).then((snapshot) => {
-                if(snapshot.exists()) {
-                    document.getElementById('inp-' + key).value = snapshot.val();
-                }
+        window.updateItemPrice = function(game, key) {
+            const newPrice = document.getElementById(`price-${game}-${key}`).value;
+            set(ref(db, `prices/${game}/${key}`), newPrice);
+            alert("Qiymət yeniləndi!");
+        };
+
+        // --- ORDERS LOGIC ---
+        onValue(ref(db, 'orders'), (snapshot) => {
+            const tableBody = document.getElementById('orders-table-body');
+            tableBody.innerHTML = "";
+            let activeCount = 0;
+            snapshot.forEach(child => {
+                const order = child.val();
+                if(order.status === 'pending') activeCount++;
+                tableBody.innerHTML += `
+                    <tr>
+                        <td><b>${order.customerName}</b><br><small>${child.key}</small></td>
+                        <td>${order.packageName}</td>
+                        <td style="color:var(--green)">${order.price} AZN</td>
+                        <td><span class="badge ${order.status}">${order.status}</span></td>
+                        <td>
+                            <select onchange="changeStatus('${child.key}', this.value)">
+                                <option value="">Dəyiş</option>
+                                <option value="completed">Tamamla</option>
+                                <option value="cancelled">Ləğv Et</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
             });
+            document.getElementById('dash-active').innerText = activeCount;
         });
+
+        window.changeStatus = (id, status) => {
+            if(!status) return;
+            update(ref(db, 'orders/' + id), { status: status });
+            // Log əlavə etmək olar bura
+        };
+
+        // Initial Load
+        loadCatalog('roblox');
     </script>
 </body>
 </html>
