@@ -6,27 +6,109 @@
     <title>Glidox Shop | Apple App Store Balans</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --apple-blue: #0071e3; --bg-dark: #000; --card-bg: #1d1d1f; --text-gray: #86868b; }
+        :root {
+            --apple-blue: #0071e3;
+            --bg-dark: #000000;
+            --card-bg: #1d1d1f;
+            --text-gray: #86868b;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg-dark); color: #fff; font-family: 'Poppins', sans-serif; opacity: 0; transition: 0.6s; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: #ffffff; 
+            font-family: 'Poppins', sans-serif;
+            opacity: 0; 
+            transition: opacity 0.6s ease; 
+        }
+        
         body.loaded { opacity: 1; }
-        header { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); padding: 15px 8%; display: flex; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-family: 'Orbitron'; font-size: 22px; color: #fff; text-decoration: none; letter-spacing: 2px; }
-        .hero { text-align: center; padding: 80px 20px; background: radial-gradient(circle at center, #2c2c2e 0%, #000 100%); }
+
+        header { 
+            background-color: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(20px);
+            padding: 15px 8%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid #333;
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        .logo { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px; font-weight: bold; color: #fff; 
+            text-decoration: none; letter-spacing: 2px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(circle at center, #2c2c2e 0%, #000000 100%);
+        }
         .hero img { width: 60px; margin-bottom: 20px; filter: invert(1); }
+        .hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; }
+        .hero p { color: var(--text-gray); margin-top: 10px; font-size: 18px; }
+
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .price-card { background: var(--card-bg); padding: 30px; border-radius: 18px; text-align: center; transition: 0.4s; cursor: pointer; border: 1px solid transparent; }
+
+        .price-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 20px; 
+        }
+        
+        .price-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 18px;
+            text-align: center;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
         .price-card:hover { transform: scale(1.03); border-color: #555; }
         .price-card.active { border-color: var(--apple-blue); background: #252527; }
+
+        .amount { font-size: 28px; font-weight: 600; display: block; margin-bottom: 5px; color: #fff; }
+        .currency { color: var(--text-gray); font-size: 14px; margin-bottom: 15px; display: block; }
         .price-tag { color: var(--apple-blue); font-weight: 600; font-size: 22px; }
-        .buy-btn { display: block; width: 100%; max-width: 280px; margin: 60px auto; padding: 16px; background: var(--apple-blue); color: #fff; text-decoration: none; text-align: center; border-radius: 30px; font-weight: 600; border: none; cursor: pointer; }
+
+        .buy-btn {
+            display: block; width: 100%; max-width: 280px; margin: 60px auto;
+            padding: 16px; background: var(--apple-blue); color: #fff;
+            text-decoration: none; text-align: center; border-radius: 30px;
+            font-weight: 600; font-size: 16px; transition: 0.3s;
+            border: none; cursor: pointer;
+        }
+        .buy-btn:hover { background: #0077ed; box-shadow: 0 0 20px rgba(0, 113, 227, 0.4); }
+
+        .modal {
+            display: none; position: fixed; z-index: 9999; 
+            left: 0; top: 0; width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.9);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #1d1d1f; padding: 40px; border-radius: 24px;
+            max-width: 400px; width: 90%; text-align: center;
+        }
+        .modal-h2 { font-size: 24px; margin-bottom: 15px; }
+        .details { margin: 20px 0; text-align: left; background: #000; padding: 20px; border-radius: 12px; }
+        .details p { margin-bottom: 10px; font-size: 14px; color: #ccc; }
+
+        .support-link {
+            display: block; background: #fff; color: #000;
+            padding: 14px; text-decoration: none; font-weight: bold;
+            border-radius: 25px; transition: 0.3s; text-align: center;
+        }
+
+        footer { text-align: center; padding: 60px; color: var(--text-gray); font-size: 12px; }
     </style>
 </head>
 <body class="loaded">
+
     <header>
         <a href="index.html" class="logo">GLIDOX</a>
-        <a href="index.html" style="color: #fff; text-decoration: none; font-size: 13px;">Geri qayt</a>
+        <nav><a href="index.html" style="color: #fff; text-decoration: none; font-size: 13px;">Geri qayt</a></nav>
     </header>
 
     <div class="hero">
@@ -38,35 +120,51 @@
     <div class="container">
         <div class="price-grid">
             <div class="price-card" onclick="select(this, '2$ Balans')">
-                <span style="font-size: 28px; font-weight: 600; display: block;">2$</span>
-                <span style="color: var(--text-gray); font-size: 14px; display: block; margin-bottom: 15px;">APPLE GIFT CARD</span>
+                <span class="amount">2$</span>
+                <span class="currency">APPLE GIFT CARD</span>
                 <span class="price-tag" id="price-apple2">Yüklənir...</span>
             </div>
             <div class="price-card" onclick="select(this, '4$ Balans')">
-                <span style="font-size: 28px; font-weight: 600; display: block;">4$</span>
-                <span style="color: var(--text-gray); font-size: 14px; display: block; margin-bottom: 15px;">APPLE GIFT CARD</span>
+                <span class="amount">4$</span>
+                <span class="currency">APPLE GIFT CARD</span>
                 <span class="price-tag" id="price-apple4">Yüklənir...</span>
             </div>
             <div class="price-card" onclick="select(this, '5$ Balans')">
-                <span style="font-size: 28px; font-weight: 600; display: block;">5$</span>
-                <span style="color: var(--text-gray); font-size: 14px; display: block; margin-bottom: 15px;">APPLE GIFT CARD</span>
+                <span class="amount">5$</span>
+                <span class="currency">APPLE GIFT CARD</span>
                 <span class="price-tag" id="price-apple5">Yüklənir...</span>
             </div>
             <div class="price-card" onclick="select(this, '10$ Balans')">
-                <span style="font-size: 28px; font-weight: 600; display: block;">10$</span>
-                <span style="color: var(--text-gray); font-size: 14px; display: block; margin-bottom: 15px;">APPLE GIFT CARD</span>
+                <span class="amount">10$</span>
+                <span class="currency">APPLE GIFT CARD</span>
                 <span class="price-tag" id="price-apple10">Yüklənir...</span>
             </div>
         </div>
-        <button class="buy-btn" onclick="alert('Tezliklə!')">SİFARİŞ ET</button>
+
+        <button class="buy-btn" onclick="openM()">SİFARİŞ ET</button>
     </div>
+
+    <div id="m" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-h2">Sifariş Məlumatı</h2>
+            <div class="details">
+                <p>📍 <b>Seçim:</b> <span id="sel" style="color: var(--apple-blue);">Yoxdur</span></p>
+                <p>⚠️ Region: <b>USA</b> (ABŞ) olmalıdır.</p>
+                <p>📩 Kodunuz dəstək xidməti tərəfindən göndəriləcək.</p>
+            </div>
+            <a href="destek.html" class="support-link">ÖDƏNİŞƏ KEÇ</a>
+            <p onclick="closeM()" style="margin-top: 15px; cursor: pointer; color: var(--text-gray); font-size: 13px;">Ləğv et</p>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 GLIDOX SHOP - Apple Inc. ilə rəsmi əlaqəsi yoxdur.</footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSy...", 
+            apiKey: "AIzaSy...", // Bura real API Key-ini əlavə etdiyindən əmin ol
             databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "glidoxshop",
         };
@@ -74,7 +172,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // DİQQƏT: Firebase-də qovluq adın "applebalans" olduğu üçün buranı düzəltdim
         const appleItems = [
             { id: 'price-apple2', key: '2_USD' },
             { id: 'price-apple4', key: '4_USD' },
@@ -83,12 +180,31 @@
         ];
 
         appleItems.forEach(item => {
-            // YOLU DÜZƏLTDİM: Artıq "applebalans/" qovluğuna baxır
-            onValue(ref(db, 'applebalans/' + item.key), (snap) => {
-                const val = snap.exists() ? snap.val() : "N/A";
+            // FIREBASE YOLU: Şəkillərdəki kimi 'prices/applebalans/' istifadə edildi
+            onValue(ref(db, 'prices/applebalans/' + item.key), (snapshot) => {
+                const val = snapshot.exists() ? snapshot.val() : "N/A";
                 document.getElementById(item.id).innerText = val + " AZN";
             });
         });
+    </script>
+
+    <script>
+        window.onload = () => document.body.classList.add('loaded');
+        let choice = "";
+
+        function select(el, name) {
+            document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            choice = name;
+        }
+
+        function openM() {
+            if(!choice) return alert("Paket seçin!");
+            document.getElementById('sel').innerText = choice;
+            document.getElementById('m').style.display = 'flex';
+        }
+
+        function closeM() { document.getElementById('m').style.display = 'none'; }
     </script>
 </body>
 </html>
