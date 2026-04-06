@@ -11,6 +11,7 @@
             --bg-dark: #0a0a0a;
             --card-bg: #111111;
             --transition: 0.3s ease;
+            --green: #00ff88;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,9 +40,22 @@
             text-decoration: none; letter-spacing: 2px;
         }
 
+        nav { display: flex; align-items: center; gap: 20px; }
         nav ul { list-style: none; display: flex; gap: 25px; }
         nav ul li a { color: #fff; text-decoration: none; font-size: 12px; font-family: 'Orbitron'; transition: 0.3s; }
         nav ul li a:hover { color: var(--primary); }
+
+        /* PROMO STATUSU */
+        #promo-status-badge {
+            display: none;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--green);
+            border: 1px solid var(--green);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: 'Orbitron';
+        }
 
         .container {
             max-width: 1200px;
@@ -65,6 +79,24 @@
             transition: var(--transition);
             display: flex;
             flex-direction: column;
+            position: relative;
+        }
+
+        /* ENDİRİM ETİKETİ (Kartın üzərində) */
+        .discount-tag {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--green);
+            color: black;
+            font-family: 'Orbitron';
+            font-weight: bold;
+            font-size: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
         }
 
         .game-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 5px 20px rgba(255, 70, 85, 0.2); }
@@ -121,6 +153,7 @@
     <header>
         <a href="index.html" class="logo">GLIDOX</a>
         <nav>
+            <div id="promo-status-badge">🎟️ PROMO AKTİVDİR</div>
             <ul>
                 <li><a href="index.html">ANA SƏHİFƏ</a></li>
                 <li><a href="destek.html">DƏSTƏK</a></li>
@@ -132,6 +165,7 @@
         <div class="games-grid">
             
             <a href="steambalans.html" class="game-card">
+                <div class="discount-tag">10% ENDİRİM</div>
                 <div class="img-container">
                     <img src="https://cdn.fastly.steamstatic.com/store/home/store_home_share.jpg" class="game-img">
                 </div>
@@ -142,6 +176,7 @@
             </a>
 
             <a href="pubg.html" class="game-card">
+                <div class="discount-tag">10% ENDİRİM</div>
                 <div class="img-container">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU2HFapnOWqtN4uzRUHXkdVWir06EQ6DJ64QCPg_oqXarptw3k6xsSdcoHCDoUow3B0mWXovDleFYB1zJwsvcVVYqivokdYKBHf7Hoj_k&s=10" class="game-img">
                 </div>
@@ -152,6 +187,7 @@
             </a>
 
             <a href="mlbb.html" class="game-card">
+                <div class="discount-tag">10% ENDİRİM</div>
                 <div class="img-container">
                     <img src="https://cdn.prod.website-files.com/65956e2711516206d2d1258f/67d16acac5515372f3f3af70_MLBB%20rank%20cover.webp" class="game-img">
                 </div>
@@ -162,6 +198,7 @@
             </a>
 
             <a href="valorantTR.html" class="game-card">
+                <div class="discount-tag">10% ENDİRİM</div>
                 <div class="img-container">
                     <img src="https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg" class="game-img">
                 </div>
@@ -171,37 +208,8 @@
                 </div>
             </a>
 
-            <a href="valorantEU.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg" class="game-img" style="filter: hue-rotate(45deg);">
-                </div>
-                <div class="game-info">
-                    <h3>VALORANT EU</h3>
-                    <span class="badge">Avropa Regionu</span>
-                </div>
-            </a>
-
-            <a href="applebalans.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://photos5.appleinsider.com/gallery/0-139534-App-Store-xl.jpg" class="game-img">
-                </div>
-                <div class="game-info">
-                    <h3>APPLE BALANS</h3>
-                    <span class="badge">App Store Gift Card</span>
-                </div>
-            </a>
-
-            <a href="freefire.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://a-static.besthdwallpaper.com/mission-landscape-map-garena-free-fire-video-game-wallpaper-2400x1350-73457_50.jpg" class="game-img">
-                </div>
-                <div class="game-info">
-                    <h3>FREE FIRE</h3>
-                    <span class="badge">Almaz Yükləmə</span>
-                </div>
-            </a>
-
             <a href="roblox.html" class="game-card">
+                <div class="discount-tag">10% ENDİRİM</div>
                 <div class="img-container">
                     <img src="https://images.tynker.com/blog/wp-content/uploads/20250401220809/robloxxjpg-1.jpg" class="game-img">
                 </div>
@@ -211,47 +219,7 @@
                 </div>
             </a>
 
-            <a href="deltaforce.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2507950/192e49c1f0a1a2e1ec524fbbeb041af29de0a4e8/capsule_616x353.jpg?t=1772768205" class="game-img">
-                </div>
-                <div class="game-info">
-                    <h3>DELTA FORCE</h3>
-                    <span class="badge">Coin Paketləri</span>
-                </div>
-            </a>
-
-            <a href="standoff.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://cdn-www.bluestacks.com/bs-images/stan-1.jpg" class="game-img">
-                </div>
-                <div class="game-info">
-                    <h3>STANDOFF 2</h3>
-                    <span class="badge">Gold Satışı</span>
-                </div>
-            </a>
-
-            <a href="weplay.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://downloadr2.apkmirror.com/wp-content/uploads/2023/08/91/64dba95d8fc8b_com.wejoy.weplay.png" class="game-img" style="object-fit: contain; background: #FFF13D; padding: 15px;">
-                </div>
-                <div class="game-info">
-                    <h3>WEPLAY</h3>
-                    <span class="badge">VIP & Jeton</span>
-                </div>
-            </a>
-
-            <a href="discord.html" class="game-card">
-                <div class="img-container">
-                    <img src="https://gamemakerstoolkit.com/wp-content/uploads/2024/01/perk-discord.jpg" class="game-img">
-                </div>
-                <div class="game-info">
-                    <h3>DISCORD NITRO</h3>
-                    <span class="badge">Nitro & Basic</span>
-                </div>
-            </a>
-
-        </div>
+            </div>
     </div>
 
     <footer>&copy; 2026 GLIDOX SHOP - Bütün hüquqlar qorunur</footer>
@@ -259,6 +227,22 @@
     <script>
         window.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("loaded");
+
+            // PROMO KOD YOXLA VƏ ENDİRİM ETİKETLƏRİNİ GÖSTƏR
+            const promo = JSON.parse(localStorage.getItem('glidox_promo'));
+            
+            if (promo && promo.percent) {
+                // 1. Header-dəki statusu göstər
+                document.getElementById('promo-status-badge').style.display = 'block';
+                document.getElementById('promo-status-badge').innerText = `🎟️ ${promo.percent}% ENDİRİM AKTİVDİR`;
+
+                // 2. Bütün kartlardakı "10% ENDİRİM" yazılarını göstər
+                const tags = document.querySelectorAll('.discount-tag');
+                tags.forEach(tag => {
+                    tag.style.display = 'block';
+                    tag.innerText = `${promo.percent}% ENDİRİM`;
+                });
+            }
         });
     </script>
 </body>
