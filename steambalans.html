@@ -80,7 +80,6 @@
         }
         .action-btn:hover { filter: brightness(1.2); letter-spacing: 1px; }
 
-        /* MODAL */
         .modal {
             display: none; position: fixed; z-index: 9999; 
             left: 0; top: 0; width: 100%; height: 100%; 
@@ -98,7 +97,7 @@
 
     <header>
         <a href="index.html" class="logo">GLIDOX</a>
-        <a href="games.html" style="color: #fff; text-decoration: none; font-size: 12px;">← Mağazaya Qayıt</a>
+        <a href="index.html" style="color: #fff; text-decoration: none; font-size: 12px;">← Mağazaya Qayıt</a>
     </header>
 
     <div class="hero">
@@ -111,17 +110,17 @@
             <div class="card" onclick="pick(this, '5$ Steam Wallet')">
                 <span class="steam-val">5 USD</span>
                 <span class="sub-text">Cüzdan Kodu</span>
-                <span class="price">10.00 AZN</span>
+                <span class="price" id="price-5usd">Yüklənir...</span>
             </div>
             <div class="card" onclick="pick(this, '10$ Steam Wallet')">
                 <span class="steam-val">10 USD</span>
                 <span class="sub-text">Cüzdan Kodu</span>
-                <span class="price">20.00 AZN</span>
+                <span class="price" id="price-10usd">Yüklənir...</span>
             </div>
             <div class="card" onclick="pick(this, '20$ Steam Wallet')">
                 <span class="steam-val">20 USD</span>
                 <span class="sub-text">Cüzdan Kodu</span>
-                <span class="price">40.50 AZN</span>
+                <span class="price" id="price-20usd">Yüklənir...</span>
             </div>
         </div>
 
@@ -133,7 +132,7 @@
             <h2 style="font-family: 'Orbitron'; margin-bottom: 15px;">SİFARİŞİNİZ</h2>
             <p>Seçilən: <b id="choice" style="color: var(--steam-light);">Yoxdur</b></p>
             <div style="margin: 20px 0; text-align: left; font-size: 14px; background: #000; padding: 15px; border-radius: 4px;">
-                <p>• Region: **Global / USA**</p>
+                <p>• Region: <b>Global / USA</b></p>
                 <p>• Kodunuz 5-10 dəqiqəyə təslim edilir.</p>
             </div>
             <a href="destek.html" class="action-btn" style="display:inline-block; width:100%; margin: 10px 0;">ÖDƏNİŞƏ KEÇ</a>
@@ -142,6 +141,35 @@
     </div>
 
     <footer>&copy; 2026 GLIDOX SHOP - Valve Corporation ilə əlaqəsi yoxdur.</footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // ÖZ FIREBASE KONFİQURASİYANIZI BURAYA QOYUN
+        const firebaseConfig = {
+            apiKey: "AIzaSy...", 
+            databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "glidoxshop",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Qiymətləri bazadan oxuyuruq
+        const items = [
+            { id: 'price-5usd', key: '5_USD' },
+            { id: 'price-10usd', key: '10_USD' },
+            { id: 'price-20usd', key: '20_USD' }
+        ];
+
+        items.forEach(item => {
+            onValue(ref(db, 'prices/steambalans/' + item.key), (snapshot) => {
+                const val = snapshot.exists() ? snapshot.val() : "N/A";
+                document.getElementById(item.id).innerText = val + " AZN";
+            });
+        });
+    </script>
 
     <script>
         window.onload = () => document.body.classList.add('loaded');
