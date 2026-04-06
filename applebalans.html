@@ -39,7 +39,6 @@
             text-decoration: none; letter-spacing: 2px;
         }
 
-        /* --- Hero Section --- */
         .hero {
             text-align: center;
             padding: 80px 20px;
@@ -82,7 +81,6 @@
         }
         .buy-btn:hover { background: #0077ed; box-shadow: 0 0 20px rgba(0, 113, 227, 0.4); }
 
-        /* MODAL */
         .modal {
             display: none; position: fixed; z-index: 9999; 
             left: 0; top: 0; width: 100%; height: 100%; 
@@ -100,17 +98,17 @@
         .support-link {
             display: block; background: #fff; color: #000;
             padding: 14px; text-decoration: none; font-weight: bold;
-            border-radius: 25px; transition: 0.3s;
+            border-radius: 25px; transition: 0.3s; text-align: center;
         }
 
         footer { text-align: center; padding: 60px; color: var(--text-gray); font-size: 12px; }
     </style>
 </head>
-<body>
+<body class="loaded">
 
     <header>
         <a href="index.html" class="logo">GLIDOX</a>
-        <nav><a href="games.html" style="color: #fff; text-decoration: none; font-size: 13px;">Geri qayt</a></nav>
+        <nav><a href="index.html" style="color: #fff; text-decoration: none; font-size: 13px;">Geri qayt</a></nav>
     </header>
 
     <div class="hero">
@@ -124,22 +122,22 @@
             <div class="price-card" onclick="select(this, '2$ Balans')">
                 <span class="amount">2$</span>
                 <span class="currency">APPLE GIFT CARD</span>
-                <span class="price-tag">4.00 AZN</span>
+                <span class="price-tag" id="price-apple2">... AZN</span>
             </div>
             <div class="price-card" onclick="select(this, '4$ Balans')">
                 <span class="amount">4$</span>
                 <span class="currency">APPLE GIFT CARD</span>
-                <span class="price-tag">8.00 AZN</span>
+                <span class="price-tag" id="price-apple4">... AZN</span>
             </div>
             <div class="price-card" onclick="select(this, '5$ Balans')">
                 <span class="amount">5$</span>
                 <span class="currency">APPLE GIFT CARD</span>
-                <span class="price-tag">9.50 AZN</span>
+                <span class="price-tag" id="price-apple5">... AZN</span>
             </div>
             <div class="price-card" onclick="select(this, '10$ Balans')">
                 <span class="amount">10$</span>
                 <span class="currency">APPLE GIFT CARD</span>
-                <span class="price-tag">19.00 AZN</span>
+                <span class="price-tag" id="price-apple10">... AZN</span>
             </div>
         </div>
 
@@ -151,7 +149,7 @@
             <h2 class="modal-h2">Sifariş Məlumatı</h2>
             <div class="details">
                 <p>📍 <b>Seçim:</b> <span id="sel" style="color: var(--apple-blue);">Yoxdur</span></p>
-                <p>⚠️ Region: **USA** (ABŞ) olmalıdır.</p>
+                <p>⚠️ Region: <b>USA</b> (ABŞ) olmalıdır.</p>
                 <p>📩 Kodunuz dəstək xidməti tərəfindən göndəriləcək.</p>
             </div>
             <a href="destek.html" class="support-link">ÖDƏNİŞƏ KEÇ</a>
@@ -160,6 +158,36 @@
     </div>
 
     <footer>&copy; 2026 GLIDOX SHOP - Apple Inc. ilə rəsmi əlaqəsi yoxdur.</footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSy...", // Öz API Key-ini bura qoy
+            databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "glidoxshop",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Apple paketləri üçün siyahı
+        const appleItems = [
+            { id: 'price-apple2', key: '2_USD' },
+            { id: 'price-apple4', key: '4_USD' },
+            { id: 'price-apple5', key: '5_USD' },
+            { id: 'price-apple10', key: '10_USD' }
+        ];
+
+        appleItems.forEach(item => {
+            // Bazada 'prices/apple/' qovluğunu yoxlayır
+            onValue(ref(db, 'prices/apple/' + item.key), (snapshot) => {
+                const val = snapshot.exists() ? snapshot.val() : "N/A";
+                document.getElementById(item.id).innerText = val + " AZN";
+            });
+        });
+    </script>
 
     <script>
         window.onload = () => document.body.classList.add('loaded');
