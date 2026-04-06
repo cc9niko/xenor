@@ -3,200 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glidox Shop | Oyun Kataloqu</title>
+    <title>Glidox Shop | Oyunlar və Xidmətlər</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff4655;
             --bg-dark: #0a0a0a;
             --card-bg: #161616;
-            --text-dim: #a0a0a0;
+            --transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            background-color: var(--bg-dark); 
-            color: #ffffff; 
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
             font-family: 'Poppins', sans-serif;
-            opacity: 0; 
-            transition: opacity 0.6s ease-in-out; 
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            overflow-x: hidden;
         }
-        
+
         body.loaded { opacity: 1; }
 
-        header { 
-            background-color: rgba(22, 22, 22, 0.95); 
+        header {
+            background-color: rgba(22, 22, 22, 0.95);
             backdrop-filter: blur(10px);
-            padding: 15px 8%; 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 1px solid rgba(255, 70, 85, 0.2); 
-            position: sticky; top: 0; z-index: 1000; 
+            padding: 15px 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 70, 85, 0.2);
+            position: sticky; top: 0; z-index: 1000;
         }
-        .logo { 
+
+        .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 24px; font-weight: bold; color: var(--primary); 
-            text-decoration: none; letter-spacing: 3px; text-transform: uppercase; 
-        }
-        nav ul { list-style: none; display: flex; gap: 30px; }
-        nav ul li a { color: #fff; text-decoration: none; font-size: 14px; font-family: 'Orbitron'; text-transform: uppercase; transition: 0.3s; }
-        nav ul li a:hover { color: var(--primary); }
-
-        .page-header { text-align: center; padding: 60px 20px; background: linear-gradient(to bottom, #0f0f0f, var(--bg-dark)); }
-        .page-header h2 { font-family: 'Orbitron', sans-serif; font-size: 32px; letter-spacing: 4px; text-transform: uppercase; }
-        .page-header h2 span { color: var(--primary); }
-        .page-header p { color: var(--text-dim); margin-top: 10px; font-size: 14px; }
-
-        .container { max-width: 1200px; margin: 0 auto 80px; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-
-        .card { 
-            background-color: var(--card-bg); 
-            border-radius: 15px; 
-            overflow: hidden; 
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-        .card:hover { 
-            transform: translateY(-10px); 
-            border-color: var(--primary); 
-            box-shadow: 0 15px 40px rgba(255, 70, 85, 0.15); 
-        }
-        
-        .card-img { 
-            height: 180px; 
-            background-size: cover;
-            background-position: center;
+            font-size: 24px; font-weight: bold; color: var(--primary);
+            text-decoration: none; letter-spacing: 3px; text-transform: uppercase;
         }
 
-        /* Oyun Şəkilləri */
-        .pubg-bg { background-image: url('https://static0.xdaimages.com/wordpress/wp-content/uploads/2018/06/pubg.jpg?w=1200&h=675&fit=crop'); }
-        .ff-bg { background-image: url('https://a-static.besthdwallpaper.com/mission-landscape-map-garena-free-fire-video-game-wallpaper-2400x1350-73457_50.jpg'); }
-        .roblox-bg { background-image: url('https://images.tynker.com/blog/wp-content/uploads/20250401220809/robloxxjpg-1.jpg'); }
-        .val-bg { background-image: url('https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg'); }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
 
-        .card-content { padding: 25px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-content h3 { font-size: 20px; margin-bottom: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; }
-        .card-content p { color: var(--text-dim); font-size: 13px; margin-bottom: 20px; line-height: 1.4; }
-
-        .buy-btn { 
-            display: block; 
-            background-color: var(--primary); 
-            color: #fff; 
-            padding: 12px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border-radius: 8px; 
+        .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 12px; 
-            transition: 0.3s; 
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section-title span { color: var(--primary); }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: var(--transition);
+            text-decoration: none;
+            color: white;
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 70, 85, 0.2);
+        }
+
+        .game-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            filter: grayscale(30%);
+            transition: 0.5s;
+        }
+
+        .game-card:hover .game-img {
+            filter: grayscale(0%);
+            scale: 1.05;
+        }
+
+        .game-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .game-info h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .game-info p {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            background: rgba(255, 70, 85, 0.1);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
             border: 1px solid var(--primary);
-            letter-spacing: 1px;
-        }
-        .buy-btn:hover { 
-            background-color: transparent; 
-            color: var(--primary); 
-            box-shadow: 0 0 20px rgba(255, 70, 85, 0.4);
         }
 
-        footer { 
-            background-color: #050505; 
-            text-align: center; 
-            padding: 40px; 
-            border-top: 1px solid #1a1a1a; 
-            color: #555; 
-            font-size: 13px; 
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: #444;
+            font-size: 13px;
+            border-top: 1px solid #111;
+            margin-top: 50px;
         }
 
-        @media (max-width: 768px) {
-            header { padding: 15px 5%; }
-            .grid { grid-template-columns: 1fr; }
+        /* Navigasiya linki */
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Orbitron';
+            font-size: 13px;
+            margin-left: 20px;
+            transition: 0.3s;
         }
+        nav a:hover { color: var(--primary); }
+
     </style>
 </head>
-<body>
+<body class="loaded">
 
     <header>
         <a href="index.html" class="logo">Glidox</a>
         <nav>
-            <ul>
-                <li><a href="index.html">Ana Səhifə</a></li>
-                <li><a href="#">Dəstək</a></li>
-            </ul>
+            <a href="index.html">ANA SƏHİFƏ</a>
+            <a href="destek.html">DƏSTƏK</a>
         </nav>
     </header>
 
-    <div class="page-header">
-        <h2>Oyun <span>Kataloqu</span></h2>
-        <p>Regionu seç və sürətli yükləmədən yararlan.</p>
-    </div>
+    <div class="container">
+        <h2 class="section-title">MÖVCUD <span>XİDMƏTLƏR</span></h2>
 
-    <section class="container">
-        <div class="grid">
+        <div class="games-grid">
             
-            <div class="card">
-                <div class="card-img pubg-bg"></div>
-                <div class="card-content">
-                    <div>
-                        <h3>PUBG Mobile</h3>
-                        <p>Global və TR region üçün anında UC yükləmə xidməti.</p>
-                    </div>
-                    <a href="pubg.html" class="buy-btn">UC SATIN AL</a>
+            <a href="pubg.html" class="game-card">
+                <img src="https://e0.pxfuel.com/wallpapers/118/989/desktop-wallpaper-pubg-mobile-4k-2020-games-pubg.jpg" alt="PUBG" class="game-img">
+                <div class="game-info">
+                    <h3>PUBG MOBILE</h3>
+                    <p>UC yükləmələri və paketlər</p>
+                    <span class="badge">Sürətli Çatdırılma</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="card">
-                <div class="card-img ff-bg"></div>
-                <div class="card-content">
-                    <div>
-                        <h3>Free Fire</h3>
-                        <p>Ən ucuz FF Elmas paketləri ilə hesabını gücləndir.</p>
-                    </div>
-                    <a href="freefire.html" class="buy-btn">ELMAS AL</a>
+            <a href="valorantTR.html" class="game-card">
+                <img src="https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt3f00417770f8a09f/639798d197607711200155a5/VALORANT_ANNOUNCEMENT_STILL.jpg" alt="Valorant TR" class="game-img">
+                <div class="game-info">
+                    <h3>VALORANT TR</h3>
+                    <p>Türkiyə regionu üçün VP</p>
+                    <span class="badge">Ən Ucuz Qiymət</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="card">
-                <div class="card-img roblox-bg"></div>
-                <div class="card-content">
-                    <div>
-                        <h3>Roblox</h3>
-                        <p>Roblox dünyasında fərqlənmək üçün Robux əldə et.</p>
-                    </div>
-                    <a href="roblox.html" class="buy-btn">ROBUX AL</a>
+            <a href="valorantEU.html" class="game-card">
+                <img src="https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg" alt="Valorant EU" class="game-img">
+                <div class="game-info">
+                    <h3>VALORANT EU</h3>
+                    <p>Avropa regionu üçün VP</p>
+                    <span class="badge">Riot ID ilə</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="card">
-                <div class="card-img val-bg"></div>
-                <div class="card-content">
-                    <div>
-                        <h3>Valorant (Avropa)</h3>
-                        <p>EU Region hesablar üçün sürətli VP yükləmə.</p>
-                    </div>
-                    <a href="valorantEU.html" class="buy-btn">VP SATIN AL</a>
+            <a href="roblox.html" class="game-card">
+                <img src="https://images.rbxcdn.com/f047719602e9a2636a0f7c234a946522.jpg" alt="Roblox" class="game-img">
+                <div class="game-info">
+                    <h3>ROBLOX</h3>
+                    <p>Robux paketləri və yükləmə</p>
+                    <span class="badge">Təhlükəsiz</span>
                 </div>
-            </div>
+            </a>
 
-            <div class="card">
-                <div class="card-img val-bg"></div>
-                <div class="card-content">
-                    <div>
-                        <h3>Valorant (Türkiyə)</h3>
-                        <p>TR Region hesablar üçün ən ucuz qiymətə VP-lər.</p>
-                    </div>
-                    <a href="valorantTR.html" class="buy-btn">VP SATIN AL</a>
+            <a href="discord.html" class="game-card">
+                <img src="https://gamemakerstoolkit.com/wp-content/uploads/2024/01/perk-discord.jpg" alt="Discord" class="game-img">
+                <div class="game-info">
+                    <h3>DISCORD NITRO</h3>
+                    <p>Nitro və Basic abunəlikləri</p>
+                    <span class="badge">Hədiyyə / Girişlə</span>
                 </div>
-            </div>
+            </a>
+
+            <a href="freefire.html" class="game-card">
+                <img src="https://dl.dir.freefiremobile.com/garena/ffsite/tr/news/63/87d90f2305a2e5d7751c3859666063be.jpg" alt="Free Fire" class="game-img">
+                <div class="game-info">
+                    <h3>FREE FIRE</h3>
+                    <p>Almaz (Diamond) yükləmələri</p>
+                    <span class="badge">Anında Yükləmə</span>
+                </div>
+            </a>
 
         </div>
-    </section>
+    </div>
 
-    <footer>
-        <p>&copy; 2026 GLIDOX SHOP. Bütün hüquqlar qorunur.</p>
-    </footer>
+    <footer>&copy; 2026 GLIDOX SHOP - Bütün hüquqlar qorunur</footer>
 
     <script>
         window.addEventListener("DOMContentLoaded", () => {
