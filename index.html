@@ -18,14 +18,13 @@
             background-color: var(--bg-dark); 
             color: #ffffff; 
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Ana səhifədə scroll ehtiyacı yoxdur */
+            overflow: hidden; 
             opacity: 0; 
             transition: opacity 0.8s ease-in-out; 
         }
         
         body.loaded { opacity: 1; }
 
-        /* --- Header --- */
         header { 
             background-color: rgba(22, 22, 22, 0.95); 
             backdrop-filter: blur(10px);
@@ -46,7 +45,6 @@
         }
         nav ul li a:hover { color: var(--primary); }
 
-        /* --- Premium Hero Section --- */
         .hero {
             height: 100vh;
             display: flex;
@@ -58,7 +56,6 @@
             text-align: center;
         }
 
-        /* Hərəkətli duman effekti */
         .hero::before {
             content: '';
             position: absolute;
@@ -91,7 +88,6 @@
         }
         .hero p { color: var(--text-dim); font-size: 1.2rem; margin-bottom: 50px; letter-spacing: 1px; }
 
-        /* Düymələr */
         .hero-btns { display: flex; gap: 25px; justify-content: center; }
         
         .main-btn {
@@ -152,7 +148,27 @@
         <div class="hero-bottom-glow"></div>
     </section>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8",
+            authDomain: "glidoxshop.firebaseapp.com",
+            projectId: "glidoxshop",
+            storageBucket: "glidoxshop.firebasestorage.app",
+            messagingSenderId: "123258254071",
+            appId: "1:123258254071:web:ae147159986886134a59f2",
+            measurementId: "G-TT462T34YL"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+
+        // Sayt yüklənəndə animasiyanı aktiv et
         window.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("loaded");
         });
