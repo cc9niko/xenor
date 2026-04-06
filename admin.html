@@ -3,136 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glidox | Command Center</title>
+    <title>Glidox | Command Center v5.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { 
-            --primary: #ff4655; --bg: #050505; --card: #111; --text: #eee; 
-            --green: #00ff88; --accent: #222; --gold: #ffd700; --blue: #0088ff; 
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --primary: #ff4655; --bg: #050505; --card: #111; --text: #eee; --green: #00ff88; --gold: #ffd700; --accent: #222; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
-        /* Mobil menyu düyməsi (yalnız mobildə görünür) */
-        .menu-toggle { display: none; position: fixed; top: 15px; right: 15px; z-index: 1001; background: var(--primary); border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+        /* Auth Screen */
+        #auth-screen { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-card { background: #0a0a0a; padding: 30px; border: 1px solid var(--accent); border-radius: 15px; width: 100%; max-width: 400px; text-align: center; }
 
-        /* Sidebar Responsive */
-        .sidebar { 
-            width: 260px; background: #080808; border-right: 1px solid var(--accent); padding: 20px; 
-            display: flex; flex-direction: column; transition: 0.3s; z-index: 1000;
-        }
-
-        /* Giriş Ekranı */
-        #auth-overlay { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px); padding: 20px; }
-        .auth-box { background: #0a0a0a; padding: 30px; border: 1px solid var(--accent); border-radius: 15px; text-align: center; width: 100%; max-width: 380px; }
+        /* Sidebar */
+        .sidebar { width: 260px; background: #080808; border-right: 1px solid var(--accent); padding: 20px; transition: 0.3s; display: flex; flex-direction: column; }
+        .nav-btn { width: 100%; padding: 12px; background: transparent; border: none; color: #666; text-align: left; cursor: pointer; border-radius: 8px; margin-bottom: 5px; font-size: 14px; }
+        .nav-btn.active { background: #151515; color: var(--primary); border-left: 3px solid var(--primary); }
         
-        .role-badge { font-family: 'Orbitron'; font-size: 10px; padding: 6px; border-radius: 4px; margin-bottom: 20px; text-align: center; width: 100%; display: block; }
-        .admin-badge { background: rgba(255, 70, 85, 0.1); color: var(--primary); border: 1px solid var(--primary); }
-        .owner-badge { background: rgba(255, 215, 0, 0.1); color: var(--gold); border: 1px solid var(--gold); }
-
-        .nav-group { margin-bottom: 20px; }
-        .nav-btn { 
-            width: 100%; padding: 12px 15px; background: transparent; border: none; color: #777; 
-            text-align: left; cursor: pointer; border-radius: 8px; font-size: 13px; margin-bottom: 5px; transition: 0.2s;
-        }
-        .nav-btn:hover, .nav-btn.active { background: #1a1a1a; color: #fff; }
-        .nav-btn.active { border-left: 3px solid var(--primary); }
-        .owner-only { display: none !important; }
-
-        .workspace { flex: 1; padding: 30px; overflow-y: auto; position: relative; }
+        /* Workspace */
+        .workspace { flex: 1; padding: 25px; overflow-y: auto; }
         .section { display: none; }
         .section.active { display: block; }
 
-        /* Kartlar */
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid var(--accent); }
-        .stat-val { font-family: 'Orbitron'; font-size: 18px; margin-top: 5px; }
+        /* UI Elements */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--accent); }
+        input, select, textarea { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: #fff; border-radius: 8px; margin-top: 10px; outline: none; }
+        .btn { background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .owner-only { display: none; border-color: var(--gold) !important; }
 
-        /* Formalar */
-        input, select, textarea { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: #fff; border-radius: 8px; margin-bottom: 10px; outline: none; font-size: 14px; }
-        .btn-main { background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; width: 100%; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #222; font-size: 13px; }
+        th { color: var(--primary); font-family: 'Orbitron'; font-size: 11px; }
 
-        /* Mobil üçün media query */
         @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .sidebar { position: fixed; left: -260px; height: 100%; }
-            .sidebar.open { left: 0; }
-            .workspace { padding: 60px 15px 20px; }
-            .grid-stats { grid-template-columns: 1fr 1fr; }
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--accent); padding: 10px; flex-direction: row; overflow-x: auto; }
+            .nav-btn { width: auto; white-space: nowrap; }
         }
     </style>
 </head>
 <body>
 
-    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-
-    <div id="auth-overlay">
-        <div class="auth-box">
-            <h2 style="font-family:'Orbitron'; margin-bottom:20px; color:var(--primary)">CORE ACCESS</h2>
-            <input type="password" id="pass-key" placeholder="Şifrəni daxil edin..." style="text-align:center;">
-            <button class="btn-main" onclick="tryLogin()">SİSTEMİ AÇ</button>
+    <div id="auth-screen">
+        <div class="auth-card">
+            <h2 style="font-family:'Orbitron'; color:var(--primary); margin-bottom:20px;">GLIDOX CORE</h2>
+            <input type="text" id="admin-name" placeholder="Adınız (Məs: Admin Ali)">
+            <input type="password" id="admin-pass" placeholder="Məxfi Şifrə">
+            <button class="btn" onclick="handleLogin()">SİSTEMƏ DAXİL OL</button>
         </div>
     </div>
 
-    <aside class="sidebar" id="sidebar">
-        <div id="role-display" class="role-badge admin-badge">YÜKLƏNİR...</div>
-        
-        <div class="nav-group">
-            <button class="nav-btn active" onclick="nav('dashboard')">📊 Dashboard</button>
-            <button class="nav-btn" onclick="nav('products')">💎 Qiymətlər</button>
-            <button class="nav-btn" onclick="nav('promo')">🎟️ Promo Kodlar</button>
-            <button class="nav-btn" onclick="nav('announcement')">📢 Duyurular</button>
-            <button class="nav-btn" onclick="nav('blacklist')">🚫 Qara Siyahı</button>
-        </div>
-
-        <div class="nav-group owner-section owner-only">
-            <p style="font-size:10px; color:var(--gold); margin-bottom:10px; font-family:'Orbitron'">OWNER V5.0</p>
-            <button class="nav-btn" onclick="nav('logs')" style="color:var(--gold)">📜 Admin Loqları</button>
-            <button class="nav-btn" onclick="nav('finance')" style="color:var(--gold)">💰 Maliyyə</button>
+    <aside class="sidebar">
+        <div id="badge" style="font-size:10px; text-align:center; margin-bottom:20px; font-family:'Orbitron'"></div>
+        <button class="nav-btn active" onclick="showTab('dash')">📊 Dashboard</button>
+        <button class="nav-btn" onclick="showTab('prices')">💎 Qiymətlər</button>
+        <button class="nav-btn" onclick="showTab('promo')">🎟️ Promokodlar</button>
+        <button class="nav-btn" onclick="showTab('ann')">📢 Duyurular</button>
+        <button class="nav-btn" onclick="showTab('bl')">🚫 Blacklist</button>
+        <div class="owner-only" id="owner-nav">
+            <button class="nav-btn" onclick="showTab('logs')" style="color:var(--gold)">📜 Sistem Loqları</button>
+            <button class="nav-btn" onclick="showTab('fin')" style="color:var(--gold)">💰 Maliyyə</button>
         </div>
     </aside>
 
     <main class="workspace">
-        <section id="dashboard" class="section active">
-            <h2 style="font-family:'Orbitron'; margin-bottom:15px;">Dashboard</h2>
-            <div class="grid-stats">
-                <div class="stat-card">
-                    <p style="font-size:10px; color:#555;">SATIŞLAR</p>
-                    <div class="stat-val">0 AZN</div>
-                </div>
-                <div class="stat-card owner-section owner-only" style="border-color:var(--gold)">
-                    <p style="font-size:10px; color:var(--gold);">XALİS QAZANC</p>
-                    <div class="stat-val">0 AZN</div>
-                </div>
-            </div>
-            <div style="background:var(--card); padding:10px; border-radius:10px;">
-                <canvas id="chart" height="150"></canvas>
+        <section id="dash" class="section active">
+            <h2 style="font-family:'Orbitron'">Xoş gəldiniz, <span id="user-name">...</span></h2>
+            <div class="grid" style="margin-top:20px;">
+                <div class="card"><h4>Gündəlik Satış</h4><p id="d-sales" class="stat">0 AZN</p></div>
+                <div class="card owner-only"><h4>Xalis Mənfəət</h4><p id="d-profit" style="color:var(--green)">0 AZN</p></div>
             </div>
         </section>
 
-        <section id="products" class="section">
-            <h2 style="font-family:'Orbitron'; margin-bottom:15px;">Kataloq</h2>
-            <div id="game-list" style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:20px;"></div>
-            <div id="price-editor" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-                <p style="color:#444">Bir oyun seçin...</p>
+        <section id="prices" class="section">
+            <h2 style="font-family:'Orbitron'">Kataloq & Qiymət</h2>
+            <select id="game-select" onchange="loadGamePrices(this.value)" style="margin-bottom:20px; border-color:var(--primary)">
+                <option value="">Oyun seçin...</option>
+                <option value="roblox">Roblox</option><option value="pubg">PUBG Mobile</option>
+                <option value="mlbb">MLBB</option><option value="valorantTR">Valorant TR</option>
+                <option value="valorantEU">Valorant EU</option><option value="steambalans">Steam</option>
+                <option value="applebalans">Apple</option><option value="freefire">Free Fire</option>
+                <option value="discord">Discord</option><option value="weplay">WePlay</option>
+                <option value="standoff">Standoff 2</option><option value="deltaforce">Delta Force</option>
+            </select>
+            <div id="price-list" class="grid"></div>
+        </section>
+
+        <section id="promo" class="section">
+            <h2 style="font-family:'Orbitron'">🎟️ Promokod Paneli</h2>
+            <div class="card" style="margin-top:15px;">
+                <input type="text" id="p-code" placeholder="Kod adı">
+                <input type="number" id="p-percent" placeholder="Endirim %">
+                <button class="btn" onclick="addPromo()">Yarat</button>
             </div>
+            <table>
+                <thead><tr><th>KOD</th><th>FAİZ</th><th>SİL</th></tr></thead>
+                <tbody id="promo-table"></tbody>
+            </table>
         </section>
 
         <section id="logs" class="section">
-            <h2 style="font-family:'Orbitron'; color:var(--gold);">Sistem Loqları</h2>
-            <div style="background:#111; padding:15px; border-radius:8px; margin-top:15px; font-size:12px; font-family:monospace; color:var(--green)">
-                [14:20] Admin daxil oldu.<br>
-                [14:22] Qiymət dəyişdirildi (Robux 800).
-            </div>
+            <h2 style="font-family:'Orbitron'; color:var(--gold)">Sistem Loqları</h2>
+            <div id="log-container" style="background:#000; padding:15px; border-radius:10px; height:400px; overflow-y:auto; font-family:monospace; font-size:12px; color:var(--green); border:1px solid #222;"></div>
         </section>
-
-        </main>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "IzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8", 
@@ -144,90 +123,121 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Funksiyaları Window obyektinə bağlayırıq ki, HTML-dən çağırmaq olsun
-        window.nav = (id) => {
+        let currentAdmin = "";
+        let currentRole = "";
+
+        // LOGIN SİSTEMİ
+        window.handleLogin = async () => {
+            const name = document.getElementById('admin-name').value;
+            const pass = document.getElementById('admin-pass').value;
+
+            if(!name) return alert("Adınızı daxil edin!");
+
+            const snap = await get(ref(db, 'security'));
+            const data = snap.val();
+
+            if(pass === data.owner_pass) {
+                currentRole = "owner";
+                enterSystem(name, "OWNER V5.0");
+            } else if(pass === data.admin_pass) {
+                currentRole = "admin";
+                enterSystem(name, "ADMIN V2.5");
+            } else {
+                alert("Şifrə yanlışdır!");
+            }
+        };
+
+        function enterSystem(name, badgeText) {
+            currentAdmin = name;
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('user-name').innerText = name;
+            document.getElementById('badge').innerText = badgeText;
+            document.getElementById('badge').className = currentRole === 'owner' ? 'owner-badge' : 'admin-badge';
+
+            if(currentRole === 'owner') {
+                document.querySelectorAll('.owner-only').forEach(el => el.style.display = 'block');
+                loadLogs();
+            }
+            
+            writeLog(`${name} sistemə giriş etdi.`);
+        }
+
+        // LOG YAZMA
+        async function writeLog(msg) {
+            const time = new Date().toLocaleString();
+            await push(ref(db, 'logs'), { admin: currentAdmin, action: msg, time: time });
+        }
+
+        // TAB NAVİQASİYA
+        window.showTab = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(window.innerWidth < 768) toggleSidebar();
+            event.target.classList.add('active');
         };
 
-        window.toggleSidebar = () => {
-            document.getElementById('sidebar').classList.toggle('open');
-        };
-
-        window.tryLogin = async () => {
-            const pass = document.getElementById('pass-key').value;
-            const snap = await get(ref(db, 'security'));
-            if(snap.exists()){
-                const data = snap.val();
-                if(pass === data.owner_pass) setupRole('owner');
-                else if(pass === data.admin_pass) setupRole('admin');
-                else alert("Yanlış şifrə!");
-            }
-        };
-
-        function setupRole(role) {
-            document.getElementById('auth-overlay').style.display = 'none';
-            sessionStorage.setItem('role', role);
+        // QİYMƏTLƏR
+        window.loadGamePrices = (game) => {
+            if(!game) return;
+            const container = document.getElementById('price-list');
+            container.innerHTML = "Yüklənir...";
             
-            const badge = document.getElementById('role-display');
-            if(role === 'owner') {
-                badge.innerText = "OWNER v5.0";
-                badge.className = "role-badge owner-badge";
-                document.querySelectorAll('.owner-section').forEach(el => el.style.setProperty('display', 'block', 'important'));
-            } else {
-                badge.innerText = "ADMIN v2.5";
-                badge.className = "role-badge admin-badge";
-                document.querySelectorAll('.owner-section').forEach(el => el.remove());
-            }
-        }
+            onValue(ref(db, `prices/${game}`), (snap) => {
+                container.innerHTML = "";
+                const data = snap.val() || {};
+                Object.keys(data).forEach(key => {
+                    container.innerHTML += `
+                        <div class="card">
+                            <h5 style="color:var(--primary)">${key}</h5>
+                            <input type="text" value="${data[key]}" id="inp-${game}-${key}">
+                            <button class="btn" style="padding:5px; font-size:11px" onclick="updatePrice('${game}','${key}')">Yadda Saxla</button>
+                        </div>`;
+                });
+            });
+        };
 
-        // Oyun Siyahısı Yükləmə
-        const games = ["roblox", "pubg", "mlbb", "valorantTR", "steambalans"];
-        const gameContainer = document.getElementById('game-list');
-        games.forEach(g => {
-            const btn = document.createElement('button');
-            btn.innerText = g.toUpperCase();
-            btn.className = "nav-btn";
-            btn.style.width = "auto";
-            btn.onclick = () => loadPrices(g);
-            gameContainer.appendChild(btn);
+        window.updatePrice = (game, key) => {
+            const val = document.getElementById(`inp-${game}-${key}`).value;
+            set(ref(db, `prices/${game}/${key}`), val).then(() => {
+                writeLog(`${game} oyununda ${key} qiymətini ${val} etdi.`);
+                alert("Yeniləndi!");
+            });
+        };
+
+        // PROMO KODLAR
+        window.addPromo = () => {
+            const code = document.getElementById('p-code').value;
+            const per = document.getElementById('p-percent').value;
+            set(ref(db, 'promocodes/' + code), { percent: per }).then(() => {
+                writeLog(`Yeni promokod yaratdı: ${code}`);
+                alert("Yaradıldı!");
+            });
+        };
+
+        onValue(ref(db, 'promocodes'), (snap) => {
+            const table = document.getElementById('promo-table');
+            table.innerHTML = "";
+            snap.forEach(c => {
+                table.innerHTML += `<tr><td>${c.key}</td><td>${c.val().percent}%</td><td><button onclick="removePromo('${c.key}')">❌</button></td></tr>`;
+            });
         });
 
-        async function loadPrices(game) {
-            const editor = document.getElementById('price-editor');
-            editor.innerHTML = "Yüklənir...";
-            const snap = await get(ref(db, `prices/${game}`));
-            editor.innerHTML = "";
-            const data = snap.val() || {};
-            Object.keys(data).forEach(key => {
-                editor.innerHTML += `
-                    <div class="stat-card">
-                        <p style="font-size:10px;">${key}</p>
-                        <input type="text" value="${data[key]}" id="val-${game}-${key}">
-                        <button class="btn-main" style="padding:5px; font-size:10px" onclick="updatePrice('${game}','${key}')">UPDATE</button>
-                    </div>
-                `;
+        window.removePromo = (key) => {
+            remove(ref(db, 'promocodes/' + key)).then(() => writeLog(`Promokodu sildi: ${key}`));
+        };
+
+        // LOQLARIN GÖSTƏRİLMƏSİ (Owner Only)
+        function loadLogs() {
+            onValue(ref(db, 'logs'), (snap) => {
+                const container = document.getElementById('log-container');
+                container.innerHTML = "";
+                snap.forEach(l => {
+                    const log = l.val();
+                    container.innerHTML = `<div>[${log.time}] <b>${log.admin}:</b> ${log.action}</div>` + container.innerHTML;
+                });
             });
         }
 
-        window.updatePrice = (game, key) => {
-            const val = document.getElementById(`val-${game}-${key}`).value;
-            set(ref(db, `prices/${game}/${key}`), val).then(() => alert("Uğurlu!"));
-        };
-
-        // Yadda saxlanılmış sessiya
-        const saved = sessionStorage.getItem('role');
-        if(saved) setupRole(saved);
-
-        // Chart.js (Nümunə)
-        const ctx = document.getElementById('chart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: { labels: ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'B'], datasets: [{ label: 'Satışlar', data: [12, 19, 3, 5, 2, 3, 9], borderColor: '#ff4655' }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-        });
     </script>
 </body>
 </html>
