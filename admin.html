@@ -26,7 +26,7 @@
         @keyframes slideUp { from {opacity: 0; transform: translateY(15px);} to {opacity: 1; transform: translateY(0);} }
 
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .card { background: var(--card); border: 1px solid var(--accent); padding: 20px; border-radius: 12px; }
+        .card { background: var(--card); border: 1px solid var(--accent); padding: 20px; border-radius: 12px; position: relative; }
         .card h3 { font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 10px; font-family: 'Orbitron'; }
         .card .val { font-size: 28px; font-family: 'Orbitron'; color: #fff; }
 
@@ -34,16 +34,9 @@
         .cat-btn { padding: 8px 12px; background: #1a1a1a; border: 1px solid var(--accent); color: #fff; cursor: pointer; border-radius: 5px; font-size: 11px; transition: 0.2s; }
         .cat-btn.active { background: var(--primary); border-color: var(--primary); }
 
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--card); border-radius: 10px; overflow: hidden; }
-        .data-table th { background: #1a1a1a; padding: 12px; text-align: left; font-family: 'Orbitron'; font-size: 10px; color: var(--primary); }
-        .data-table td { padding: 12px; border-bottom: 1px solid var(--accent); font-size: 12px; }
-
-        input, select { width: 100%; background: #000; border: 1px solid var(--accent); padding: 10px; color: #fff; border-radius: 6px; font-size: 13px; margin-top: 5px; }
+        input { width: 100%; background: #000; border: 1px solid var(--accent); padding: 10px; color: #fff; border-radius: 6px; font-size: 13px; margin-top: 5px; }
         .btn-action { background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; width: 100%; margin-top: 10px; font-size: 11px; transition: 0.3s; }
         .btn-action:hover { opacity: 0.8; box-shadow: 0 0 10px var(--primary); }
-        .badge { padding: 3px 7px; border-radius: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; }
-        .pending { background: rgba(255, 165, 0, 0.1); color: orange; }
-        .completed { background: rgba(0, 255, 136, 0.1); color: var(--green); }
     </style>
 </head>
 <body>
@@ -53,17 +46,7 @@
         <div class="nav-group">
             <span class="nav-label">İdarəetmə</span>
             <button class="nav-btn active" onclick="nav('dashboard')">📊 Dashboard</button>
-            <button class="nav-btn" onclick="nav('orders')">📦 Sifarişlər</button>
             <button class="nav-btn" onclick="nav('products')">💎 Qiymət & Kataloq</button>
-        </div>
-        <div class="nav-group">
-            <span class="nav-label">Marketinq</span>
-            <button class="nav-btn" onclick="nav('promo')">🎟️ Promo Kodlar</button>
-            <button class="nav-btn" onclick="nav('settings')">⚙️ Sayt Ayarları</button>
-        </div>
-        <div class="nav-group">
-            <span class="nav-label">Təhlükəsizlik</span>
-            <button class="nav-btn" onclick="nav('blacklist')">🚫 Qara Siyahı</button>
         </div>
     </aside>
 
@@ -72,12 +55,7 @@
             <h2 style="font-family: 'Orbitron'; margin-bottom: 20px;">Ümumi Baxış</h2>
             <div class="grid-3">
                 <div class="card"><h3>Gündəlik Satış</h3><div class="val" id="stat-sales">0 AZN</div></div>
-                <div class="card"><h3>Aktiv Sifarişlər</h3><div class="val" id="stat-orders">0</div></div>
                 <div class="card"><h3>Ziyarətçilər</h3><div class="val">128</div></div>
-            </div>
-            <div class="card" style="width: 100%;">
-                <h3>Son Aktivlik</h3>
-                <p id="system-status" style="color:var(--green); font-size:12px">Bütün sistemlər normal işləyir.</p>
             </div>
         </section>
 
@@ -89,63 +67,64 @@
                 <button class="cat-btn" onclick="loadCatalog('steambalans', this)">STEAM</button>
                 <button class="cat-btn" onclick="loadCatalog('mlbb', this)">MLBB</button>
                 <button class="cat-btn" onclick="loadCatalog('valorantTR', this)">VALORANT TR</button>
+                <button class="cat-btn" onclick="loadCatalog('valorantEU', this)">VALORANT EU</button>
                 <button class="cat-btn" onclick="loadCatalog('applebalans', this)">APPLE</button>
+                <button class="cat-btn" onclick="loadCatalog('freefire', this)">FREE FIRE</button>
+                <button class="cat-btn" onclick="loadCatalog('discord', this)">DISCORD</button>
                 <button class="cat-btn" style="border-style:dashed" onclick="addPkg()">+ Yeni Paket</button>
             </div>
             <div id="product-grid" class="grid-3"></div>
         </section>
-
-        </main>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSy...",
+            apiKey: "AIzaSy...", // Bura öz API Key-ni qoy
             databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "glidoxshop",
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        let selectedGame = '';
+        let selectedGame = 'roblox';
 
-        // OYUN PAKET SİYAHISI (Firebase-də olmasa belə burada görünəcəklər)
+        // TAM PAKET SİYAHISI - Bütün oyunlar buraya birbaşa yazıldı
         const gamePackages = {
-            "roblox": ["80_Robux", "400_Robux", "800_Robux", "1700_Robux"],
-            "applebalans": ["2_USD", "4_USD", "5_USD", "10_USD"],
-            "mlbb": [
-                "Weekly_Pass", "Twilight_Pass", "5_Diamonds", "12_Diamonds", 
-                "19_Diamonds", "28_Diamonds", "44_Diamonds", "59_Diamonds", 
-                "85_Diamonds", "170_Diamonds", "240_Diamonds", "296_Diamonds", 
-                "408_Diamonds", "568_Diamonds", "875_Diamonds", "2010_Diamonds"
-            ]
+            "roblox": ["80_Robux", "400_Robux", "800_Robux", "1700_Robux", "4500_Robux", "10000_Robux"],
+            "pubg": ["60_UC", "325_UC", "660_UC", "1800_UC", "3850_UC", "8100_UC"],
+            "steambalans": ["5_USD", "10_USD", "20_USD", "50_USD", "100_USD"],
+            "mlbb": ["Weekly_Pass", "Twilight_Pass", "5_Diamonds", "12_Diamonds", "19_Diamonds", "28_Diamonds", "44_Diamonds", "59_Diamonds", "85_Diamonds", "170_Diamonds", "240_Diamonds", "296_Diamonds", "408_Diamonds", "568_Diamonds", "875_Diamonds", "2010_Diamonds"],
+            "valorantTR": ["115_VP", "485_VP", "925_VP", "1850_VP", "3400_VP", "5500_VP"],
+            "valorantEU": ["575_VP", "1150_VP", "2150_VP", "4400_VP", "5500_VP"],
+            "applebalans": ["2_USD", "4_USD", "5_USD", "10_USD", "15_USD", "20_USD"],
+            "freefire": ["100_Diamonds", "210_Diamonds", "530_Diamonds", "1080_Diamonds"],
+            "discord": ["Nitro_Basic_Month", "Nitro_Full_Month", "Nitro_Basic_Year", "Nitro_Full_Year"]
         };
 
         window.nav = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(event) event.target.classList.add('active');
         };
 
         window.loadCatalog = (game, btn) => {
             selectedGame = game;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
 
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = "Gözləyin...";
+            grid.innerHTML = "Yüklənir...";
 
             onValue(ref(db, 'prices/' + game), (snap) => {
                 grid.innerHTML = "";
                 const dbData = snap.val() || {};
                 
-                // Əgər koddakı siyahıda (gamePackages) varsa, onları göstər
-                const packagesToShow = gamePackages[game] || Object.keys(dbData);
+                // Həm koddakı paketləri, həm də Firebase-də sonradan əlavə edilənləri birləşdirir
+                const allKeys = [...new Set([...(gamePackages[game] || []), ...Object.keys(dbData)])];
 
-                packagesToShow.forEach(pkgKey => {
+                allKeys.forEach(pkgKey => {
                     const price = dbData[pkgKey] || "0.00";
                     grid.innerHTML += `
                         <div class="card">
@@ -163,27 +142,21 @@
         window.savePrice = (key) => {
             const val = document.getElementById('p-' + key).value;
             set(ref(db, `prices/${selectedGame}/${key}`), val)
-                .then(() => alert(key + " üçün qiymət yeniləndi!"))
-                .catch(err => alert("Xəta: " + err.message));
+                .then(() => alert("Qiymət Firebase-ə yazıldı!"));
         };
 
         window.delPkg = (key) => {
-            if(confirm(key + " silinsin?")) {
-                remove(ref(db, `prices/${selectedGame}/${key}`));
-            }
+            if(confirm("Silinsin?")) remove(ref(db, `prices/${selectedGame}/${key}`));
         };
 
         window.addPkg = () => {
             const name = prompt("Paket adı (məs: 500_Diamonds):");
             const price = prompt("Qiymət:");
-            if(name && price) set(ref(db, `prices/${selectedGame}/${name}`), price);
+            if(name && price) set(ref(db, `prices/${selectedGame}/${name.replace(/ /g,'_')}`), price);
         };
 
-        // İlk yükləmə
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstBtn = document.querySelector('.cat-btn');
-            if(firstBtn) loadCatalog('roblox', firstBtn);
-        });
+        // Başlanğıcda Roblox-u aç
+        document.addEventListener('DOMContentLoaded', () => loadCatalog('roblox', document.querySelector('.cat-btn')));
     </script>
 </body>
 </html>
