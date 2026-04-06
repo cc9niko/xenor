@@ -27,7 +27,7 @@
         @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
 
         .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--card); border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; }
+        .stat-card { background: var(--card); border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; position: relative; }
         .stat-card h4 { font-size: 11px; color: #666; text-transform: uppercase; }
         .stat-card .val { font-size: 24px; font-family: 'Orbitron'; margin-top: 10px; }
 
@@ -42,6 +42,8 @@
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
         .admin-table th { background: #1a1a1a; padding: 12px; text-align: left; color: var(--primary); font-family: 'Orbitron'; font-size: 10px; }
         .admin-table td { padding: 12px; border-bottom: 1px solid var(--accent); background: #0c0c0c; }
+        
+        .promo-status { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
@@ -87,21 +89,31 @@
             <div id="product-editor" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:15px;">
                 <p style="color:#555">Zəhmət olmasa yuxarıdan bir oyun seçin...</p>
             </div>
-            <button class="btn-save" style="margin-top:20px; background:var(--blue); color:white; width: 250px;" onclick="addNewCategoryManual()">+ Yeni Oyun Əlavə Et</button>
         </section>
 
         <section id="promo" class="section">
-            <h2 style="font-family:'Orbitron';">Promo Kod Sistemi</h2>
-            <div class="stat-card" style="margin-top:15px; max-width: 400px;">
-                <input type="text" id="promo-name" placeholder="Kod adı (məs: GLIDOX10)">
-                <input type="number" id="promo-percent" placeholder="Endirim faizi (%)">
-                <input type="number" id="promo-limit" placeholder="İstifadə limiti">
-                <button class="btn-save" onclick="createPromo()">Kuponu Aktiv Et</button>
+            <h2 style="font-family:'Orbitron';">🎟️ Promo Kod Sistemi</h2>
+            <div class="stat-card" style="margin-top:15px; max-width: 500px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <input type="text" id="promo-name" placeholder="Kod adı">
+                    <input type="number" id="promo-percent" placeholder="Endirim %">
+                    <input type="number" id="promo-limit" placeholder="Limit">
+                    <select id="promo-init-status">
+                        <option value="active">Aktiv Başlat</option>
+                        <option value="inactive">Deaktiv Başlat</option>
+                    </select>
+                </div>
+                <button class="btn-save" onclick="createPromo()">Kuponu Yarat</button>
             </div>
+
+            <table class="admin-table" style="margin-top:20px;">
+                <thead><tr><th>KOD</th><th>FAİZ</th><th>LİMİT</th><th>İŞLƏNİB</th><th>STATUS</th><th>SİL</th></tr></thead>
+                <tbody id="promo-list-body"></tbody>
+            </table>
         </section>
 
         <section id="blacklist" class="section">
-            <h2 style="font-family:'Orbitron'; color:var(--primary);">Blacklist (Bloklamalar)</h2>
+            <h2 style="font-family:'Orbitron'; color:var(--primary);">🚫 Blacklist</h2>
             <div style="display:flex; gap:10px; margin-top:10px; max-width: 500px;">
                 <input type="text" id="bl-input" placeholder="IP və ya Oyun ID-si">
                 <button class="btn-save" style="background:red; width:150px; margin-top:5px;" onclick="addToBlacklist()">BLOKLA</button>
@@ -115,7 +127,7 @@
         <section id="announcement" class="section">
             <h2 style="font-family:'Orbitron';">📢 Sayt Duyurusu</h2>
             <div style="max-width: 600px; margin-top:15px;">
-                <textarea id="ann-text" style="height: 100px;" placeholder="Saytın yuxarısında görünəcək yazı..."></textarea>
+                <textarea id="ann-text" style="height: 100px;" placeholder="Duyuru mətni..."></textarea>
                 <select id="ann-status" style="margin-top:10px;">
                     <option value="active">Aktiv</option>
                     <option value="inactive">Deaktiv</option>
@@ -128,22 +140,19 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, set, push, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSy...", // Buranı öz apiKey-inlə dəyişməyi unutma
+            apiKey: "IzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8", 
             databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "glidoxshop",
+            appId: "1:123258254071:web:ae147159986886134a59f2"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const cats = [
-            "roblox", "pubg", "steambalans", "mlbb", 
-            "valorantTR", "valorantEU", "applebalans", 
-            "freefire", "discord", "weplay", "standoff", "deltaforce"
-        ];
+        const cats = ["roblox", "pubg", "steambalans", "mlbb", "valorantTR", "valorantEU", "applebalans", "freefire", "discord", "weplay", "standoff", "deltaforce"];
 
         window.nav = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -154,23 +163,19 @@
 
         function initCats() {
             const container = document.getElementById('cat-list');
-            container.innerHTML = "";
-            cats.forEach(c => {
-                container.innerHTML += `<button class="cat-btn" onclick="loadPrices('${c}', this)">${c}</button>`;
-            });
+            container.innerHTML = cats.map(c => `<button class="cat-btn" onclick="loadPrices('${c}', this)">${c}</button>`).join('');
         }
 
         window.loadPrices = (game, btn) => {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
-            const editor = document.getElementById('product-editor');
-            
             onValue(ref(db, 'prices/' + game), (snap) => {
+                const editor = document.getElementById('product-editor');
                 editor.innerHTML = "";
                 const data = snap.val() || {};
                 Object.keys(data).forEach(key => {
                     editor.innerHTML += `
-                        <div class="stat-card" style="border-left:2px solid #333">
+                        <div class="stat-card">
                             <h4 style="color:var(--primary)">${key.replace(/_/g,' ')}</h4>
                             <input type="text" id="inp-${game}-${key}" value="${data[key]}">
                             <div style="display:flex; gap:5px;">
@@ -185,34 +190,48 @@
 
         window.updatePrice = (game, key) => {
             const val = document.getElementById(`inp-${game}-${key}`).value;
-            set(ref(db, `prices/${game}/${key}`), val).then(() => alert("Qiymət yeniləndi!"));
-        };
-
-        window.addNewPackage = (game) => {
-            const name = prompt("Paket adı (məs: 500_Diamonds):");
-            const price = prompt("Qiymət (AZN):");
-            if(name && price) set(ref(db, `prices/${game}/${name.replace(/ /g,'_')}`), price);
+            set(ref(db, `prices/${game}/${key}`), val).then(() => alert("Yeniləndi!"));
         };
 
         window.deletePackage = (game, key) => {
-            if(confirm("Bu paketi silmək istədiyinizə əminsiniz?")) {
-                remove(ref(db, `prices/${game}/${key}`));
+            if(confirm("Silinsin?")) remove(ref(db, `prices/${game}/${key}`));
+        };
+
+        window.addNewPackage = (game) => {
+            const name = prompt("Paket adı:"); const price = prompt("Qiymət:");
+            if(name && price) set(ref(db, `prices/${game}/${name.replace(/ /g,'_')}`), price);
+        };
+
+        window.createPromo = () => {
+            const name = document.getElementById('promo-name').value.trim();
+            const percent = parseInt(document.getElementById('promo-percent').value);
+            const limit = parseInt(document.getElementById('promo-limit').value);
+            const status = document.getElementById('promo-init-status').value;
+            if(name && percent) {
+                set(ref(db, 'promocodes/' + name), { percent, limit, used: 0, status }).then(() => alert("Kupon yaradıldı!"));
             }
         };
 
-        // DUYURU SİSTEMİ (SƏHV BURADA İDİ - ƏLAVƏ OLUNDU)
-        window.saveAnn = () => {
-            const txt = document.getElementById('ann-text').value;
-            const stat = document.getElementById('ann-status').value;
-            
-            set(ref(db, 'announcement'), {
-                text: txt,
-                status: stat
-            }).then(() => {
-                alert("📢 Duyuru uğurla yeniləndi!");
-            }).catch((error) => {
-                alert("Xəta: " + error.message);
+        window.togglePromo = (code, cur) => {
+            update(ref(db, 'promocodes/' + code), { status: cur === 'active' ? 'inactive' : 'active' });
+        };
+
+        onValue(ref(db, 'promocodes'), (snap) => {
+            const body = document.getElementById('promo-list-body');
+            body.innerHTML = "";
+            snap.forEach(child => {
+                const p = child.val();
+                const color = p.status === 'active' ? 'var(--green)' : '#555';
+                body.innerHTML += `<tr>
+                    <td>${child.key}</td><td>${p.percent}%</td><td>${p.limit}</td><td>${p.used}</td>
+                    <td><button class="promo-status" style="background:${color}" onclick="togglePromo('${child.key}','${p.status}')">${p.status.toUpperCase()}</button></td>
+                    <td><button onclick="remove(ref(db,'promocodes/${child.key}'))">❌</button></td>
+                </tr>`;
             });
+        });
+
+        window.saveAnn = () => {
+            set(ref(db, 'announcement'), { text: document.getElementById('ann-text').value, status: document.getElementById('ann-status').value }).then(() => alert("Duyuru yeniləndi!"));
         };
 
         window.addToBlacklist = () => {
@@ -220,15 +239,14 @@
             if(val) push(ref(db, 'blacklist'), { data: val, date: new Date().toLocaleString() });
         };
 
-        onValue(ref(db, 'blacklist'), (snap) => {
+        onValue(ref(db, 'blacklist'), snap => {
             const list = document.getElementById('bl-list');
             list.innerHTML = "";
-            snap.forEach(child => {
-                list.innerHTML += `<tr><td>${child.val().data}</td><td>${child.val().date}</td><td><button onclick="remove(ref(db,'blacklist/${child.key}'))">❌</button></td></tr>`;
+            snap.forEach(c => {
+                list.innerHTML += `<tr><td>${c.val().data}</td><td>${c.val().date}</td><td><button onclick="remove(ref(db,'blacklist/${c.key}'))">❌</button></td></tr>`;
             });
         });
 
-        // Dashboard Qrafiki
         const ctx = document.getElementById('salesChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
