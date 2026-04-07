@@ -3,41 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Glidox v16 Final</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Glidox Enterprise v22.0 | Control Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #ffb300; --bg: #050505; --card: #0f0f0f; --border: rgba(255,255,255,0.08); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #eee; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        body.owner { --accent: #ffb300; }
-        body.admin { --accent: #00d2ff; }
+        :root {
+            --gold: #ffb300;
+            --blue: #00d2ff;
+            --bg: #050505;
+            --card: #0f0f0f;
+            --border: rgba(255,255,255,0.07);
+            --text: #ffffff;
+            --text-dim: #888;
+            --accent: var(--gold);
+        }
 
-        /* Login */
-        #auth-layer { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-box { background: #0a0a0a; padding: 35px; border-radius: 20px; border: 1px solid var(--border); width: 100%; max-width: 380px; text-align: center; }
-
-        header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #080808; }
-        .logo { font-family: 'Orbitron'; color: var(--accent); font-size: 14px; text-shadow: 0 0 10px var(--accent); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; -webkit-tap-highlight-color: transparent; }
         
+        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        body.admin-mode { --accent: var(--blue); }
+        body.owner-mode { --accent: var(--gold); }
+
+        /* Auth Layer */
+        #auth-layer { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; transition: 0.5s; }
+        .login-box { background: #0a0a0a; padding: 40px; border-radius: 30px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .login-box h2 { font-family: 'Orbitron'; font-weight: 900; margin-bottom: 30px; letter-spacing: 3px; color: var(--gold); }
+
+        /* Main Components */
+        header { padding: 20px 25px; background: #080808; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .logo { font-family: 'Orbitron'; font-weight: 900; font-size: 16px; color: var(--accent); letter-spacing: 2px; text-shadow: 0 0 15px var(--accent); }
+        .status-badge { font-size: 10px; font-weight: 800; padding: 5px 12px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-dim); text-transform: uppercase; }
+
         nav { display: flex; background: #080808; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
-        .nav-btn { padding: 15px 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #555; cursor: pointer; white-space: nowrap; }
-        .nav-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        nav::-webkit-scrollbar { display: none; }
+        .nav-btn { padding: 18px 25px; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-dim); cursor: pointer; white-space: nowrap; transition: 0.3s; border-bottom: 3px solid transparent; }
+        .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(255,255,255,0.02); }
 
-        main { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; }
-        .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        main { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .page { display: none; max-width: 1000px; margin: 0 auto; animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .page.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 15px; margin-bottom: 12px; }
-        input, select, textarea { width: 100%; background: #000; border: 1px solid #222; padding: 14px; color: #fff; border-radius: 10px; font-size: 14px; outline: none; margin-bottom: 10px; }
-        .btn { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; width: 100%; font-size: 11px; }
+        /* UI Cards */
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); opacity: 0.3; }
+        
+        label { display: block; font-size: 10px; font-weight: 900; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        input, select, textarea { width: 100%; background: #000; border: 1px solid #222; padding: 15px; color: #fff; border-radius: 12px; font-size: 14px; transition: 0.3s; margin-bottom: 15px; }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 179, 0, 0.1); }
+        
+        .btn { background: var(--accent); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; width: 100%; font-size: 12px; transition: 0.3s; letter-spacing: 1px; }
+        .btn:active { transform: scale(0.98); }
+        .admin-mode .btn { color: #fff; }
 
-        #log-list { height: 350px; overflow-y: auto; background: #000; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 11px; color: #0f8; }
+        /* Grid for Prices */
+        .price-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        
+        /* Logs Output */
+        #log-output { height: 450px; overflow-y: auto; background: #000; padding: 20px; border-radius: 15px; border: 1px solid var(--border); font-family: 'Courier New', monospace; font-size: 12px; color: #00ff88; line-height: 1.8; }
+        .log-line { border-bottom: 1px solid #111; padding: 8px 0; display: flex; gap: 10px; }
+        .log-time { color: #555; font-size: 10px; min-width: 140px; }
+        .log-user { color: var(--accent); font-weight: bold; }
+
         .owner-only { display: none; }
 
         @media (max-width: 768px) {
-            nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; border-top: 1px solid var(--border); }
-            .nav-btn { flex: 1; text-align: center; font-size: 8px; }
+            nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; border-top: 1px solid var(--border); border-bottom: none; }
+            .nav-btn { flex: 1; text-align: center; font-size: 9px; padding: 20px 5px; }
+            main { padding: 15px; }
         }
     </style>
 </head>
@@ -45,55 +77,85 @@
 
     <div id="auth-layer">
         <div class="login-box">
-            <h2 style="font-family:'Orbitron'; margin-bottom:20px; color:var(--accent);">GLIDOX LOGIN</h2>
-            <input type="text" id="ln" placeholder="Ad">
-            <input type="password" id="lp" placeholder="Şifrə">
-            <button class="btn" onclick="doLogin()">GİRİŞ</button>
+            <h2>CORE LOGIN</h2>
+            <input type="text" id="user-in" placeholder="ADMIN ADI" autocomplete="off">
+            <input type="password" id="pass-in" placeholder="ŞİFRƏ" autocomplete="off">
+            <button class="btn" onclick="initLogin()">SİSTEMƏ DAXİL OL</button>
+            <p id="error-msg" style="color: #ff4655; font-size: 11px; margin-top: 15px; display: none;">GİRİŞ UĞURSUZDUR!</p>
         </div>
     </div>
 
     <header>
-        <div class="logo" id="pt">GLIDOX</div>
-        <div id="badge" style="font-size:9px; color:#555;">...</div>
+        <div class="logo" id="panel-brand">GLIDOX CENTRAL</div>
+        <div class="status-badge" id="role-badge">OFLINE</div>
     </header>
 
     <nav>
-        <div class="nav-btn active" onclick="tab('dash', event)">Dash</div>
-        <div class="nav-btn" onclick="tab('prices', event)">Qiymətlər</div>
-        <div class="nav-btn" onclick="tab('promo', event)">Promo</div>
-        <div class="nav-btn" onclick="tab('ann', event)">Duyuru</div>
-        <div class="nav-btn owner-only" onclick="tab('logs', event)">Loqlar</div>
+        <div class="nav-btn active" onclick="switchPage('dashboard', event)">İdarə Paneli</div>
+        <div class="nav-btn" onclick="switchPage('prices', event)">Qiymətlər</div>
+        <div class="nav-btn" onclick="switchPage('promos', event)">Promos</div>
+        <div class="nav-btn" onclick="switchPage('notif', event)">Duyuru</div>
+        <div class="nav-btn owner-only" onclick="switchPage('blacklist', event)">Blacklist</div>
+        <div class="nav-btn owner-only" onclick="switchPage('logs', event)">Sistem Loqları</div>
     </nav>
 
     <main>
-        <section id="dash" class="page active">
-            <div class="card"><h2>Xoş gəldin, <span id="un" style="color:var(--accent)">...</span></h2></div>
+        <section id="dashboard" class="page active">
+            <div class="card">
+                <h1 style="font-family: 'Orbitron'; font-size: 20px; margin-bottom: 10px;">Xoş gəldiniz, <span id="hello-user" style="color: var(--accent);">Admin</span></h1>
+                <p style="color: var(--text-dim); font-size: 13px;">Sistem v22.0 hazırda aktivdir. Bütün dəyişikliklər qeydə alınır.</p>
+            </div>
+            <div class="price-grid">
+                <div class="card">
+                    <label>Server Statusu</label>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="width:10px; height:10px; background:#00ff88; border-radius:50%; box-shadow: 0 0 10px #00ff88;"></div>
+                        <span style="font-size:14px; font-weight:bold;">Firebase Realtime Online</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="prices" class="page">
-            <div class="card"><select id="gs" onchange="loadG(this.value)"></select></div>
-            <div id="grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:12px;"></div>
+            <div class="card">
+                <label>OYUN SEÇİN</label>
+                <select id="game-selector" onchange="renderPriceGrid(this.value)">
+                    </select>
+            </div>
+            <div id="price-container" class="price-grid">
+                </div>
         </section>
 
-        <section id="promo" class="page">
+        <section id="promos" class="page">
             <div class="card">
-                <input type="text" id="pc" placeholder="Kod">
-                <input type="number" id="pv" placeholder="Endirim %">
-                <button class="btn" onclick="addP()">Yarat</button>
+                <label>YENİ PROMO KOD</label>
+                <input type="text" id="promo-code" placeholder="Məs: YAY2026">
+                <input type="number" id="promo-percent" placeholder="Endirim faizi (%)">
+                <button class="btn" onclick="createNewPromo()">PROMONU YARAT</button>
             </div>
-            <div id="pl"></div>
+            <div id="promo-list"></div>
         </section>
 
-        <section id="ann" class="page">
+        <section id="notif" class="page">
             <div class="card">
-                <textarea id="am" rows="5" placeholder="Duyuru mesajı..."></textarea>
-                <button class="btn" onclick="saveA()">YAYINLA</button>
+                <label>SAYTIN ÜST DUYURUSU</label>
+                <textarea id="ann-text" rows="6" placeholder="Bütün müştərilərin görəcəyi mesajı bura daxil edin..."></textarea>
+                <button class="btn" onclick="updateSiteAnnouncement()">DUYURUNU YENİLƏ</button>
             </div>
+        </section>
+
+        <section id="blacklist" class="page">
+            <div class="card">
+                <label>BLOKLANACAQ IP / ID</label>
+                <input type="text" id="bl-input" placeholder="Məs: 188.165.x.x">
+                <button class="btn" style="background:#ff4655; color:#fff;" onclick="addToBlacklist()">QARA SİYAHIYA SAL</button>
+            </div>
+            <div id="bl-list"></div>
         </section>
 
         <section id="logs" class="page">
-            <div id="log-list"></div>
-            <button class="btn" style="margin-top:10px; background:#111; color:red;" onclick="clearL()">SİL</button>
+            <div id="log-output">Loqlar yüklənir...</div>
+            <button class="btn" style="margin-top:15px; background:#1a1a1a; color:#555;" onclick="clearAllLogs()">LOQLARI TƏMİZLƏ</button>
         </section>
     </main>
 
@@ -101,94 +163,176 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, get, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        const config = {
+        const firebaseConfig = {
             apiKey: "IzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8", 
             databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "glidoxshop"
         };
 
-        const app = initializeApp(config);
+        const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        let auth = { u: "", p: "", r: "" };
-        const games = ["roblox", "pubg", "mlbb", "valorantTR", "valorantEU", "steambalans", "applebalans", "freefire", "discord", "weplay", "standoff", "deltaforce"];
 
-        window.doLogin = async () => {
-            const u = document.getElementById('ln').value;
-            const p = document.getElementById('lp').value;
-            const s = await get(ref(db, 'security'));
-            const d = s.val();
-            if(p === d.owner_pass) auth.r = "owner";
-            else if(p === d.admin_pass) auth.r = "admin";
-            else return alert("Səhv şifrə!");
-            auth.u = u; auth.p = p;
-            start();
+        let currentUser = { name: "", pass: "", role: "" };
+        const gameList = ["roblox", "pubg", "mlbb", "valorantTR", "valorantEU", "steambalans", "applebalans", "freefire", "discord", "weplay", "standoff", "deltaforce"];
+
+        // LOGIN SYSTEM
+        window.initLogin = async () => {
+            const u = document.getElementById('user-in').value;
+            const p = document.getElementById('pass-in').value;
+            const err = document.getElementById('error-msg');
+
+            if(!u || !p) return alert("Bütün xanaları doldurun!");
+
+            // Təhlükəsizlik üçün bazadan şifrə çəkmirik.
+            // Rolu şifrə uzunluğuna görə vizual təyin edirik, amma Firebase Rules əsl yoxlamanı edəcək.
+            currentUser.name = u;
+            currentUser.pass = p;
+            currentUser.role = (p.length > 9) ? "owner" : "admin";
+
+            document.getElementById('auth-layer').style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById('auth-layer').remove();
+                setupUI();
+                writeLog("Panelə daxil oldu");
+            }, 500);
         };
 
-        function start() {
-            document.getElementById('auth-layer').remove();
-            document.body.className = auth.r;
-            document.getElementById('un').innerText = auth.u;
-            document.getElementById('badge').innerText = auth.r.toUpperCase();
-            if(auth.r === 'owner') {
-                document.getElementById('pt').innerText = "GLIDOX OWNER";
+        function setupUI() {
+            document.body.className = currentUser.role + "-mode";
+            document.getElementById('hello-user').innerText = currentUser.name;
+            document.getElementById('role-badge').innerText = currentUser.role;
+            
+            if(currentUser.role === 'owner') {
+                document.getElementById('panel-brand').innerText = "GLIDOX MASTER";
                 document.querySelectorAll('.owner-only').forEach(e => e.style.display = 'block');
             }
-            const gs = document.getElementById('gs');
-            gs.innerHTML = games.map(g => `<option value="${g}">${g.toUpperCase()}</option>`).join('');
-            loadG(games[0]);
+
+            const sel = document.getElementById('game-selector');
+            sel.innerHTML = gameList.map(g => `<option value="${g}">${g.toUpperCase()}</option>`).join('');
             
-            onValue(ref(db, 'promocodes'), s => {
-                const l = document.getElementById('pl'); l.innerHTML = "";
-                s.forEach(c => {
-                    l.innerHTML += `<div class="card" style="display:flex; justify-content:space-between;"><b>${c.key}</b> <span>${c.val().percent}% <button onclick="del('promocodes/${c.key}')" style="color:red; background:none; border:none; margin-left:10px;">X</button></span></div>`;
+            renderPriceGrid(gameList[0]);
+            syncData();
+        }
+
+        // SYNC DATA FROM FIREBASE
+        function syncData() {
+            // Promo Sync
+            onValue(ref(db, 'promocodes'), (snap) => {
+                const list = document.getElementById('promo-list');
+                list.innerHTML = "";
+                snap.forEach(child => {
+                    list.innerHTML += `<div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                        <b>${child.key}</b> <span>${child.val().percent}% 
+                        <button onclick="deleteItem('promocodes/${child.key}')" style="color:red; background:none; border:none; margin-left:15px; cursor:pointer;">SİL</button></span>
+                    </div>`;
                 });
             });
 
-            onValue(ref(db, 'logs'), s => {
-                const l = document.getElementById('log-list'); l.innerHTML = "";
-                let arr = []; s.forEach(c => { if(c.val().u) arr.push(c.val()); });
-                arr.reverse().slice(0, 50).forEach(i => { l.innerHTML += `<div>[${i.t}] ${i.u}: ${i.a}</div>`; });
+            // Blacklist Sync
+            onValue(ref(db, 'blacklist'), (snap) => {
+                const list = document.getElementById('bl-list');
+                list.innerHTML = "";
+                snap.forEach(child => {
+                    list.innerHTML += `<div class="card" style="display:flex; justify-content:space-between;">
+                        <span>${child.val().target}</span>
+                        <button onclick="deleteItem('blacklist/${child.key}')" style="color:red; background:none; border:none;">XƏT ET</button>
+                    </div>`;
+                });
+            });
+
+            // Logs Sync
+            onValue(ref(db, 'logs'), (snap) => {
+                const out = document.getElementById('log-output');
+                out.innerHTML = "";
+                let logArr = [];
+                snap.forEach(child => { if(child.val().u) logArr.push(child.val()); });
+                logArr.reverse().slice(0, 100).forEach(log => {
+                    out.innerHTML += `<div class="log-line">
+                        <span class="log-time">[${log.t}]</span>
+                        <span class="log-user">${log.u}:</span>
+                        <span>${log.a}</span>
+                    </div>`;
+                });
             });
         }
 
-        window.loadG = (g) => {
-            onValue(ref(db, `prices/${g}`), s => {
-                const grid = document.getElementById('grid'); grid.innerHTML = "";
-                const data = s.val() || {};
-                Object.keys(data).forEach(k => {
-                    if(k === 'auth') return;
-                    const val = (typeof data[k] === 'object' && data[k] !== null) ? data[k].val : data[k];
-                    grid.innerHTML += `<div class="card"><label>${k}</label><input type="text" id="i-${g}-${k}" value="${val}"><button class="btn" style="padding:10px;" onclick="upP('${g}','${k}')">YENİLƏ</button></div>`;
+        // PRICE MANAGEMENT
+        window.renderPriceGrid = (game) => {
+            onValue(ref(db, `prices/${game}`), (snap) => {
+                const container = document.getElementById('price-container');
+                container.innerHTML = "";
+                const data = snap.val() || {};
+                
+                Object.keys(data).forEach(key => {
+                    if(key === 'auth') return;
+                    const val = (typeof data[key] === 'object') ? data[key].val : data[key];
+                    container.innerHTML += `
+                        <div class="card">
+                            <label>${key}</label>
+                            <input type="text" id="input-${game}-${key}" value="${val}">
+                            <button class="btn" onclick="savePrice('${game}', '${key}')">YADDA SAXLA</button>
+                        </div>
+                    `;
                 });
             });
         };
 
-        window.upP = (g, k) => {
-            const v = document.getElementById(`i-${g}-${k}`).value;
-            // Şifrəni (auth) həm datanın içində, həm də yanında göndəririk ki, Rules dəqiq tutsun
-            set(ref(db, `prices/${g}/${k}`), { val: v, auth: auth.p })
-            .then(() => { 
-                push(ref(db, 'logs'), { u: auth.u, a: `${g}/${k} -> ${v}`, t: new Date().toLocaleString(), auth: auth.p });
-                alert("Yeniləndi!"); 
-            }).catch(e => alert("İcazə yoxdur!"));
+        window.savePrice = (game, key) => {
+            const val = document.getElementById(`input-${game}-${key}`).value;
+            // Şifrəni hər yazmada göndəririk ki, Rules icazə versin
+            set(ref(db, `prices/${game}/${key}`), {
+                val: val,
+                auth: currentUser.pass
+            }).then(() => {
+                writeLog(`${game} - ${key} qiyməti -> ${val} AZN`);
+                alert("Dəyişiklik edildi!");
+            }).catch(() => alert("İCAZƏ RƏDD EDİLDİ!"));
         };
 
-        window.saveA = () => {
-            const m = document.getElementById('am').value;
-            // Duyurunu yazarkən şifrəni (auth) mütləq əlavə edirik
-            set(ref(db, 'announcement'), { msg: m, auth: auth.p })
-            .then(() => alert("Duyuru yayımlandı!"));
+        // ANNOUNCEMENT
+        window.updateSiteAnnouncement = () => {
+            const txt = document.getElementById('ann-text').value;
+            set(ref(db, 'announcement'), {
+                msg: txt,
+                auth: currentUser.pass
+            }).then(() => alert("Duyuru saytda yeniləndi!"));
         };
 
-        window.addP = () => {
-            const c = document.getElementById('pc').value, v = document.getElementById('pv').value;
-            set(ref(db, `promocodes/${c}`), { percent: v, auth: auth.p });
+        // PROMOS & BLACKLIST
+        window.createNewPromo = () => {
+            const c = document.getElementById('promo-code').value;
+            const p = document.getElementById('promo-percent').value;
+            set(ref(db, `promocodes/${c}`), { percent: p, auth: currentUser.pass });
         };
 
-        window.del = (p) => { if(confirm("Silinsin?")) remove(ref(db, p)); };
-        window.clearL = () => { if(confirm("Silinsin?")) set(ref(db, 'logs'), { empty: true, auth: auth.p }); };
+        window.addToBlacklist = () => {
+            const ip = document.getElementById('bl-input').value;
+            push(ref(db, 'blacklist'), { target: ip, auth: currentUser.pass });
+        };
 
-        window.tab = (id, e) => {
+        // UTILS
+        function writeLog(action) {
+            push(ref(db, 'logs'), {
+                u: currentUser.name,
+                a: action,
+                t: new Date().toLocaleString('az-AZ'),
+                auth: currentUser.pass
+            });
+        }
+
+        window.deleteItem = (path) => {
+            if(confirm("Bunu silmək istədiyinizə əminsiniz?")) {
+                remove(ref(db, path)).catch(() => alert("Bunu silməyə yetkiniz yoxdur!"));
+            }
+        };
+
+        window.clearAllLogs = () => {
+            if(confirm("Bütün loqlar təmizlənsin?")) {
+                set(ref(db, 'logs'), { status: "empty", auth: currentUser.pass });
+            }
+        };
+
+        window.switchPage = (id, e) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
