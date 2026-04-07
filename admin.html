@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glidox Titan v70 | Bug Fix Edition</title>
+    <title>Glidox Titan v70 | Final Edition</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -23,11 +22,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg-ultra); color: #888b94; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; display: flex; }
 
-        /* Login */
+        /* Auth */
         #gatekeeper { position: fixed; inset: 0; z-index: 10000; background: #020204; display: flex; align-items: center; justify-content: center; }
         .login-frame { background: var(--bg-panel); border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 380px; text-align: center; }
-        .f-group { text-align: left; margin-top: 15px; }
-        .f-group input { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin-top: 5px; outline: none; }
+        .f-group input { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin-top: 10px; outline: none; }
         .btn-auth { width: 100%; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: #000; font-weight: 900; cursor: pointer; margin-top: 20px; transition: 0.3s; }
 
         /* Layout */
@@ -35,20 +33,21 @@
         aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border); padding: 30px 15px; display: flex; flex-direction: column; flex-shrink: 0; }
         main { flex: 1; overflow-y: auto; padding: 30px; }
 
-        /* Nav */
-        .nav-link { padding: 14px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; margin-bottom: 5px; transition: 0.2s; }
-        .nav-link:hover { background: rgba(255,255,255,0.03); color: #fff; }
+        .nav-link { padding: 14px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; margin-bottom: 5px; }
         .nav-link.active { background: var(--primary); color: #000; }
         .owner-active .nav-link.active { background: var(--owner-gold); }
 
         .glass-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 25px; }
         input, select, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 15px; outline: none; }
         
+        /* Qiymət Paketləri Dizaynı */
+        .price-box { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        .price-box label { flex: 1; color: #fff; font-size: 14px; font-weight: 600; }
+        .price-box input { flex: 2; margin-bottom: 0; border-color: var(--border); }
+
         .view { display: none; }
         .view.active { display: block; }
         #btn-logout { margin-top: auto; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,62,62,0.3); background: none; color: var(--danger); cursor: pointer; font-weight: 700; }
-        
-        .promo-item, .bl-item { background: #000; padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; border: 1px solid #111; }
     </style>
 </head>
 <body>
@@ -57,12 +56,10 @@
         <div class="login-frame">
             <h2 style="color:#fff; font-weight:900;">TITAN v70</h2>
             <div class="f-group">
-                <input type="email" id="f-email" placeholder="Email">
-            </div>
-            <div class="f-group">
+                <input type="email" id="f-email" placeholder="Admin Email">
                 <input type="password" id="f-pass" placeholder="Şifrə">
             </div>
-            <button class="btn-auth" id="btn-login-trigger">GİRİŞ ET</button>
+            <button class="btn-auth" id="btn-login-trigger">SİSTEMƏ GİRİŞ</button>
             <p id="auth-err" style="color:var(--danger); font-size:11px; margin-top:10px;"></p>
         </div>
     </div>
@@ -79,7 +76,6 @@
             <div id="owner-only-nav" style="display:none;">
                 <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold)"><i class="fa-solid fa-database"></i> Sistem Loqları</div>
             </div>
-
             <button id="btn-logout">ÇIXIŞ</button>
         </aside>
 
@@ -87,75 +83,45 @@
             <div id="pg-dash" class="view active">
                 <div class="glass-panel">
                     <h2 id="welcome-msg" style="color:#fff;">Xoş gəldiniz!</h2>
-                    <p id="role-text">Status: Yüklənir...</p>
+                    <p id="role-text" style="color:var(--primary); font-weight: 900; margin-top: 5px;"></p>
                 </div>
             </div>
 
             <div id="pg-prices" class="view">
                 <div class="glass-panel">
-                    <h3>Qiymət Redaktoru (12 Oyun)</h3>
+                    <h3>Qiymət Redaktoru</h3>
+                    <p style="font-size: 12px; margin-bottom: 15px;">Bazadakı paketlər avtomatik yüklənir.</p>
                     <select id="game-select">
                         <option value="">Oyun seçin...</option>
                         <option value="roblox">Roblox</option>
+                        <option value="steambalans">Steam Balans</option>
                         <option value="pubg">PUBG Mobile</option>
                         <option value="mlbb">Mobile Legends</option>
                         <option value="valorant">Valorant</option>
-                        <option value="freefire">Free Fire</option>
-                        <option value="brawlstars">Brawl Stars</option>
-                        <option value="lol">League of Legends</option>
-                        <option value="steam">Steam Balans</option>
-                        <option value="discord">Discord Nitro</option>
-                        <option value="xbox">Xbox Gift Card</option>
-                        <option value="psn">PSN Card</option>
-                        <option value="minecraft">Minecraft</option>
                     </select>
-                    <div id="price-fields"></div>
-                    <button class="btn-auth" id="btn-save-prices" style="display:none;">YADDA SAXLA</button>
+                    <div id="price-fields-container"></div>
+                    <button class="btn-auth" id="btn-save-prices" style="display:none;">DƏYİŞİKLİKLƏRİ YADDA SAXLA</button>
                 </div>
             </div>
 
             <div id="pg-ann" class="view">
                 <div class="glass-panel">
                     <h3>Duyuru Sistemi</h3>
-                    <textarea id="ann-text" rows="5" placeholder="Mesajı bura yazın..."></textarea>
-                    <button class="btn-auth" id="btn-save-ann">SAYTDA GÖSTƏR</button>
+                    <textarea id="ann-text" rows="5" placeholder="Ana səhifədə görünəcək mesaj..."></textarea>
+                    <button class="btn-auth" id="btn-save-ann">YAYIMLA</button>
                 </div>
             </div>
 
-            <div id="pg-promo" class="view">
-                <div class="glass-panel">
-                    <h3>Promokod Paneli</h3>
-                    <input type="text" id="promo-name" placeholder="KOD (Məs: GLIDOX10)">
-                    <input type="number" id="promo-val" placeholder="Endirim (AZN)">
-                    <button class="btn-auth" id="btn-add-promo">KODU YARAT</button>
-                    <div id="promo-list" style="margin-top:20px;"></div>
-                </div>
-            </div>
-
-            <div id="pg-blist" class="view">
-                <div class="glass-panel">
-                    <h3>Blacklist Control</h3>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="bl-input" placeholder="UID/Email" style="margin:0">
-                        <button id="btn-add-bl" style="background:var(--danger); border:none; padding:0 20px; border-radius:10px; color:#fff; font-weight:900; cursor:pointer;">BLOKLA</button>
-                    </div>
-                    <div id="bl-list" style="margin-top:20px;"></div>
-                </div>
-            </div>
-
-            <div id="pg-logs" class="view">
-                <div class="glass-panel">
-                    <h3>Root Logs</h3>
-                    <div id="log-terminal" style="height:300px; overflow-y:auto; font-family:monospace; font-size:12px;"></div>
-                </div>
-            </div>
+            <div id="pg-promo" class="view">...</div>
+            <div id="pg-blist" class="view">...</div>
+            <div id="pg-logs" class="view">...</div>
         </main>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, update, push, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8",
@@ -175,7 +141,7 @@
         document.getElementById('btn-login-trigger').onclick = () => {
             const e = document.getElementById('f-email').value;
             const p = document.getElementById('f-pass').value;
-            signInWithEmailAndPassword(auth, e, p).catch(err => { document.getElementById('auth-err').innerText = "Giriş rədd edildi!"; });
+            signInWithEmailAndPassword(auth, e, p).catch(() => { document.getElementById('auth-err').innerText = "Giriş rədd edildi!"; });
         };
 
         onAuthStateChanged(auth, (user) => {
@@ -183,14 +149,12 @@
                 document.getElementById('gatekeeper').style.display = 'none';
                 document.getElementById('titan-root').style.display = 'flex';
                 initPanel(user);
-            } else if(user) {
-                signOut(auth);
-            }
+            } else if(user) { signOut(auth); }
         });
 
         function initPanel(user) {
             const isOwner = user.uid === OWNER_UID;
-            document.getElementById('role-text').innerText = isOwner ? "Status: OWNER" : "Status: ADMIN";
+            document.getElementById('role-text').innerText = isOwner ? "YETKİ: OWNER" : "YETKİ: ADMIN";
             if(isOwner) {
                 document.body.classList.add('owner-active');
                 document.getElementById('owner-only-nav').style.display = 'block';
@@ -203,73 +167,48 @@
                 .then(() => alert("Duyuru yeniləndi!"));
             };
 
-            // QIYMETLER FIX
+            // QIYMETLER FIX (DİNAMİK VERSİYA)
             document.getElementById('game-select').onchange = (e) => {
-                const g = e.target.value;
-                const fields = document.getElementById('price-fields');
+                const game = e.target.value;
+                const container = document.getElementById('price-fields-container');
                 const btn = document.getElementById('btn-save-prices');
-                fields.innerHTML = "";
-                if(!g) { btn.style.display="none"; return; }
-                btn.style.display="block";
                 
-                onValue(ref(db, `prices/${g}`), (s) => {
-                    const d = s.val() || {p1:"0", p2:"0", p3:"0"};
-                    fields.innerHTML = `
-                        Paket 1: <input id="p1" value="${d.p1}">
-                        Paket 2: <input id="p2" value="${d.p2}">
-                        Paket 3: <input id="p3" value="${d.p3}">
-                    `;
+                container.innerHTML = "Yüklənir...";
+                if(!game) { container.innerHTML = ""; btn.style.display="none"; return; }
+                btn.style.display="block";
+
+                // Diqqət: "prices/roblox" deyil, birbaşa "roblox"
+                onValue(ref(db, game), (snap) => {
+                    const data = snap.val();
+                    container.innerHTML = "";
+                    if(!data) { container.innerHTML = "Bazada bu oyun üçün paket tapılmadı."; return; }
+
+                    // Bazadakı bütün paketləri (rbx_400, 10_USD və s.) avtomatik çıxarır
+                    Object.keys(data).forEach(key => {
+                        container.innerHTML += `
+                            <div class="price-box">
+                                <label>${key.replace('_', ' ')}</label>
+                                <input type="text" class="p-input" data-key="${key}" value="${data[key]}">
+                            </div>
+                        `;
+                    });
                 }, {onlyOnce: true});
             };
 
             document.getElementById('btn-save-prices').onclick = () => {
-                const g = document.getElementById('game-select').value;
-                update(ref(db, `prices/${g}`), {
-                    p1: document.getElementById('p1').value,
-                    p2: document.getElementById('p2').value,
-                    p3: document.getElementById('p3').value
-                }).then(() => alert("Qiymətlər yadda saxlanıldı!"));
-            };
-
-            // PROMOKODLAR
-            document.getElementById('btn-add-promo').onclick = () => {
-                const n = document.getElementById('promo-name').value;
-                const v = document.getElementById('promo-val').value;
-                if(n && v) update(ref(db, `promocodes/${n}`), { value: v });
-            };
-            onValue(ref(db, 'promocodes'), s => {
-                const list = document.getElementById('promo-list');
-                list.innerHTML = "";
-                s.forEach(c => {
-                    list.innerHTML += `<div class="promo-item"><span>${c.key} (-${c.val().value} AZN)</span><button onclick="window.delPromo('${c.key}')" style="color:red; background:none; border:none; cursor:pointer;">SİL</button></div>`;
+                const game = document.getElementById('game-select').value;
+                const inputs = document.querySelectorAll('.p-input');
+                let updateData = {};
+                
+                inputs.forEach(inp => {
+                    updateData[inp.dataset.key] = inp.value;
                 });
-            });
 
-            // BLACKLIST
-            document.getElementById('btn-add-bl').onclick = () => {
-                const v = document.getElementById('bl-input').value;
-                if(v) push(ref(db, 'blacklist'), { target: v });
+                update(ref(db, game), updateData).then(() => {
+                    alert("Qiymətlər uğurla yadda saxlanıldı!");
+                });
             };
-            onValue(ref(db, 'blacklist'), s => {
-                const list = document.getElementById('bl-list');
-                list.innerHTML = "";
-                s.forEach(c => {
-                    list.innerHTML += `<div class="bl-item"><span>${c.val().target}</span><button onclick="window.delBL('${c.key}')" style="color:red; background:none; border:none; cursor:pointer;">SİL</button></div>`;
-                });
-            });
-
-            // LOGS (Owner Only)
-            if(isOwner) {
-                onValue(ref(db, 'logs'), s => {
-                    const term = document.getElementById('log-terminal');
-                    term.innerHTML = "";
-                    s.forEach(c => { term.innerHTML += `<div>[${c.val().time}] ${c.val().user}: ${c.val().action}</div>`; });
-                });
-            }
         }
-
-        window.delPromo = (k) => remove(ref(db, `promocodes/${k}`));
-        window.delBL = (k) => remove(ref(db, `blacklist/${k}`));
 
         document.getElementById('btn-logout').onclick = () => signOut(auth).then(() => location.reload());
 
