@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glidox Titan v70 | Owner Elite</title>
+    <title>Glidox Titan v70 | Full Control</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -17,164 +17,150 @@
             --owner-gold: #ffaa00;
             --danger: #ff3e3e;
             --border: rgba(255, 255, 255, 0.05);
-            --sidebar-w: 280px;
+            --sidebar-w: 260px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg-ultra); color: #888b94; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; display: flex; }
 
-        /* Gatekeeper (Login) */
-        #gatekeeper { position: fixed; inset: 0; z-index: 10000; background: radial-gradient(circle at 50% 0%, #1c1c2d 0%, #020204 100%); display: flex; align-items: center; justify-content: center; }
-        .login-frame { background: var(--bg-panel); border: 1px solid var(--border); padding: 50px; border-radius: 40px; width: 420px; text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .login-frame h1 { color: #fff; font-weight: 900; letter-spacing: -1px; margin-bottom: 5px; }
-        .f-group { text-align: left; margin-top: 20px; }
-        .f-group label { font-size: 10px; font-weight: 900; color: var(--primary); text-transform: uppercase; margin-left: 5px; }
-        .f-group input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 15px; color: #fff; margin-top: 5px; }
-        .btn-auth { width: 100%; padding: 18px; border-radius: 15px; border: none; background: var(--primary); color: #000; font-weight: 900; cursor: pointer; margin-top: 25px; transition: 0.3s; }
-        .btn-auth:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,242,255,0.2); }
+        /* Login */
+        #gatekeeper { position: fixed; inset: 0; z-index: 10000; background: #020204; display: flex; align-items: center; justify-content: center; }
+        .login-frame { background: var(--bg-panel); border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 380px; text-align: center; }
+        .f-group { text-align: left; margin-top: 15px; }
+        .f-group input { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin-top: 5px; outline: none; }
+        .btn-auth { width: 100%; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: #000; font-weight: 900; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn-auth:hover { opacity: 0.8; transform: translateY(-2px); }
 
-        /* Panel Structure */
-        #titan-root { display: none; width: 100%; height: 100%; }
-        aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; }
-        main { flex: 1; overflow-y: auto; padding: 40px 60px; }
+        /* Layout */
+        #titan-root { display: none; width: 100%; height: 100%; display: flex; }
+        aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border); padding: 30px 15px; display: flex; flex-direction: column; flex-shrink: 0; }
+        main { flex: 1; overflow-y: auto; padding: 30px; }
 
-        .nav-link { padding: 16px; border-radius: 18px; cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 600; margin-bottom: 8px; transition: 0.3s; }
+        /* Nav */
+        .nav-link { padding: 14px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; margin-bottom: 5px; transition: 0.2s; }
         .nav-link:hover { background: rgba(255,255,255,0.03); color: #fff; }
         .nav-link.active { background: var(--primary); color: #000; }
-        
-        /* Owner Styling */
-        .owner-active .nav-link.active { background: var(--owner-gold); box-shadow: 0 10px 20px rgba(255,170,0,0.2); }
-        .owner-active .btn-auth { background: var(--owner-gold); }
+        .owner-active .nav-link.active { background: var(--owner-gold); }
 
-        .glass-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 35px; padding: 35px; margin-bottom: 30px; }
-        
-        /* Dashboard Cards */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: #000; border: 1px solid var(--border); padding: 25px; border-radius: 25px; border-left: 4px solid var(--primary); }
-        .owner-active .stat-card { border-left-color: var(--owner-gold); }
-        .stat-card h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #444; }
-        .stat-card p { font-size: 28px; font-weight: 900; color: #fff; margin-top: 10px; }
+        /* UI */
+        .glass-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 25px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 20px; border-radius: 20px; }
+        .stat-card p { font-size: 24px; font-weight: 900; color: #fff; margin-top: 10px; }
 
-        /* Terminal */
-        .terminal { background: #000; border-radius: 25px; padding: 25px; height: 450px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 12px; border: 1px solid #111; }
-        .log-row { border-bottom: 1px solid #111; padding: 10px 0; display: flex; align-items: center; justify-content: space-between; }
-        .log-ip { background: rgba(255,62,62,0.1); color: var(--danger); padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; }
-
+        input, select, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 15px; outline: none; }
         .view { display: none; }
         .view.active { display: block; }
-        
-        select, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 18px; border-radius: 15px; margin-bottom: 20px; font-family: inherit; }
+
+        /* Terminal */
+        .terminal { background: #000; border-radius: 15px; padding: 15px; height: 350px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 11px; color: #00ff00; }
+        #btn-logout { margin-top: auto; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,62,62,0.3); background: none; color: var(--danger); cursor: pointer; font-weight: 700; }
     </style>
 </head>
 <body>
 
     <div id="gatekeeper">
         <div class="login-frame">
-            <h1 id="login-title">TITAN v70</h1>
-            <p style="font-size:11px; font-weight:700; opacity:0.5; text-transform:uppercase;">Admin Gate Access</p>
+            <h2 style="color:#fff; font-weight:900; letter-spacing: 2px;">TITAN SYSTEM</h2>
+            <p style="font-size: 10px; opacity: 0.5; margin-bottom: 20px;">V70 SECURE ACCESS</p>
             <div class="f-group">
-                <label>Admin Email</label>
-                <input type="email" id="f-email" placeholder="admin@glidox.com">
+                <input type="email" id="f-email" placeholder="Email">
             </div>
             <div class="f-group">
-                <label>Access Code</label>
-                <input type="password" id="f-pass" placeholder="••••••••">
+                <input type="password" id="f-pass" placeholder="Şifrə">
             </div>
-            <button class="btn-auth" id="btn-login-trigger">AUTHORIZE ENTRANCE</button>
-            <p id="auth-err" style="color:var(--danger); font-size:11px; margin-top:15px; font-weight:700;"></p>
+            <button class="btn-auth" id="btn-login-trigger">AVTORİZASİYA</button>
+            <p id="auth-err" style="color:var(--danger); font-size:11px; margin-top:10px; font-weight: bold;"></p>
         </div>
     </div>
 
     <div id="titan-root">
         <aside>
-            <h2 style="color:#fff; font-weight:900; margin-bottom:45px; font-size:24px;"><i class="fa-solid fa-bolt-lightning" style="color:var(--primary)"></i> TITAN</h2>
+            <h3 style="color:#fff; margin-bottom:30px; padding-left:10px;"><i class="fa-solid fa-shield-virus" style="color:var(--primary)"></i> GLIDOX</h3>
+            <div class="nav-link active" data-target="pg-dash"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+            <div class="nav-link" data-target="pg-prices"><i class="fa-solid fa-tags"></i> Qiymətlər</div>
+            <div class="nav-link" data-target="pg-ann"><i class="fa-solid fa-bullhorn"></i> Duyurular</div>
+            <div class="nav-link" data-target="pg-promo"><i class="fa-solid fa-ticket"></i> Promokodlar</div>
+            <div class="nav-link" data-target="pg-blist"><i class="fa-solid fa-user-lock"></i> Blacklist</div>
             
-            <div class="nav-link active" data-target="pg-dash"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
-            <div class="nav-link" data-target="pg-prices"><i class="fa-solid fa-coins"></i> Qiymət İdarəsi</div>
-            <div class="nav-link" data-target="pg-ann"><i class="fa-solid fa-paper-plane"></i> Duyurular</div>
-            <div class="nav-link" data-target="pg-blist"><i class="fa-solid fa-user-xmark"></i> Blacklist</div>
-
-            <div class="owner-panel" style="display:none; margin-top:40px;">
-                <p style="font-size:10px; font-weight:900; color:var(--owner-gold); margin-bottom:15px; letter-spacing:2px; margin-left:15px;">ROOT ACCESS</p>
-                <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold);"><i class="fa-solid fa-terminal"></i> Sistem Loqları</div>
+            <div id="owner-only-nav" style="display:none;">
+                <hr style="opacity:0.05; margin: 15px 0;">
+                <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold)"><i class="fa-solid fa-terminal"></i> Sistem Loqları</div>
             </div>
 
-            <button id="btn-logout" style="margin-top:auto; background:rgba(255,62,62,0.05); border:1px solid rgba(255,62,62,0.2); color:var(--danger); padding:16px; border-radius:18px; cursor:pointer; font-weight:900; transition:0.3s;">SİSTEMDƏN ÇIXIŞ</button>
+            <button id="btn-logout">SİSTEMDƏN ÇIXIŞ</button>
         </aside>
 
         <main>
-            <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
-                <div>
-                    <h2 id="view-title" style="color:#fff; font-weight:900; font-size:28px;">Dashboard</h2>
-                    <p style="font-size:12px; opacity:0.5;">Xoş gəldiniz, idarəetməyə hazırsınız.</p>
-                </div>
-                <div style="text-align:right;">
-                    <p id="role-tag" style="font-weight:900; font-size:13px;"></p>
-                    <p id="uid-tag" style="font-size:10px; opacity:0.3; font-family:'JetBrains Mono';"></p>
-                </div>
-            </header>
-
             <div id="pg-dash" class="view active">
                 <div class="stats-grid">
-                    <div class="stat-card"><h4>Cəmi Loq</h4><p id="stat-logs">0</p></div>
+                    <div class="stat-card"><h4>Ümumi Loqlar</h4><p id="stat-logs">0</p></div>
                     <div class="stat-card"><h4>Bloklananlar</h4><p id="stat-bl">0</p></div>
-                    <div class="stat-card"><h4>Sistem Gücü</h4><p id="stat-cpu">99%</p></div>
-                    <div class="stat-card"><h4>Status</h4><p style="color:var(--success)">AKTİV</p></div>
+                    <div class="stat-card"><h4>Vəzifəniz</h4><p id="stat-role" style="color:var(--primary)">Yüklənir...</p></div>
                 </div>
                 <div class="glass-panel">
-                    <h3>Giriş Trafiki</h3>
-                    <canvas id="titanChart" height="100"></canvas>
+                    <h3>Sistem Analitikası</h3>
+                    <canvas id="mainChart" height="100"></canvas>
                 </div>
             </div>
 
             <div id="pg-prices" class="view">
                 <div class="glass-panel">
-                    <h3>12 Oyun Qiymət Paneli</h3>
+                    <h3>Qiymət İdarəetməsi</h3>
                     <select id="game-select">
-                        <option value="">Oyun/Xidmət Seçin...</option>
-                        <option value="roblox">ROBLOX (ROBUX)</option>
-                        <option value="pubg">PUBG MOBILE (UC)</option>
-                        <option value="mlbb">MOBILE LEGENDS (DM)</option>
-                        <option value="valorant">VALORANT (VP)</option>
-                        <option value="freefire">FREE FIRE (DM)</option>
-                        <option value="brawlstars">BRAWL STARS (GEMS)</option>
-                        <option value="lol">LEAGUE OF LEGENDS (RP)</option>
-                        <option value="steam">STEAM (BALANS)</option>
-                        <option value="discord">DISCORD (NITRO)</option>
-                        <option value="xbox">XBOX (GIFT CARD)</option>
-                        <option value="psn">PLAYSTATION (CARD)</option>
-                        <option value="minecraft">MINECRAFT (COINS)</option>
+                        <option value="">Oyun seçin...</option>
+                        <option value="roblox">Roblox</option>
+                        <option value="pubg">PUBG Mobile</option>
+                        <option value="mlbb">Mobile Legends</option>
+                        <option value="valorant">Valorant</option>
+                        <option value="freefire">Free Fire</option>
+                        <option value="brawlstars">Brawl Stars</option>
+                        <option value="lol">League of Legends</option>
+                        <option value="steam">Steam Balans</option>
+                        <option value="discord">Discord Nitro</option>
+                        <option value="xbox">Xbox Gift Card</option>
+                        <option value="psn">PSN Card</option>
+                        <option value="minecraft">Minecraft</option>
                     </select>
-                    <div id="price-editor-area">
-                        <p style="text-align:center; padding:40px; opacity:0.4;">Zəhmət olmasa yuxarıdan redaktə ediləcək oyunu seçin.</p>
-                    </div>
+                    <div id="price-fields"></div>
+                    <button class="btn-auth" id="btn-save-prices" style="display:none;">YADDA SAXLA</button>
                 </div>
             </div>
 
             <div id="pg-ann" class="view">
                 <div class="glass-panel">
-                    <h3>Duyuru Paneli</h3>
-                    <textarea id="ann-text" rows="6" placeholder="Saytın ana səhifəsində görünəcək mesajı yazın..."></textarea>
+                    <h3>Yeni Duyuru</h3>
+                    <textarea id="ann-text" rows="5" placeholder="Müştərilər üçün mesaj..."></textarea>
                     <button class="btn-auth" id="btn-save-ann">YAYIMLA</button>
+                </div>
+            </div>
+
+            <div id="pg-promo" class="view">
+                <div class="glass-panel">
+                    <h3>Promokod Yarat</h3>
+                    <input type="text" id="promo-name" placeholder="KOD ADI (Məs: YENIYIL)">
+                    <input type="number" id="promo-val" placeholder="Endirim Miqdarı (Məs: 5)">
+                    <button class="btn-auth" id="btn-add-promo">KODU ƏLAVƏ ET</button>
+                    <div id="promo-list" style="margin-top:20px;"></div>
                 </div>
             </div>
 
             <div id="pg-blist" class="view">
                 <div class="glass-panel">
                     <h3>Blacklist Control</h3>
-                    <div style="display:flex; gap:15px; margin-bottom:25px;">
-                        <input type="text" id="bl-input" placeholder="UID və ya Email daxil edin..." style="flex:1; background:#000; border:1px solid #222; padding:15px; border-radius:15px; color:#fff;">
-                        <button id="btn-add-bl" style="background:var(--danger); border:none; padding:0 30px; border-radius:15px; color:#fff; font-weight:900; cursor:pointer;">BLOKLA</button>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="bl-input" placeholder="UID və ya Email" style="margin:0">
+                        <button id="btn-add-bl" style="background:var(--danger); border:none; padding:0 20px; border-radius:10px; color:#fff; font-weight:900; cursor:pointer;">BLOKLA</button>
                     </div>
-                    <div id="bl-render"></div>
+                    <div id="bl-list" style="margin-top:20px;"></div>
                 </div>
             </div>
 
             <div id="pg-logs" class="view">
                 <div class="glass-panel">
-                    <button id="btn-clear-logs" style="float:right; background:var(--danger); color:#fff; border:none; padding:10px 20px; border-radius:12px; font-weight:900; cursor:pointer;">TERMINALI TƏMİZLƏ</button>
-                    <h3 style="color:var(--owner-gold)">Root System Logs</h3>
-                    <div class="terminal" id="log-terminal" style="margin-top:20px;"></div>
+                    <button id="btn-clear-logs" style="float:right; background:var(--danger); border:none; color:#fff; padding:8px 15px; border-radius:10px; font-size:10px; cursor:pointer;">TƏMİZLƏ</button>
+                    <h3>Root Terminal</h3>
+                    <div class="terminal" id="log-terminal" style="margin-top:15px;"></div>
                 </div>
             </div>
         </main>
@@ -183,7 +169,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8",
@@ -195,139 +181,168 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // HƏR DƏFƏ LOGİN TƏLƏBİ
+        const OWNER_UID = "dXDTZPPuVKaO1ecsO7UbCOXr15i1";
+        const ADMINS = ["tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
+
         setPersistence(auth, browserSessionPersistence);
 
-        const OWNER_UID = "dXDTZPPuVKaO1ecsO7UbCOXr15i1";
-        const ADMINS_LIST = ["tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
-        let MASTER_IP = "[PROTECTED]";
-
+        // LOGIN ENGINE
         document.getElementById('btn-login-trigger').onclick = () => {
             const e = document.getElementById('f-email').value;
             const p = document.getElementById('f-pass').value;
+            if(!e || !p) return;
             signInWithEmailAndPassword(auth, e, p).catch(err => {
-                document.getElementById('auth-err').innerText = "Giriş icazəsi yoxdur!";
+                document.getElementById('auth-err').innerText = "Giriş rədd edildi!";
             });
         };
 
-        onAuthStateChanged(auth, async (user) => {
-            if(user && (user.uid === OWNER_UID || ADMINS_LIST.includes(user.uid))) {
-                document.getElementById('gatekeeper').style.display = 'none';
-                document.getElementById('titan-root').style.display = 'flex';
-                
+        onAuthStateChanged(auth, (user) => {
+            if(user) {
                 const isOwner = user.uid === OWNER_UID;
-                if(isOwner) {
-                    const r = await fetch('https://api.ipify.org?format=json');
-                    const d = await r.json();
-                    MASTER_IP = d.ip;
+                const isAdmin = ADMINS.includes(user.uid);
+
+                if(isOwner || isAdmin) {
+                    document.getElementById('gatekeeper').style.display = 'none';
+                    document.getElementById('titan-root').style.display = 'flex';
+                    setupApp(user, isOwner);
+                } else {
+                    signOut(auth);
+                    alert("İcazəsiz Giriş!");
                 }
-                
-                startSystem(user, isOwner);
-            } else if(user) {
-                signOut(auth);
+            } else {
+                document.getElementById('gatekeeper').style.display = 'flex';
+                document.getElementById('titan-root').style.display = 'none';
             }
         });
 
-        function startSystem(user, isOwner) {
-            document.getElementById('uid-tag').innerText = "UID: " + user.uid.substring(0, 10) + "...";
-            
+        function setupApp(user, isOwner) {
             if(isOwner) {
-                document.getElementById('role-tag').innerText = "SYSTEM OWNER";
-                document.getElementById('role-tag').style.color = "var(--owner-gold)";
                 document.body.classList.add('owner-active');
-                document.querySelectorAll('.owner-panel').forEach(el => el.style.display = 'block');
-                document.getElementById('btn-clear-logs').onclick = () => {
-                    if(confirm("Tarixçə silinsin?")) remove(ref(db, 'logs'));
-                };
+                document.getElementById('owner-only-nav').style.display = 'block';
+                document.getElementById('stat-role').innerText = "OWNER";
+                document.getElementById('stat-role').style.color = "var(--owner-gold)";
             } else {
-                document.getElementById('role-tag').innerText = "ADMINISTRATOR";
-                document.getElementById('role-tag').style.color = "var(--primary)";
+                document.getElementById('stat-role').innerText = "ADMIN";
             }
 
-            writeLog(user, isOwner ? "ROOT_GIRIS" : "ADMIN_GIRIS");
-            loadLogs(isOwner);
-            loadBlacklist();
+            // Qiymət seçimi
+            document.getElementById('game-select').onchange = (e) => {
+                const game = e.target.value;
+                const fields = document.getElementById('price-fields');
+                const btn = document.getElementById('btn-save-prices');
+                fields.innerHTML = "";
+                if(!game) { btn.style.display="none"; return; }
+                btn.style.display="block";
+                onValue(ref(db, `prices/${game}`), s => {
+                    const d = s.val() || {p1:0, p2:0, p3:0};
+                    fields.innerHTML = `
+                        <p style="font-size:12px; margin-bottom:5px;">Paket 1:</p><input id="p1" value="${d.p1}">
+                        <p style="font-size:12px; margin-bottom:5px;">Paket 2:</p><input id="p2" value="${d.p2}">
+                        <p style="font-size:12px; margin-bottom:5px;">Paket 3:</p><input id="p3" value="${d.p3}">
+                    `;
+                }, {onlyOnce: true});
+            };
+
+            document.getElementById('btn-save-prices').onclick = () => {
+                const g = document.getElementById('game-select').value;
+                update(ref(db, `prices/${g}`), {
+                    p1: document.getElementById('p1').value,
+                    p2: document.getElementById('p2').value,
+                    p3: document.getElementById('p3').value
+                }).then(() => {
+                    alert("Yadda saxlanıldı!");
+                    writeLog(user.email, `${g} qiymətlərini dəyişdi`);
+                });
+            };
+
+            // Duyuru
+            document.getElementById('btn-save-ann').onclick = () => {
+                set(ref(db, 'announcement'), { message: document.getElementById('ann-text').value, time: new Date().toLocaleString() });
+            };
+
+            // Promokodlar
+            document.getElementById('btn-add-promo').onclick = () => {
+                const name = document.getElementById('promo-name').value;
+                const val = document.getElementById('promo-val').value;
+                if(name && val) set(ref(db, `promocodes/${name}`), { value: val });
+            };
+            
+            onValue(ref(db, 'promocodes'), s => {
+                const list = document.getElementById('promo-list');
+                list.innerHTML = "";
+                s.forEach(c => {
+                    list.innerHTML += `<div style="background:#000; padding:10px; border-radius:10px; margin-bottom:5px; display:flex; justify-content:space-between;">
+                        <span>${c.key} (-${c.val().value} AZN)</span>
+                        <button onclick="window.delPromo('${c.key}')" style="color:red; background:none; border:none; cursor:pointer;">SİL</button>
+                    </div>`;
+                });
+            });
+
+            // Blacklist
+            document.getElementById('btn-add-bl').onclick = () => {
+                const v = document.getElementById('bl-input').value;
+                if(v) push(ref(db, 'blacklist'), { target: v });
+            };
+            onValue(ref(db, 'blacklist'), s => {
+                const list = document.getElementById('bl-list');
+                list.innerHTML = "";
+                s.forEach(c => {
+                    list.innerHTML += `<div style="background:#000; padding:10px; border-radius:10px; margin-bottom:5px; display:flex; justify-content:space-between;">
+                        <span>${c.val().target}</span>
+                        <button onclick="window.delBL('${c.key}')" style="color:red; background:none; border:none; cursor:pointer;">SİL</button>
+                    </div>`;
+                });
+            });
+
+            // Logs
+            if(isOwner) {
+                onValue(ref(db, 'logs'), s => {
+                    const term = document.getElementById('log-terminal');
+                    term.innerHTML = "";
+                    s.forEach(c => {
+                        const l = c.val();
+                        term.innerHTML += `<div style="margin-bottom:4px;">> [${l.time}] ${l.user}: ${l.action}</div>`;
+                    });
+                    term.scrollTop = term.scrollHeight;
+                });
+            }
+
+            loadStats();
             initChart();
         }
 
-        function loadLogs(isOwner) {
-            onValue(ref(db, 'logs'), (snap) => {
-                const term = document.getElementById('log-terminal');
-                const logStat = document.getElementById('stat-logs');
-                term.innerHTML = "";
-                let count = 0;
-                let data = [];
-                snap.forEach(c => { data.push(c.val()); count++; });
-                if(logStat) logStat.innerText = count;
-                
-                data.reverse().slice(0, 100).forEach(l => {
-                    const ipSpan = isOwner ? `<span class="log-ip">${l.ip}</span>` : "";
-                    term.innerHTML += `<div class="log-row">
-                        <span><b style="color:#fff">[${l.time}]</b> <span style="color:var(--primary)">${l.user}</span>: ${l.action}</span>
-                        ${ipSpan}
-                    </div>`;
-                });
-            });
+        window.delPromo = (key) => remove(ref(db, `promocodes/${key}`));
+        window.delBL = (key) => remove(ref(db, `blacklist/${key}`));
+
+        function writeLog(email, action) {
+            push(ref(db, 'logs'), { user: email, action: action, time: new Date().toLocaleString() });
         }
 
-        function writeLog(user, action) {
-            push(ref(db, 'logs'), {
-                user: user.email,
-                action: action,
-                ip: MASTER_IP,
-                time: new Date().toLocaleTimeString('az-AZ') + " " + new Date().toLocaleDateString('az-AZ')
-            });
+        function loadStats() {
+            onValue(ref(db, 'logs'), s => document.getElementById('stat-logs').innerText = s.size || 0);
+            onValue(ref(db, 'blacklist'), s => document.getElementById('stat-bl').innerText = s.size || 0);
         }
 
-        function loadBlacklist() {
-            onValue(ref(db, 'blacklist'), (snap) => {
-                const render = document.getElementById('bl-render');
-                const blStat = document.getElementById('stat-bl');
-                render.innerHTML = "";
-                let count = 0;
-                snap.forEach(c => {
-                    count++;
-                    render.innerHTML += `<div style="background:#000; padding:15px; border-radius:15px; margin-bottom:10px; display:flex; justify-content:space-between; border:1px solid #111;">
-                        <span style="color:#fff;">${c.val().target}</span>
-                        <button onclick="window.delBL('${c.key}')" style="color:var(--danger); background:none; border:none; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>`;
-                });
-                if(blStat) blStat.innerText = count;
-            });
-        }
+        document.getElementById('btn-logout').onclick = () => signOut(auth).then(() => location.reload());
 
-        window.delBL = (key) => remove(ref(db, 'blacklist/' + key));
-
-        document.getElementById('btn-logout').onclick = () => {
-            signOut(auth).then(() => location.reload());
-        };
-
-        // Navigation
-        document.querySelectorAll('.nav-link').forEach(btn => {
-            btn.onclick = () => {
+        // Nav Logic
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.onclick = () => {
                 document.querySelectorAll('.nav-link, .view').forEach(el => el.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.target).classList.add('active');
-                document.getElementById('view-title').innerText = btn.innerText;
+                link.classList.add('active');
+                document.getElementById(link.dataset.target).classList.add('active');
             };
         });
 
         function initChart() {
-            const ctx = document.getElementById('titanChart').getContext('2d');
+            const ctx = document.getElementById('mainChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['00h', '04h', '08h', '12h', '16h', '20h'],
-                    datasets: [{
-                        label: 'Girişlər',
-                        data: [5, 12, 19, 3, 25, 40],
-                        borderColor: '#00f2ff',
-                        backgroundColor: 'rgba(0, 242, 255, 0.05)',
-                        fill: true,
-                        tension: 0.4
-                    }]
+                    labels: ['00:00', '08:00', '16:00', '24:00'],
+                    datasets: [{ label: 'Trafik', data: [2, 10, 5, 18], borderColor: '#00f2ff', tension: 0.4 }]
                 },
-                options: { responsive: true, plugins: { legend: false }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                options: { plugins: { legend: false }, scales: { y: { display: false } } }
             });
         }
     </script>
