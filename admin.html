@@ -3,75 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Glidox Enterprise v14</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Glidox v16 Final</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #ffb300; --blue: #0084ff; --bg: #050505; --card: #0f0f0f; --text: #eee; --border: rgba(255,255,255,0.08); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        :root { --accent: #ffb300; --bg: #050505; --card: #0f0f0f; --border: rgba(255,255,255,0.08); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: #eee; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        body.owner { --accent: #ffb300; }
+        body.admin { --accent: #00d2ff; }
 
-        /* Themes */
-        body.owner-mode { --accent: var(--gold); }
-        body.admin-mode { --accent: var(--blue); }
-
-        /* Auth */
+        /* Login */
         #auth-layer { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-box { background: #0a0a0a; padding: 40px; border-radius: 24px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
-        .login-box h2 { font-family: 'Orbitron'; margin-bottom: 25px; letter-spacing: 2px; }
+        .login-box { background: #0a0a0a; padding: 35px; border-radius: 20px; border: 1px solid var(--border); width: 100%; max-width: 380px; text-align: center; }
 
-        /* Header & Nav */
-        header { padding: 18px 20px; background: #080808; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--accent); font-size: 14px; text-shadow: 0 0 10px var(--accent); }
+        header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #080808; }
+        .logo { font-family: 'Orbitron'; color: var(--accent); font-size: 14px; text-shadow: 0 0 10px var(--accent); }
         
         nav { display: flex; background: #080808; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
-        .nav-btn { padding: 16px 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #555; cursor: pointer; white-space: nowrap; transition: 0.3s; border-bottom: 2px solid transparent; }
-        .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(255,255,255,0.02); }
+        .nav-btn { padding: 15px 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #555; cursor: pointer; white-space: nowrap; }
+        .nav-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
 
-        /* Main Content */
-        main { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 90px; }
-        .page { display: none; max-width: 900px; margin: 0 auto; }
+        main { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; }
+        .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 18px; margin-bottom: 12px; }
-        label { display: block; font-size: 10px; font-weight: 800; color: #444; text-transform: uppercase; margin-bottom: 8px; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 15px; margin-bottom: 12px; }
         input, select, textarea { width: 100%; background: #000; border: 1px solid #222; padding: 14px; color: #fff; border-radius: 10px; font-size: 14px; outline: none; margin-bottom: 10px; }
-        
         .btn { background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; width: 100%; font-size: 11px; }
-        .admin-mode .btn { color: #fff; }
 
-        /* Lists */
-        .item-list { display: grid; gap: 10px; }
-        .list-card { background: #080808; padding: 12px 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #111; }
-        .del-btn { color: #ff4655; background: none; border: none; cursor: pointer; font-weight: bold; }
-
-        /* Logs Output */
-        #log-out { height: 400px; overflow-y: auto; background: #000; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 11px; color: #0f8; line-height: 1.6; }
-        .log-entry { border-bottom: 1px solid #080808; padding: 5px 0; }
-        .log-entry b { color: var(--accent); }
-
+        #log-list { height: 350px; overflow-y: auto; background: #000; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 11px; color: #0f8; }
         .owner-only { display: none; }
 
         @media (max-width: 768px) {
             nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; border-top: 1px solid var(--border); }
-            .nav-btn { flex: 1; text-align: center; font-size: 8px; padding: 18px 5px; }
+            .nav-btn { flex: 1; text-align: center; font-size: 8px; }
         }
     </style>
 </head>
-<body class="admin-mode">
+<body>
 
     <div id="auth-layer">
         <div class="login-box">
-            <h2 id="login-title">GLIDOX ENTERPRISE</h2>
-            <input type="text" id="login-name" placeholder="Adınız">
-            <input type="password" id="login-pass" placeholder="Şifrə">
-            <button class="btn" onclick="handleLogin()">GİRİŞ ET</button>
+            <h2 style="font-family:'Orbitron'; margin-bottom:20px; color:var(--accent);">GLIDOX LOGIN</h2>
+            <input type="text" id="ln" placeholder="Ad">
+            <input type="password" id="lp" placeholder="Şifrə">
+            <button class="btn" onclick="doLogin()">GİRİŞ</button>
         </div>
     </div>
 
     <header>
-        <div class="logo" id="panel-name">GLIDOX ADMIN 2.5</div>
-        <div id="badge" style="font-size:9px; background:#111; padding:4px 10px; border-radius:5px;">OFLINE</div>
+        <div class="logo" id="pt">GLIDOX</div>
+        <div id="badge" style="font-size:9px; color:#555;">...</div>
     </header>
 
     <nav>
@@ -79,49 +62,38 @@
         <div class="nav-btn" onclick="tab('prices', event)">Qiymətlər</div>
         <div class="nav-btn" onclick="tab('promo', event)">Promo</div>
         <div class="nav-btn" onclick="tab('ann', event)">Duyuru</div>
-        <div class="nav-btn owner-only" onclick="tab('bl', event)">Blacklist</div>
         <div class="nav-btn owner-only" onclick="tab('logs', event)">Loqlar</div>
     </nav>
 
     <main>
         <section id="dash" class="page active">
-            <div class="card"><h3>Xoş gəldin, <span id="u-display" style="color:var(--accent)">...</span></h3></div>
-            <div class="card"><label>Sistem Statusu</label><p id="sys-time" style="color:#0f8; font-weight:bold;">AKTİV</p></div>
+            <div class="card"><h2>Xoş gəldin, <span id="un" style="color:var(--accent)">...</span></h2></div>
         </section>
 
         <section id="prices" class="page">
-            <div class="card"><select id="game-sel" onchange="loadPrices(this.value)"></select></div>
-            <div id="price-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:12px;"></div>
+            <div class="card"><select id="gs" onchange="loadG(this.value)"></select></div>
+            <div id="grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:12px;"></div>
         </section>
 
         <section id="promo" class="page">
             <div class="card">
-                <input type="text" id="pc" placeholder="KOD">
-                <input type="number" id="pv" placeholder="FAİZ %">
-                <button class="btn" onclick="addPromo()">YARAT</button>
+                <input type="text" id="pc" placeholder="Kod">
+                <input type="number" id="pv" placeholder="Endirim %">
+                <button class="btn" onclick="addP()">Yarat</button>
             </div>
-            <div id="promo-list" class="item-list"></div>
+            <div id="pl"></div>
         </section>
 
         <section id="ann" class="page">
             <div class="card">
-                <label>Duyuru Mətni</label>
-                <textarea id="at" rows="5" placeholder="Saytın başında çıxan mesaj..."></textarea>
-                <button class="btn" onclick="setAnn()">GÖNDƏR</button>
+                <textarea id="am" rows="5" placeholder="Duyuru mesajı..."></textarea>
+                <button class="btn" onclick="saveA()">YAYINLA</button>
             </div>
-        </section>
-
-        <section id="bl" class="page">
-            <div class="card">
-                <input type="text" id="bl-ip" placeholder="IP və ya ID">
-                <button class="btn" style="background:#ff4655; color:#fff;" onclick="addBL()">BLOKLA</button>
-            </div>
-            <div id="bl-list" class="item-list"></div>
         </section>
 
         <section id="logs" class="page">
-            <div id="log-out">Yüklənir...</div>
-            <button class="btn" style="margin-top:10px; background:#111; color:#555;" onclick="clearLogs()">TƏMİZLƏ</button>
+            <div id="log-list"></div>
+            <button class="btn" style="margin-top:10px; background:#111; color:red;" onclick="clearL()">SİL</button>
         </section>
     </main>
 
@@ -137,116 +109,84 @@
 
         const app = initializeApp(config);
         const db = getDatabase(app);
-        let session = { u: "", p: "", r: "" };
+        let auth = { u: "", p: "", r: "" };
         const games = ["roblox", "pubg", "mlbb", "valorantTR", "valorantEU", "steambalans", "applebalans", "freefire", "discord", "weplay", "standoff", "deltaforce"];
 
-        window.handleLogin = async () => {
-            const u = document.getElementById('login-name').value;
-            const p = document.getElementById('login-pass').value;
-            try {
-                const snap = await get(ref(db, 'security'));
-                const data = snap.val();
-                
-                if(p === data.owner_pass) session.r = "owner";
-                else if(p === data.admin_pass) session.r = "admin";
-                else return alert("Şifrə səhvdir!");
-
-                session.u = u; session.p = p;
-                initUI();
-                logAction("Panelə daxil oldu");
-            } catch (e) { alert("Xəta!"); }
+        window.doLogin = async () => {
+            const u = document.getElementById('ln').value;
+            const p = document.getElementById('lp').value;
+            const s = await get(ref(db, 'security'));
+            const d = s.val();
+            if(p === d.owner_pass) auth.r = "owner";
+            else if(p === d.admin_pass) auth.r = "admin";
+            else return alert("Səhv şifrə!");
+            auth.u = u; auth.p = p;
+            start();
         };
 
-        function initUI() {
+        function start() {
             document.getElementById('auth-layer').remove();
-            document.body.className = `${session.r}-mode`;
-            document.getElementById('u-display').innerText = session.u;
-            document.getElementById('badge').innerText = session.r.toUpperCase();
-            
-            if(session.r === 'owner') {
-                document.getElementById('panel-name').innerText = "GLIDOX OWNER CENTRAL";
+            document.body.className = auth.r;
+            document.getElementById('un').innerText = auth.u;
+            document.getElementById('badge').innerText = auth.r.toUpperCase();
+            if(auth.r === 'owner') {
+                document.getElementById('pt').innerText = "GLIDOX OWNER";
                 document.querySelectorAll('.owner-only').forEach(e => e.style.display = 'block');
-            } else {
-                document.getElementById('panel-name').innerText = "GLIDOX ADMIN 2.5";
             }
-
-            const sel = document.getElementById('game-sel');
-            sel.innerHTML = games.map(g => `<option value="${g}">${g.toUpperCase()}</option>`).join('');
-            loadPrices(games[0]);
-            syncData();
-        }
-
-        function logAction(act) {
-            push(ref(db, 'logs'), { u: session.u, a: act, t: new Date().toLocaleString('az-AZ'), r: session.r });
-        }
-
-        function syncData() {
-            // Promos
+            const gs = document.getElementById('gs');
+            gs.innerHTML = games.map(g => `<option value="${g}">${g.toUpperCase()}</option>`).join('');
+            loadG(games[0]);
+            
             onValue(ref(db, 'promocodes'), s => {
-                const l = document.getElementById('promo-list'); l.innerHTML = "";
+                const l = document.getElementById('pl'); l.innerHTML = "";
                 s.forEach(c => {
-                    l.innerHTML += `<div class="list-card"><b>${c.key}</b> <span>${c.val().percent}% <button class="del-btn" onclick="delItem('promocodes/${c.key}')">X</button></span></div>`;
+                    l.innerHTML += `<div class="card" style="display:flex; justify-content:space-between;"><b>${c.key}</b> <span>${c.val().percent}% <button onclick="del('promocodes/${c.key}')" style="color:red; background:none; border:none; margin-left:10px;">X</button></span></div>`;
                 });
             });
 
-            // Blacklist
-            onValue(ref(db, 'blacklist'), s => {
-                const l = document.getElementById('bl-list'); l.innerHTML = "";
-                s.forEach(c => {
-                    l.innerHTML += `<div class="list-card"><span>${c.val().ip}</span> <button class="del-btn" onclick="delItem('blacklist/${c.key}')">SİL</button></div>`;
-                });
-            });
-
-            // Logs
             onValue(ref(db, 'logs'), s => {
-                const out = document.getElementById('log-out'); out.innerHTML = "";
+                const l = document.getElementById('log-list'); l.innerHTML = "";
                 let arr = []; s.forEach(c => { if(c.val().u) arr.push(c.val()); });
-                arr.reverse().slice(0, 100).forEach(i => {
-                    out.innerHTML += `<div class="log-entry"><span>[${i.t}]</span> <b>${i.u}</b>: ${i.a}</div>`;
-                });
+                arr.reverse().slice(0, 50).forEach(i => { l.innerHTML += `<div>[${i.t}] ${i.u}: ${i.a}</div>`; });
             });
         }
 
-        window.loadPrices = (g) => {
+        window.loadG = (g) => {
             onValue(ref(db, `prices/${g}`), s => {
-                const grid = document.getElementById('price-grid'); grid.innerHTML = "";
+                const grid = document.getElementById('grid'); grid.innerHTML = "";
                 const data = s.val() || {};
                 Object.keys(data).forEach(k => {
                     if(k === 'auth') return;
-                    const val = (typeof data[k] === 'object') ? data[k].val : data[k];
-                    grid.innerHTML += `<div class="card"><label>${k}</label><input type="text" id="inp-${g}-${k}" value="${val}"><button class="btn" style="padding:10px;" onclick="savePrice('${g}','${k}')">SAVE</button></div>`;
+                    const val = (typeof data[k] === 'object' && data[k] !== null) ? data[k].val : data[k];
+                    grid.innerHTML += `<div class="card"><label>${k}</label><input type="text" id="i-${g}-${k}" value="${val}"><button class="btn" style="padding:10px;" onclick="upP('${g}','${k}')">YENİLƏ</button></div>`;
                 });
             });
         };
 
-        window.savePrice = (g, k) => {
-            const v = document.getElementById(`inp-${g}-${k}`).value;
-            // DİQQƏT: Qiyməti təmiz rəqəm kimi yazırıq ki, 0.80 problemi olmasın
-            set(ref(db, `prices/${g}/${k}`), { val: v, auth: session.p }).then(() => {
-                logAction(`${g}/${k} qiyməti: ${v}`);
-                alert("Dəyişdirildi!");
-            });
+        window.upP = (g, k) => {
+            const v = document.getElementById(`i-${g}-${k}`).value;
+            // Şifrəni (auth) həm datanın içində, həm də yanında göndəririk ki, Rules dəqiq tutsun
+            set(ref(db, `prices/${g}/${k}`), { val: v, auth: auth.p })
+            .then(() => { 
+                push(ref(db, 'logs'), { u: auth.u, a: `${g}/${k} -> ${v}`, t: new Date().toLocaleString(), auth: auth.p });
+                alert("Yeniləndi!"); 
+            }).catch(e => alert("İcazə yoxdur!"));
         };
 
-        window.addPromo = () => {
+        window.saveA = () => {
+            const m = document.getElementById('am').value;
+            // Duyurunu yazarkən şifrəni (auth) mütləq əlavə edirik
+            set(ref(db, 'announcement'), { msg: m, auth: auth.p })
+            .then(() => alert("Duyuru yayımlandı!"));
+        };
+
+        window.addP = () => {
             const c = document.getElementById('pc').value, v = document.getElementById('pv').value;
-            set(ref(db, `promocodes/${c}`), { percent: v, auth: session.p }).then(() => logAction(`Promo: ${c}`));
+            set(ref(db, `promocodes/${c}`), { percent: v, auth: auth.p });
         };
 
-        window.setAnn = () => {
-            const t = document.getElementById('at').value;
-            set(ref(db, 'announcement'), { msg: t, auth: session.p }).then(() => {
-                logAction("Duyurunu yenilədi"); alert("OK");
-            });
-        };
-
-        window.addBL = () => {
-            const ip = document.getElementById('bl-ip').value;
-            push(ref(db, 'blacklist'), { ip: ip, auth: session.p }).then(() => logAction(`Blacklist: ${ip}`));
-        };
-
-        window.delItem = (p) => { if(confirm("Silinsin?")) remove(ref(db, p)); };
-        window.clearLogs = () => { if(confirm("Təmizlənsin?")) set(ref(db, 'logs'), { empty: true }); };
+        window.del = (p) => { if(confirm("Silinsin?")) remove(ref(db, p)); };
+        window.clearL = () => { if(confirm("Silinsin?")) set(ref(db, 'logs'), { empty: true, auth: auth.p }); };
 
         window.tab = (id, e) => {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
