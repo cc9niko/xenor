@@ -2,7 +2,7 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="dynamic-title">Glidox Admin Panel</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
@@ -14,47 +14,112 @@
             --owner-gold: #ffaa00; --danger: #ff3e3e; --border: rgba(255, 255, 255, 0.05);
             --sidebar-w: 260px;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg-ultra); color: #888b94; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; display: flex; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background: var(--bg-ultra); 
+            color: #888b94; 
+            font-family: 'Outfit', sans-serif; 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex; 
+        }
 
-        #gatekeeper { position: fixed; inset: 0; z-index: 10000; background: #020204; display: flex; align-items: center; justify-content: center; }
-        .login-frame { background: var(--bg-panel); border: 1px solid var(--border); padding: 40px; border-radius: 30px; width: 380px; text-align: center; }
-        .f-group input { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin-top: 10px; outline: none; }
+        /* --- GİRİŞ EKRANI (MOBİL UYĞUN) --- */
+        #gatekeeper { position: fixed; inset: 0; z-index: 10000; background: #020204; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-frame { background: var(--bg-panel); border: 1px solid var(--border); padding: 30px; border-radius: 25px; width: 100%; max-width: 380px; text-align: center; }
+        .f-group input { width: 100%; background: #000; border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: #fff; margin-top: 10px; outline: none; font-size: 16px; }
 
-        #titan-root { display: none; width: 100%; height: 100%; }
-        aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border); padding: 30px 15px; display: flex; flex-direction: column; }
-        main { flex: 1; overflow-y: auto; padding: 30px; }
+        /* --- ƏSAS STRUKTUR --- */
+        #titan-root { display: none; width: 100%; height: 100%; flex-direction: row; }
+        
+        aside { 
+            width: var(--sidebar-w); 
+            background: var(--bg-panel); 
+            border-right: 1px solid var(--border); 
+            padding: 30px 15px; 
+            display: flex; 
+            flex-direction: column; 
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
 
-        .nav-link { padding: 14px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; margin-bottom: 5px; transition: 0.2s; }
+        main { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
+
+        /* --- NAVİQASİYA --- */
+        .nav-link { padding: 14px 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; margin-bottom: 5px; transition: 0.2s; font-size: 15px; }
         .nav-link:hover { background: rgba(0, 242, 255, 0.05); }
         .nav-link.active { background: var(--primary); color: #000; }
         
-        .glass-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 25px; padding: 25px; margin-bottom: 25px; }
-        input, select, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; outline: none; }
+        /* --- PANEL ELEMENTLƏRİ --- */
+        .glass-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 25px; padding: 20px; margin-bottom: 25px; }
+        input, select, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; outline: none; font-family: inherit; font-size: 15px; }
 
-        .list-item { background: rgba(255,255,255,0.02); padding: 12px 20px; border-radius: 15px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); }
-        .price-box { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); }
+        .price-box { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); }
         .p-key { flex: 2; color: var(--primary); font-weight: bold; background: #111 !important; }
         .p-val { flex: 1; text-align: center; }
         
-        .btn-del { background: none; border: none; color: var(--danger); cursor: pointer; padding: 5px 10px; font-size: 1.2rem; }
-        .btn-main { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--primary); color: #000; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .btn-main:hover { opacity: 0.85; transform: translateY(-1px); }
+        .btn-del { background: rgba(255, 62, 62, 0.1); border: none; color: var(--danger); cursor: pointer; width: 35px; height: 35px; border-radius: 8px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        .btn-main { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--primary); color: #000; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
 
-        .view { display: none; } .view.active { display: block; }
-        #btn-logout { margin-top: auto; color: var(--danger); background: none; border: 1px solid var(--danger); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        /* --- MOBİL ÜÇÜN ÖZƏL STİLLƏR (MEDIA QUERIES) --- */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            #titan-root { flex-direction: column; }
+            
+            aside { 
+                width: 100%; 
+                height: auto; 
+                padding: 10px; 
+                border-right: none; 
+                border-bottom: 1px solid var(--border); 
+                position: sticky; 
+                top: 0; 
+                z-index: 1000;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 5px;
+                white-space: nowrap;
+            }
+
+            aside h3 { display: none; } /* Mobildə loqonu gizlədirik yer tutmasın */
+            
+            .nav-link { 
+                margin-bottom: 0; 
+                padding: 10px 15px; 
+                font-size: 13px;
+                display: inline-flex;
+            }
+
+            main { padding: 15px; padding-top: 20px; overflow: visible; }
+
+            #btn-logout { 
+                margin-top: 0; 
+                margin-left: auto; 
+                padding: 8px 15px; 
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
+            .price-box { flex-direction: column; align-items: stretch; }
+            .p-key, .p-val { width: 100%; text-align: left; }
+            .btn-del { width: 100%; margin-top: 5px; height: 40px; }
+        }
+
+        .view { display: none; } .view.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="gatekeeper">
         <div class="login-frame">
-            <h2 id="login-header" style="color:#fff; font-weight:900; margin-bottom: 20px;">GLIDOX LOGIN</h2>
+            <h2 style="color:#fff; font-weight:900; margin-bottom: 20px;">GLIDOX LOGIN</h2>
             <div class="f-group">
                 <input type="email" id="f-email" placeholder="Admin Email">
                 <input type="password" id="f-pass" placeholder="Şifrə">
             </div>
-            <button class="btn-main" id="btn-login-trigger" style="margin-top:20px;">SİSTEMƏ GİRİŞ</button>
+            <button class="btn-main" id="btn-login-trigger" style="margin-top:20px;">GİRİŞ</button>
             <p id="auth-err" style="color:var(--danger); font-size:11px; margin-top:10px;"></p>
         </div>
     </div>
@@ -67,11 +132,10 @@
             <div class="nav-link" data-target="pg-ann"><i class="fa-solid fa-bullhorn"></i> Duyurular</div>
             <div class="nav-link" data-target="pg-blist"><i class="fa-solid fa-user-slash"></i> Blacklist</div>
             
-            <div id="owner-only-nav" style="display:none;">
-                <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold)"><i class="fa-solid fa-database"></i> Sistem Loqları</div>
+            <div id="owner-only-nav" style="display:none; display: contents;"> <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold)"><i class="fa-solid fa-database"></i> Loqlar</div>
             </div>
             
-            <button id="btn-logout">ÇIXIŞ ET</button>
+            <button id="btn-logout">ÇIXIŞ</button>
         </aside>
 
         <main>
@@ -84,7 +148,7 @@
 
             <div id="pg-prices" class="view">
                 <div class="glass-panel">
-                    <h3>Qiymət Redaktoru</h3>
+                    <h3 style="color:#fff; margin-bottom:15px;">Qiymət Redaktoru</h3>
                     <select id="game-select">
                         <option value="">Oyun seçin...</option>
                         <option value="roblox">1. Roblox</option>
@@ -104,9 +168,9 @@
                     <div id="price-fields-container"></div>
                     
                     <div id="new-package-area" style="display:none; margin-top:20px; border-top:1px solid var(--border); padding-top:20px;">
-                        <p style="font-size:12px; margin-bottom:10px; color:var(--primary)">+ YENİ PAKET ƏLAVƏ ET</p>
-                        <div class="price-box" style="border: 1px solid var(--primary);">
-                            <input type="text" id="new-p-key" placeholder="Paket adı (məs: 8100_UC)">
+                        <p style="font-size:12px; margin-bottom:10px; color:var(--primary)">+ YENİ PAKET</p>
+                        <div class="price-box" style="border: 1px solid rgba(0, 242, 255, 0.3);">
+                            <input type="text" id="new-p-key" placeholder="Paket adı">
                             <input type="text" id="new-p-val" placeholder="Qiymət">
                         </div>
                     </div>
@@ -116,18 +180,18 @@
 
             <div id="pg-ann" class="view">
                 <div class="glass-panel">
-                    <h3>Duyuru Sistemi</h3>
-                    <textarea id="ann-text" rows="5" placeholder="Saytda görünəcək mesaj..."></textarea>
+                    <h3 style="color:#fff; margin-bottom:15px;">Duyuru Sistemi</h3>
+                    <textarea id="ann-text" rows="5" placeholder="Mesajınızı bura yazın..."></textarea>
                     <button class="btn-main" id="btn-save-ann">YAYIMLA</button>
                 </div>
             </div>
 
             <div id="pg-blist" class="view">
                 <div class="glass-panel">
-                    <h3>Blacklist (Qara Siyahı)</h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                        <input type="text" id="bl-user-input" placeholder="İstifadəçi ID və ya Email" style="margin-bottom: 0;">
-                        <button class="btn-main" id="btn-add-bl" style="width: 150px; padding: 0;">BLOKLA</button>
+                    <h3 style="color:#fff; margin-bottom:15px;">Blacklist</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                        <input type="text" id="bl-user-input" placeholder="ID və ya Email" style="margin-bottom: 0;">
+                        <button class="btn-main" id="btn-add-bl">BLOKLA</button>
                     </div>
                     <div id="bl-list-container"></div>
                 </div>
@@ -135,8 +199,8 @@
 
             <div id="pg-logs" class="view">
                 <div class="glass-panel">
-                    <h3>Sistem Loqları</h3>
-                    <div id="logs-container" style="max-height: 450px; overflow-y: auto; font-size: 13px; margin-top: 15px; border: 1px solid var(--border); padding: 10px; border-radius: 10px;"></div>
+                    <h3 style="color:#fff;">Sistem Loqları</h3>
+                    <div id="logs-container" style="max-height: 400px; overflow-y: auto; font-size: 12px; margin-top: 15px; border: 1px solid var(--border); padding: 10px; border-radius: 10px; background: #000;"></div>
                 </div>
             </div>
         </main>
@@ -165,6 +229,7 @@
         document.getElementById('btn-login-trigger').onclick = () => {
             const email = document.getElementById('f-email').value;
             const pass = document.getElementById('f-pass').value;
+            if(!email || !pass) return;
             signInWithEmailAndPassword(auth, email, pass).catch(() => {
                 document.getElementById('auth-err').innerText = "Giriş rədd edildi!";
             });
@@ -176,22 +241,13 @@
                 document.getElementById('titan-root').style.display = 'flex';
                 const isOwner = user.uid === OWNER_UID;
                 
-                // Dinamik Başlıqların Təyini
-                const titleTag = document.getElementById('dynamic-title');
-                const welcomeTitle = document.getElementById('panel-welcome-title');
+                document.getElementById('dynamic-title').innerText = isOwner ? "Owner Panel" : "Admin Panel";
+                document.getElementById('panel-welcome-title').innerText = isOwner ? "Owner Dashboard" : "Admin Dashboard";
                 const roleText = document.getElementById('role-text');
-
-                if(isOwner) {
-                    titleTag.innerText = "Glidox Owner Panel";
-                    welcomeTitle.innerText = "Glidox Owner Panel";
-                    roleText.innerText = "YETKİ: OWNER";
-                    roleText.style.color = "var(--owner-gold)";
-                    document.getElementById('owner-only-nav').style.display = 'block';
-                } else {
-                    titleTag.innerText = "Glidox Admins Panel v3";
-                    welcomeTitle.innerText = "Glidox Admins Panel v3";
-                    roleText.innerText = "YETKİ: ADMİN";
-                }
+                roleText.innerText = isOwner ? "STATUS: OWNER" : "STATUS: ADMIN";
+                roleText.style.color = isOwner ? "var(--owner-gold)" : "var(--primary)";
+                
+                if(isOwner) document.getElementById('owner-only-nav').style.display = 'contents';
 
                 initDashboard(user, isOwner);
             } else if(user) { signOut(auth); }
@@ -204,11 +260,16 @@
             // --- QİYMƏTLƏR ---
             document.getElementById('game-select').onchange = async (e) => {
                 const game = e.target.value;
-                if(!game) { priceContainer.innerHTML = ""; document.getElementById('btn-save-prices').style.display="none"; document.getElementById('new-package-area').style.display="none"; return; }
+                if(!game) { 
+                    priceContainer.innerHTML = ""; 
+                    document.getElementById('btn-save-prices').style.display="none"; 
+                    document.getElementById('new-package-area').style.display="none"; 
+                    return; 
+                }
                 
                 document.getElementById('btn-save-prices').style.display = "block";
                 document.getElementById('new-package-area').style.display = "block";
-                priceContainer.innerHTML = "Yüklənir...";
+                priceContainer.innerHTML = "<p style='padding:20px; text-align:center;'>Yüklənir...</p>";
 
                 onValue(ref(db, `prices/${game}`), (snap) => {
                     const data = snap.val();
@@ -217,7 +278,11 @@
                         Object.keys(data).sort().forEach(key => {
                             const div = document.createElement('div');
                             div.className = 'price-box';
-                            div.innerHTML = `<input type="text" class="p-key" value="${key}" readonly><input type="text" class="p-val" value="${data[key]}"><button class="btn-del">×</button>`;
+                            div.innerHTML = `
+                                <input type="text" class="p-key" value="${key}" readonly>
+                                <input type="text" class="p-val" value="${data[key]}">
+                                <button class="btn-del"><i class="fa-solid fa-trash-can"></i></button>
+                            `;
                             div.querySelector('.btn-del').onclick = () => div.remove();
                             priceContainer.appendChild(div);
                         });
@@ -230,16 +295,20 @@
                 const rows = priceContainer.querySelectorAll('.price-box');
                 const newK = document.getElementById('new-p-key').value.trim();
                 const newV = document.getElementById('new-p-val').value.trim();
+                
                 let upData = {};
                 rows.forEach(r => {
                     const k = r.querySelector('.p-key').value;
                     const v = r.querySelector('.p-val').value;
                     upData[k] = isNaN(v) ? v : Number(v);
                 });
+                
                 if(newK && newV) upData[newK] = isNaN(newV) ? newV : Number(newV);
+                
                 await set(ref(db, `prices/${game}`), upData);
-                alert("Yeniləndi!");
-                document.getElementById('new-p-key').value = ""; document.getElementById('new-p-val').value = "";
+                alert("Məlumatlar yadda saxlanıldı!");
+                document.getElementById('new-p-key').value = ""; 
+                document.getElementById('new-p-val').value = "";
                 document.getElementById('game-select').dispatchEvent(new Event('change'));
             };
 
@@ -247,25 +316,45 @@
             document.getElementById('btn-add-bl').onclick = () => {
                 const val = document.getElementById('bl-user-input').value.trim();
                 if(!val) return;
-                set(ref(db, `blacklist/${val.replace(/\./g, '_')}`), { status: "banned", by: user.email, date: new Date().toLocaleDateString() })
-                .then(() => { alert("Bloklandı!"); document.getElementById('bl-user-input').value = ""; });
+                const cleanKey = val.replace(/\./g, '_').replace(/@/g, '_');
+                set(ref(db, `blacklist/${cleanKey}`), { 
+                    id: val, 
+                    by: user.email, 
+                    date: new Date().toLocaleString() 
+                }).then(() => { 
+                    alert("İstifadəçi bloklandı!"); 
+                    document.getElementById('bl-user-input').value = ""; 
+                });
             };
 
             onValue(ref(db, 'blacklist'), (snap) => {
                 blContainer.innerHTML = "";
                 snap.forEach(child => {
+                    const data = child.val();
                     const div = document.createElement('div');
-                    div.className = 'list-item';
-                    div.innerHTML = `<span><i class="fa-solid fa-user-lock"></i> ${child.key}</span> <button class="btn-del">SİL</button>`;
-                    div.querySelector('.btn-del').onclick = () => { if(confirm("Blokdan çıxarılsın?")) remove(ref(db, `blacklist/${child.key}`)); };
+                    div.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:10px 15px; border-radius:12px; margin-bottom:10px; border:1px solid var(--border);";
+                    div.innerHTML = `
+                        <div style="font-size:14px;">
+                            <b style="color:#fff;">${data.id || child.key}</b><br>
+                            <small style="color:#555;">${data.date}</small>
+                        </div>
+                        <button class="btn-del" style="height:35px; width:35px;"><i class="fa-solid fa-xmark"></i></button>
+                    `;
+                    div.querySelector('button').onclick = () => {
+                        if(confirm("Blokdan çıxarılsın?")) remove(ref(db, `blacklist/${child.key}`));
+                    };
                     blContainer.appendChild(div);
                 });
             });
 
             // --- ANNOUNCEMENT ---
             document.getElementById('btn-save-ann').onclick = () => {
-                update(ref(db, 'announcement'), { message: document.getElementById('ann-text').value, date: new Date().toLocaleString() })
-                .then(() => alert("Yayına verildi!"));
+                const text = document.getElementById('ann-text').value;
+                update(ref(db, 'announcement'), { 
+                    message: text, 
+                    status: text.trim() === "" ? "inactive" : "active",
+                    date: new Date().toLocaleString() 
+                }).then(() => alert("Duyuru yeniləndi!"));
             };
 
             // --- LOGS (OWNER ONLY) ---
@@ -273,22 +362,36 @@
                 onValue(ref(db, 'logs'), (snap) => {
                     const lBox = document.getElementById('logs-container');
                     lBox.innerHTML = "";
-                    snap.forEach(child => {
-                        const l = child.val();
-                        lBox.innerHTML = `<div style="padding:5px; border-bottom:1px solid #111;">[${l.time}] <b>${l.user}</b>: ${l.action}</div>` + lBox.innerHTML;
+                    let logArr = [];
+                    snap.forEach(child => { logArr.push(child.val()); });
+                    logArr.reverse().forEach(l => {
+                        const d = document.createElement('div');
+                        d.style.padding = "8px";
+                        d.style.borderBottom = "1px solid #111";
+                        d.innerHTML = `<span style="color:var(--primary)">[${l.time || ''}]</span> <b>${l.user || 'Sistem'}</b>: ${l.action || ''}`;
+                        lBox.appendChild(d);
                     });
                 });
             }
         }
 
-        document.getElementById('btn-logout').onclick = () => signOut(auth).then(() => location.reload());
-        document.querySelectorAll('.nav-link').forEach(l => {
-            l.onclick = () => {
-                document.querySelectorAll('.nav-link, .view').forEach(el => el.classList.remove('active'));
-                l.classList.add('active');
-                document.getElementById(l.dataset.target).classList.add('active');
-            };
+        // Naviqasiya Məntiqi
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                
+                link.classList.add('active');
+                const target = link.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
         });
+
+        document.getElementById('btn-logout').onclick = () => {
+            if(confirm("Çıxış etmək istəyirsiniz?")) {
+                signOut(auth).then(() => location.reload());
+            }
+        };
     </script>
 </body>
 </html>
