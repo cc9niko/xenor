@@ -3,143 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XERON V6 | MASTER CONTROL</title>
+    <title>XERON V8 | PROFESSIONAL ADMIN</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
-            --bg-dark: #09090b;
-            --bg-sidebar: #121214;
-            --bg-card: #18181b;
-            --bg-input: #27272a;
+            --bg-dark: #070708;
+            --bg-sidebar: #0f0f12;
+            --bg-card: #15151a;
+            --bg-input: #1c1c24;
             --primary: #3b82f6;
-            --primary-hover: #2563eb;
+            --primary-glow: rgba(59, 130, 246, 0.4);
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
             --text-main: #f4f4f5;
-            --text-muted: #a1a1aa;
-            --border: #27272a;
-            --radius: 12px;
-            --transition: all 0.2s ease;
+            --text-muted: #71717a;
+            --border: rgba(255, 255, 255, 0.05);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
 
         body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; }
 
-        /* --- TOAST SYSTEM --- */
-        #toast-box { position: fixed; top: 20px; right: 20px; z-index: 999999; display: flex; flex-direction: column; gap: 10px; }
+        /* TOAST NOTIFICATION */
+        #toast-box { position: fixed; top: 24px; right: 24px; z-index: 99999; display: flex; flex-direction: column; gap: 12px; }
         .toast {
-            background: var(--bg-card); border: 1px solid var(--border); padding: 16px 20px;
-            border-radius: var(--radius); display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(120%);
-            animation: slideIn 0.3s forwards; min-width: 280px;
+            background: var(--bg-card); border: 1px solid var(--border); padding: 16px 24px;
+            border-radius: var(--radius-md); display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            transform: translateX(150%); animation: toastIn 0.4s forwards; min-width: 320px;
         }
         .toast.success { border-left: 4px solid var(--success); }
         .toast.error { border-left: 4px solid var(--danger); }
-        @keyframes slideIn { to { transform: translateX(0); } }
+        @keyframes toastIn { to { transform: translateX(0); } }
 
-        /* --- LOGIN SCREEN --- */
+        /* LOGIN SCREEN */
         #login-screen {
-            position: fixed; inset: 0; background: var(--bg-dark); z-index: 10000;
-            display: flex; align-items: center; justify-content: center;
+            position: fixed; inset: 0; background: radial-gradient(circle at center, #111827 0%, #000 100%);
+            z-index: 10000; display: flex; align-items: center; justify-content: center;
         }
         .login-card {
-            background: var(--bg-card); border: 1px solid var(--border);
-            padding: 40px; border-radius: 20px; width: 400px; text-align: center;
+            background: rgba(21, 21, 26, 0.8); border: 1px solid var(--border);
+            padding: 48px; border-radius: 24px; width: 440px; text-align: center;
+            backdrop-filter: blur(20px); box-shadow: 0 0 80px rgba(0,0,0,0.5);
         }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
-        .input-group input {
-            width: 100%; background: var(--bg-input); border: 1px solid var(--border);
-            padding: 14px 16px; border-radius: var(--radius); color: #fff; outline: none; font-size: 15px;
-        }
-        .input-group input:focus { border-color: var(--primary); }
+        .login-card h2 { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
 
-        /* --- MAIN LAYOUT --- */
-        #app-layout { display: none; width: 100%; height: 100%; }
-
+        /* SIDEBAR */
         aside {
             width: 280px; background: var(--bg-sidebar); border-right: 1px solid var(--border);
-            padding: 30px 20px; display: flex; flex-direction: column;
+            padding: 32px 20px; display: flex; flex-direction: column;
         }
-        .logo-area { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; padding-left: 10px; }
-        .logo-box { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 20px; }
-        
+        .logo-box {
+            width: 48px; height: 48px; background: var(--primary); border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; color: #fff; font-size: 24px; box-shadow: 0 0 20px var(--primary-glow);
+        }
+        .nav-group { margin-top: 40px; flex: 1; }
         .nav-item {
-            width: 100%; padding: 14px 16px; border-radius: var(--radius); border: none;
+            width: 100%; padding: 14px 18px; border-radius: var(--radius-md); border: none;
             background: transparent; color: var(--text-muted); font-size: 15px; font-weight: 600;
-            text-align: left; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; margin-bottom: 5px;
+            text-align: left; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; gap: 14px; margin-bottom: 8px;
         }
-        .nav-item:hover { background: var(--bg-input); color: #fff; }
-        .nav-item.active { background: var(--primary); color: #fff; }
-        .nav-item i { width: 20px; text-align: center; }
+        .nav-item:hover { background: rgba(255,255,255,0.03); color: #fff; }
+        .nav-item.active { background: var(--primary); color: #fff; box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2); }
 
-        main { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
+        /* MAIN AREA */
+        main { flex: 1; padding: 48px; overflow-y: auto; position: relative; }
         .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: pageFade 0.4s ease-out; }
+        @keyframes pageFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- DASHBOARD STATS --- */
-        .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: var(--bg-card); border: 1px solid var(--border); padding: 24px; border-radius: 16px; display: flex; align-items: center; gap: 20px; }
-        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        
-        /* --- GAME GRID --- */
-        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+        /* DASHBOARD STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+        .stat-box {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 28px;
+            border-radius: var(--radius-lg); position: relative; overflow: hidden;
+        }
+        .stat-box::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.03)); border-radius: 0 0 0 100%;
+        }
+
+        /* GAME GRID */
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
         .game-card {
-            background: var(--bg-card); border: 1px solid var(--border); padding: 20px;
-            border-radius: 16px; cursor: pointer; transition: var(--transition);
+            background: var(--bg-card); border: 1px solid var(--border); padding: 24px;
+            border-radius: var(--radius-md); cursor: pointer; transition: var(--transition);
             display: flex; align-items: center; justify-content: space-between;
         }
-        .game-card:hover { border-color: var(--primary); background: #1f1f22; transform: translateY(-2px); }
-        .game-card i { font-size: 20px; color: var(--text-muted); }
-        .game-card:hover i { color: var(--primary); }
+        .game-card:hover { border-color: var(--primary); transform: scale(1.02); background: #1a1a20; }
+        .game-card .icon-circle {
+            width: 40px; height: 40px; background: rgba(255,255,255,0.05);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        }
 
-        /* --- PRICE EDITOR --- */
-        .editor-section {
+        /* PRICE EDITOR */
+        .editor-container {
             background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 16px; padding: 30px; margin-top: 30px; display: none;
+            border-radius: 20px; padding: 32px; margin-top: 32px; display: none;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+        .price-list-header {
+            display: grid; grid-template-columns: 2fr 1fr 120px 60px; gap: 16px;
+            padding: 0 16px 12px; border-bottom: 1px solid var(--border);
+            color: var(--text-muted); font-size: 13px; font-weight: 700; text-transform: uppercase;
         }
         .price-row {
-            display: grid; grid-template-columns: 2fr 1fr auto auto; gap: 15px;
-            align-items: center; padding: 15px; background: var(--bg-input);
-            border-radius: var(--radius); margin-bottom: 10px; border: 1px solid transparent;
+            display: grid; grid-template-columns: 2fr 1fr 120px 60px; gap: 16px;
+            align-items: center; padding: 16px; background: rgba(255,255,255,0.02);
+            border-radius: var(--radius-md); margin-top: 12px; border: 1px solid transparent;
         }
-        .price-row:hover { border-color: var(--border); }
-        .price-row input {
-            background: var(--bg-dark); border: 1px solid var(--border);
-            padding: 10px 15px; border-radius: 8px; color: #fff; font-weight: 600; outline: none; width: 100%;
+        .price-row:hover { border-color: var(--border); background: rgba(255,255,255,0.04); }
+        
+        /* INPUTS & BUTTONS */
+        .input-field {
+            width: 100%; background: var(--bg-dark); border: 1px solid var(--border);
+            padding: 12px 16px; border-radius: 10px; color: #fff; outline: none; transition: var(--transition);
         }
-        .price-row input:focus { border-color: var(--primary); }
-
-        /* --- BUTTONS --- */
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        
         .btn {
-            padding: 12px 20px; border-radius: 8px; border: none; font-weight: 600;
-            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; font-size: 14px;
+            padding: 12px 24px; border-radius: 10px; border: none; font-weight: 700;
+            cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 10px;
         }
         .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
+        .btn-ghost { background: rgba(255,255,255,0.05); color: #fff; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
         .btn-success { background: var(--success); color: #000; }
-        .btn-success:hover { filter: brightness(1.1); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
         .btn-danger:hover { background: var(--danger); color: #fff; }
 
-        /* --- TERMINAL (LOGS) --- */
-        .terminal {
-            background: #000; border: 1px solid var(--border); border-radius: 12px;
-            padding: 20px; height: 500px; overflow-y: auto; font-family: 'Fira Code', monospace;
+        /* TERMINAL LOQS */
+        .terminal-wrap {
+            background: #000; border: 1px solid var(--border); border-radius: var(--radius-md);
+            padding: 24px; height: 500px; overflow-y: auto; font-family: 'Fira Code', monospace;
         }
-        .log-line { display: flex; gap: 15px; padding: 8px 0; border-bottom: 1px solid #111; font-size: 13px; }
-        .log-time { color: var(--text-muted); min-width: 140px; }
-        .log-user { color: var(--primary); min-width: 150px; font-weight: 600; }
-        .log-action { color: #d4d4d8; flex: 1; }
+        .log-entry {
+            display: flex; gap: 20px; padding: 10px 0; border-bottom: 1px solid #111;
+            font-size: 13px; line-height: 1.5;
+        }
+        .log-ts { color: var(--text-muted); min-width: 160px; }
+        .log-user { color: var(--primary); font-weight: 600; min-width: 120px; }
+        .log-msg { color: #e4e4e7; }
 
     </style>
 </head>
@@ -149,135 +166,122 @@
 
     <div id="login-screen">
         <div class="login-card">
-            <div class="logo-box" style="margin: 0 auto 20px; width: 60px; height: 60px; font-size: 28px;">X</div>
-            <h2 style="margin-bottom: 5px;">SİSTEMƏ GİRİŞ</h2>
-            <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 14px;">Xeron Admin Paneli V6</p>
+            <div class="logo-box" style="margin: 0 auto 24px;">X</div>
+            <h2>XERON ADMIN</h2>
+            <p style="color: var(--text-muted); margin-bottom: 40px;">Zəhmət olmasa kimliyinizi təsdiq edin</p>
             
-            <div class="input-group">
-                <label>Admin E-poçt</label>
-                <input type="email" id="auth-email" placeholder="admin@xeron.com">
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px; display: block;">E-POÇT</label>
+                <input type="email" id="email" class="input-field" placeholder="admin@xeron.com">
             </div>
-            <div class="input-group">
-                <label>Şifrə</label>
-                <input type="password" id="auth-pass" placeholder="••••••••">
+            <div style="text-align: left; margin-bottom: 32px;">
+                <label style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px; display: block;">ŞİFRƏ</label>
+                <input type="password" id="pass" class="input-field" placeholder="••••••••">
             </div>
             
-            <button class="btn btn-primary" id="btn-login" style="width: 100%; justify-content: center; padding: 14px; font-size: 16px;">
-                Daxil Ol <i class="fa-solid fa-arrow-right"></i>
+            <button id="btn-login" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px;">
+                SİSTEMƏ DAXİL OL <i class="fa-solid fa-chevron-right"></i>
             </button>
         </div>
     </div>
 
-    <div id="app-layout">
+    <div id="app-content" style="display: none; width: 100%; height: 100%;">
         <aside>
-            <div class="logo-area">
+            <div style="display: flex; align-items: center; gap: 16px;">
                 <div class="logo-box">X</div>
                 <div>
-                    <h3 style="font-size: 18px;">XERON</h3>
-                    <span style="font-size: 11px; color: var(--success); font-weight: 700;">V6 BULLETPROOF</span>
+                    <h3 style="letter-spacing: -0.5px;">XERON V8</h3>
+                    <span style="font-size: 11px; color: var(--success); font-weight: 800; text-transform: uppercase;">Cloud Secure</span>
                 </div>
             </div>
 
-            <nav>
-                <button class="nav-item active" data-page="dash"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
-                <button class="nav-item" data-page="prices"><i class="fa-solid fa-tags"></i> Qiymət İdarəsi</button>
-                <button class="nav-item" data-page="announcement"><i class="fa-solid fa-bullhorn"></i> Sistem Duyurusu</button>
-                <div style="height: 1px; background: var(--border); margin: 20px 0;"></div>
-                <button class="nav-item" data-page="logs" id="menu-logs" style="color: var(--warning);"><i class="fa-solid fa-terminal"></i> Audit Loqları</button>
+            <nav class="nav-group">
+                <button class="nav-item active" onclick="switchPage('dash', this)"><i class="fa-solid fa-grid-2"></i> Dashboard</button>
+                <button class="nav-item" onclick="switchPage('prices', this)"><i class="fa-solid fa-tags"></i> Qiymət İdarəsi</button>
+                <button class="nav-item" onclick="switchPage('ann', this)"><i class="fa-solid fa-bullhorn"></i> Duyurular</button>
+                <div style="height: 1px; background: var(--border); margin: 24px 0;"></div>
+                <button id="nav-logs" class="nav-item" onclick="switchPage('logs', this)" style="color: var(--warning);"><i class="fa-solid fa-shield-halved"></i> Audit Loqları</button>
             </nav>
 
-            <button class="btn btn-danger" id="btn-logout" style="margin-top: auto; justify-content: center;">
-                <i class="fa-solid fa-power-off"></i> Çıxış
+            <button class="btn btn-danger" onclick="handleLogout()" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-power-off"></i> ÇIXIŞ ET
             </button>
         </aside>
 
         <main>
             <div id="page-dash" class="page active">
-                <h1 style="margin-bottom: 5px;">İdarəetmə Paneli</h1>
-                <p style="color: var(--text-muted); margin-bottom: 30px;">Xoş gəldin, <span id="admin-label" style="color:var(--primary); font-weight: bold;"></span></p>
+                <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Xoş gəldin, Admin</h1>
+                <p style="color: var(--text-muted); margin-bottom: 40px;">Sistem statusu hazırda optimal vəziyyətdədir.</p>
 
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--primary);"><i class="fa-regular fa-clock"></i></div>
-                        <div>
-                            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">SİSTEM VAXTI</p>
-                            <h2 id="sys-clock">--:--:--</h2>
-                        </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <small style="color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Sistem Saatı</small>
+                        <h2 id="clock-display" style="font-size: 36px; margin-top: 10px; font-family: 'Fira Code';">00:00:00</h2>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fa-solid fa-database"></i></div>
-                        <div>
-                            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">BAZA STATUSU</p>
-                            <h2 style="color: var(--success);">Tam Aktiv</h2>
-                        </div>
+                    <div class="stat-box">
+                        <small style="color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Aktiv Oyunlar</small>
+                        <h2 style="font-size: 36px; margin-top: 10px; color: var(--primary);">12 List</h2>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);"><i class="fa-solid fa-gamepad"></i></div>
-                        <div>
-                            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">DƏSTƏKLƏNƏN OYUN</p>
-                            <h2>12 Oyun</h2>
-                        </div>
+                    <div class="stat-box">
+                        <small style="color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Baza Bağlantısı</small>
+                        <h2 style="font-size: 36px; margin-top: 10px; color: var(--success);">Stabil</h2>
                     </div>
                 </div>
             </div>
 
             <div id="page-prices" class="page">
-                <h2 style="margin-bottom: 20px;">Oyun Qiymətləri</h2>
+                <h2 style="font-size: 24px; margin-bottom: 24px;">Oyun Siyahısı (Master 12)</h2>
                 
-                <div class="game-grid">
-                    <div class="game-card" onclick="openEditor('roblox', 'Roblox')"><div style="font-weight:600;"><i class="fa-solid fa-cube" style="margin-right:10px;"></i> Roblox</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('pubg', 'PUBG Mobile')"><div style="font-weight:600;"><i class="fa-solid fa-gun" style="margin-right:10px;"></i> PUBG Mobile</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('steambalans', 'Steam Balans')"><div style="font-weight:600;"><i class="fa-brands fa-steam" style="margin-right:10px;"></i> Steam Balans</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('mlbb', 'Mobile Legends')"><div style="font-weight:600;"><i class="fa-solid fa-khanda" style="margin-right:10px;"></i> MLBB</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('valorant', 'Valorant')"><div style="font-weight:600;"><i class="fa-solid fa-crosshairs" style="margin-right:10px;"></i> Valorant</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('freefire', 'Free Fire')"><div style="font-weight:600;"><i class="fa-solid fa-fire" style="margin-right:10px;"></i> Free Fire</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('brawlstars', 'Brawl Stars')"><div style="font-weight:600;"><i class="fa-solid fa-star" style="margin-right:10px;"></i> Brawl Stars</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('clashofclans', 'Clash of Clans')"><div style="font-weight:600;"><i class="fa-solid fa-chess-rook" style="margin-right:10px;"></i> Clash of Clans</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('genshin', 'Genshin Impact')"><div style="font-weight:600;"><i class="fa-solid fa-wand-sparkles" style="margin-right:10px;"></i> Genshin Impact</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('efootball', 'eFootball')"><div style="font-weight:600;"><i class="fa-solid fa-futbol" style="margin-right:10px;"></i> eFootball</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('codm', 'COD Mobile')"><div style="font-weight:600;"><i class="fa-solid fa-person-rifle" style="margin-right:10px;"></i> COD Mobile</div><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="game-card" onclick="openEditor('leagueoflegends', 'League of Legends')"><div style="font-weight:600;"><i class="fa-solid fa-hat-wizard" style="margin-right:10px;"></i> League of Legends</div><i class="fa-solid fa-chevron-right"></i></div>
-                </div>
-
-                <div class="editor-section" id="price-editor-panel">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <h2 id="editor-title" style="color: var(--primary);">Oyun Seçilməyib</h2>
-                        <button class="btn btn-danger" onclick="closeEditor()">Paneli Bağla</button>
+                <div class="game-grid" id="master-game-list">
                     </div>
 
-                    <div style="background: rgba(59, 130, 246, 0.05); border: 1px dashed var(--primary); padding: 20px; border-radius: 12px; margin-bottom: 30px;">
-                        <h4 style="margin-bottom: 15px; color: var(--text-main);">YENİ PAKET YARAT</h4>
-                        <div style="display: flex; gap: 15px;">
-                            <input type="text" id="new-pkg-name" placeholder="Paket Adı (Məs: 10 UC)" style="flex:2; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: #fff; outline: none;">
-                            <input type="text" id="new-pkg-price" placeholder="Qiymət (AZN)" style="flex:1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: #fff; outline: none;">
-                            <button class="btn btn-primary" onclick="createNewPackage()"><i class="fa-solid fa-plus"></i> Əlavə Et</button>
+                <div class="editor-container" id="main-editor">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                        <div>
+                            <h2 id="active-game-title" style="color: var(--primary); font-size: 24px;">Seçilməyib</h2>
+                            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Paket qiymətlərini birbaşa aşağıdan yeniləyin.</p>
+                        </div>
+                        <button class="btn btn-ghost" onclick="closeEditor()">Bağla</button>
+                    </div>
+
+                    <div style="background: rgba(59, 130, 246, 0.03); border: 1px dashed var(--primary); padding: 24px; border-radius: var(--radius-md); margin-bottom: 32px;">
+                        <h4 style="font-size: 14px; margin-bottom: 16px;">YENİ PAKET ƏLAVƏ ET</h4>
+                        <div style="display: flex; gap: 12px;">
+                            <input type="text" id="new-p-name" class="input-field" placeholder="Paket Adı (Məs: 10 UC)" style="flex: 2;">
+                            <input type="text" id="new-p-val" class="input-field" placeholder="Qiymət (AZN)" style="flex: 1;">
+                            <button class="btn btn-primary" onclick="addNewPackage()">ƏLAVƏ ET</button>
                         </div>
                     </div>
 
-                    <h4 style="margin-bottom: 15px; color: var(--text-muted);">MÖVCUD PAKETLƏRİ REDAKTƏ ET</h4>
-                    <div id="editor-list">
+                    <div class="price-list-header">
+                        <span>Paket Adı</span>
+                        <span>Mövcud Qiymət</span>
+                        <span>Hərəkət</span>
+                        <span>Sil</span>
+                    </div>
+                    <div id="price-rows-container">
                         </div>
                 </div>
             </div>
 
-            <div id="page-announcement" class="page">
-                <h2 style="margin-bottom: 20px;">Sistem Duyurusu</h2>
-                <div style="background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); max-width: 800px;">
-                    <label style="display: block; margin-bottom: 10px; color: var(--text-muted); font-weight: 600;">Müştəri Tətbiqində Görünəcək Mətn</label>
-                    <textarea id="ann-text" rows="6" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 12px; outline: none; margin-bottom: 20px; font-size: 15px;"></textarea>
-                    <button class="btn btn-primary" onclick="saveAnnouncement()">
-                        <i class="fa-solid fa-paper-plane"></i> Duyurunu Yenilə
+            <div id="page-ann" class="page">
+                <h2 style="margin-bottom: 24px;">Qlobal Duyuru Sistemi</h2>
+                <div style="max-width: 700px; background: var(--bg-card); padding: 32px; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                    <label style="display: block; color: var(--text-muted); font-weight: 600; margin-bottom: 12px;">Müştəri Panelində Görünəcək Mətn</label>
+                    <textarea id="ann-input" style="width: 100%; height: 180px; background: var(--bg-dark); border: 1px solid var(--border); color: #fff; padding: 20px; border-radius: var(--radius-md); outline: none; margin-bottom: 24px; resize: none;"></textarea>
+                    <button class="btn btn-primary" onclick="saveGlobalAnn()">
+                        <i class="fa-solid fa-paper-plane"></i> DUYURUNU YAYIMLA
                     </button>
                 </div>
             </div>
 
             <div id="page-logs" class="page">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>Audit Loqları (Aktiv)</h2>
-                    <button class="btn btn-danger" onclick="clearLogs()"><i class="fa-solid fa-trash"></i> Loqları Təmizlə</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h2>Sistem Audit Loqları</h2>
+                    <button class="btn btn-danger" onclick="clearAllLogs()">Loqları Təmizlə</button>
                 </div>
-                <div class="terminal" id="log-terminal">
-                    <p style="color: var(--text-muted);">Loqlar yüklənir...</p>
+                <div class="terminal-wrap" id="log-display">
+                    <p style="color: #444;">Loqlar sinxronizasiya edilir...</p>
                 </div>
             </div>
         </main>
@@ -288,284 +292,225 @@
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Firebase Setup
-        const firebaseConfig = { 
-            apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8", 
-            databaseURL: "https://xeronshop-default-rtdb.europe-west1.firebasedatabase.app", 
-            projectId: "xeronshop" 
+        const firebaseConfig = {
+            apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8",
+            databaseURL: "https://xeronshop-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "xeronshop"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // Access Control
-        const OWNER_UID = "dXDTZPPuVKaO1ecsO7UbCOXr15i1";
-        const ADMINS = ["tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
+        // Core Configuration
+        const ADMIN_LIST = ["dXDTZPPuVKaO1ecsO7UbCOXr15i1", "tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
+        const CORE_12_GAMES = [
+            { id: 'steam', name: 'Steam Wallet' },
+            { id: 'pubg', name: 'PUBG Mobile' },
+            { id: 'mlbb', name: 'Mobile Legends' },
+            { id: 'val_tr', name: 'Valorant TR' },
+            { id: 'val_eu', name: 'Valorant EU' },
+            { id: 'apple', name: 'Apple Balans' },
+            { id: 'freefire', name: 'Free Fire' },
+            { id: 'roblox', name: 'Roblox' },
+            { id: 'delta', name: 'Delta Force' },
+            { id: 'standoff', name: 'Standoff 2' },
+            { id: 'weplay', name: 'WePlay' },
+            { id: 'discord', name: 'Discord Nitro' }
+        ];
 
-        let activeGame = null;
-        let priceListener = null;
+        let activeGameID = null;
 
-        // ==========================================
-        // 1. UI & UTILITIES
-        // ==========================================
-        
-        window.showToast = (msg, type = 'success') => {
+        // Utilities
+        window.toast = (msg, type = 'success') => {
             const box = document.getElementById('toast-box');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${msg}`;
-            box.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(120%)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> ${msg}`;
+            box.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 3000);
         };
 
         setInterval(() => {
-            document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString('az-AZ');
+            document.getElementById('clock-display').innerText = new Date().toLocaleTimeString();
         }, 1000);
 
-        document.querySelectorAll('.nav-item').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(`page-${btn.dataset.page}`).classList.add('active');
-            });
-        });
-
-        // ==========================================
-        // 2. BULLETPROOF LOG SYSTEM (V6)
-        // ==========================================
-        
-        // Log funksiyası sadələşdirildi: birbaşa push istifadə edilir, mürəkkəb vaxt funksiyaları ləğv edildi.
-        const writeSystemLog = async (actionText) => {
-            if(!auth.currentUser) return;
-            try {
-                // 'admin_logs_v6' adlı yeni, təmiz cədvəl yaradırıq.
-                const logRef = ref(db, 'admin_logs_v6');
-                const logData = {
-                    user: auth.currentUser.email.split('@')[0],
-                    action: actionText,
-                    time: new Date().toLocaleString('az-AZ'),
-                    timestamp: Date.now() // Local timestamp, rules xətası verməz.
-                };
-                await push(logRef, logData);
-            } catch (err) {
-                console.error("Log yazıla bilmədi:", err);
-            }
+        window.switchPage = (page, btn) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`page-${page}`).classList.add('active');
+            btn.classList.add('active');
         };
 
-        const loadLogs = () => {
-            onValue(ref(db, 'admin_logs_v6'), (snapshot) => {
-                const terminal = document.getElementById('log-terminal');
-                terminal.innerHTML = "";
-                const logsArray = [];
-                
-                snapshot.forEach(child => { logsArray.push(child.val()); });
-                
-                if(logsArray.length === 0) {
-                    terminal.innerHTML = "<p style='color: var(--text-muted);'>Sistem loqları boşdur.</p>";
-                    return;
-                }
+        // Audit Logs
+        async function writeAuditLog(action) {
+            if(!auth.currentUser) return;
+            const logRef = ref(db, 'audit_logs_v8');
+            await push(logRef, {
+                u: auth.currentUser.email.split('@')[0],
+                a: action,
+                t: new Date().toLocaleString('az-AZ'),
+                ts: Date.now()
+            });
+        }
 
-                // Ən yeniləri yuxarıda göstər
-                logsArray.sort((a, b) => b.timestamp - a.timestamp).forEach(log => {
-                    terminal.innerHTML += `
-                        <div class="log-line">
-                            <div class="log-time">[${log.time}]</div>
-                            <div class="log-user">@${log.user}</div>
-                            <div class="log-action">${log.action}</div>
+        function loadAuditLogs() {
+            onValue(ref(db, 'audit_logs_v8'), (snap) => {
+                const display = document.getElementById('log-display');
+                display.innerHTML = "";
+                let logs = [];
+                snap.forEach(child => { logs.push(child.val()); });
+                logs.sort((a,b) => b.ts - a.ts).forEach(l => {
+                    display.innerHTML += `
+                        <div class="log-entry">
+                            <span class="log-ts">[${l.t}]</span>
+                            <span class="log-user">@${l.u}</span>
+                            <span class="log-msg">${l.a}</span>
                         </div>
                     `;
                 });
             });
-        };
+        }
 
-        window.clearLogs = async () => {
-            if(confirm("Bütün loqları silmək istədiyinizə əminsiniz?")) {
-                try {
-                    await remove(ref(db, 'admin_logs_v6'));
-                    await writeSystemLog("Bütün sistem loqlarını təmizlədi.");
-                    showToast("Loqlar təmizləndi", "success");
-                } catch(e) {
-                    showToast("Xəta: " + e.message, "error");
-                }
-            }
-        };
-
-        // ==========================================
-        // 3. AUTHENTICATION
-        // ==========================================
-
-        onAuthStateChanged(auth, async (user) => {
-            if(user && (user.uid === OWNER_UID || ADMINS.includes(user.uid))) {
+        // Auth Logic
+        onAuthStateChanged(auth, (user) => {
+            if(user && ADMIN_LIST.includes(user.uid)) {
                 document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-layout').style.display = 'flex';
-                document.getElementById('admin-label').innerText = user.email;
-
-                if(user.uid === OWNER_UID) {
-                    document.getElementById('menu-logs').style.display = 'flex';
-                    loadLogs();
-                } else {
-                    document.getElementById('menu-logs').style.display = 'none';
-                }
-
-                // Load Announcement
-                onValue(ref(db, 'announcement/text'), (snap) => {
-                    if(snap.exists()) document.getElementById('ann-text').value = snap.val();
-                });
-
-                await writeSystemLog("Sistemə giriş etdi.");
+                document.getElementById('app-content').style.display = 'flex';
+                initSystem();
+                writeAuditLog("Sistemə daxil oldu.");
             } else {
                 document.getElementById('login-screen').style.display = 'flex';
-                document.getElementById('app-layout').style.display = 'none';
+                document.getElementById('app-content').style.display = 'none';
                 if(user) signOut(auth);
             }
         });
 
         document.getElementById('btn-login').onclick = () => {
-            const e = document.getElementById('auth-email').value;
-            const p = document.getElementById('auth-pass').value;
-            if(!e || !p) return showToast("Məlumatları doldurun!", "error");
-            
-            signInWithEmailAndPassword(auth, e, p).catch(err => {
-                showToast("E-poçt və ya Şifrə yanlışdır!", "error");
-            });
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, e, p).catch(() => toast("Giriş məlumatları yanlışdır!", "error"));
         };
 
-        document.getElementById('btn-logout').onclick = async () => {
-            await writeSystemLog("Sistemdən çıxış etdi.");
+        window.handleLogout = async () => {
+            await writeAuditLog("Sistemdən çıxış etdi.");
             signOut(auth);
         };
 
-        // ==========================================
-        // 4. DIRECT PRICE EDITING (THE CORE FIX)
-        // ==========================================
+        // Price Engine
+        function initSystem() {
+            const grid = document.getElementById('master-game-list');
+            grid.innerHTML = "";
+            CORE_12_GAMES.forEach(game => {
+                grid.innerHTML += `
+                    <div class="game-card" onclick="openEditor('${game.id}', '${game.name}')">
+                        <div style="display:flex; align-items:center; gap:16px;">
+                            <div class="icon-circle"><i class="fa-solid fa-gamepad"></i></div>
+                            <span style="font-weight:700;">${game.name}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i>
+                    </div>
+                `;
+            });
 
-        window.openEditor = (gameId, gameName) => {
-            activeGame = gameId;
-            document.getElementById('editor-title').innerText = `${gameName} - Qiymət Paneli`;
-            document.getElementById('price-editor-panel').style.display = 'block';
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            // Sync Ann
+            onValue(ref(db, 'global_announcement/msg'), (snap) => {
+                document.getElementById('ann-input').value = snap.val() || "";
+            });
 
-            if(priceListener) {
-                // Clear old listener
-            }
+            loadAuditLogs();
+        }
 
-            const listDiv = document.getElementById('editor-list');
+        window.openEditor = (id, name) => {
+            activeGameID = id;
+            document.getElementById('active-game-title').innerText = name;
+            document.getElementById('main-editor').style.display = 'block';
             
-            priceListener = onValue(ref(db, `prices/${activeGame}`), (snapshot) => {
-                listDiv.innerHTML = "";
-                if(snapshot.exists()) {
-                    const data = snapshot.val();
-                    Object.keys(data).forEach(pkgName => {
-                        // Qiymət rəqəmini götürürük
-                        const currentPrice = data[pkgName];
-                        
-                        // Hər paket üçün BİRBAŞA REDAKTƏ sətiri yaradırıq
-                        listDiv.innerHTML += `
+            const container = document.getElementById('price-rows-container');
+            onValue(ref(db, `prices/${id}`), (snap) => {
+                container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        const pName = child.key;
+                        const pVal = child.val();
+                        container.innerHTML += `
                             <div class="price-row">
-                                <div style="font-weight: 600; font-size: 16px; padding-left: 10px;">${pkgName}</div>
-                                <div>
-                                    <input type="text" id="input-${pkgName}" value="${currentPrice}" placeholder="Qiymət">
-                                </div>
-                                <button class="btn btn-success" onclick="updateExistingPrice('${pkgName}')">
-                                    <i class="fa-solid fa-check"></i> Yenilə
-                                </button>
-                                <button class="btn btn-danger" onclick="deleteExistingPrice('${pkgName}')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
+                                <span style="font-weight:600;">${pName}</span>
+                                <input type="text" id="input-${pName}" class="input-field" value="${pVal}">
+                                <button class="btn btn-success" onclick="updatePkgPrice('${pName}')">YENİLƏ</button>
+                                <button class="btn btn-danger" onclick="deletePkg('${pName}')"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         `;
                     });
                 } else {
-                    listDiv.innerHTML = "<p style='color: var(--text-muted); padding: 10px;'>Bu oyun üçün heç bir paket yoxdur.</p>";
+                    container.innerHTML = "<p style='padding:20px; color:var(--text-muted);'>Hələ paket əlavə edilməyib.</p>";
                 }
             });
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         };
 
         window.closeEditor = () => {
-            document.getElementById('price-editor-panel').style.display = 'none';
-            activeGame = null;
+            document.getElementById('main-editor').style.display = 'none';
+            activeGameID = null;
         };
 
-        // Yeni Paket Yarat
-        window.createNewPackage = async () => {
-            if(!activeGame) return;
-            const name = document.getElementById('new-pkg-name').value.trim();
-            const price = document.getElementById('new-pkg-price').value.trim();
-
-            if(!name || !price) return showToast("Paket adını və qiymətini yazın!", "error");
-
-            try {
-                // Firebase set metodu ilə konkret yola yazırıq
-                await set(ref(db, `prices/${activeGame}/${name}`), price);
-                await writeSystemLog(`${activeGame} oyununa yeni paket əlavə etdi: ${name} = ${price} AZN`);
-                
-                showToast("Yeni paket yaradıldı!", "success");
-                document.getElementById('new-pkg-name').value = "";
-                document.getElementById('new-pkg-price').value = "";
-            } catch(e) {
-                showToast("Xəta baş verdi: " + e.message, "error");
-            }
-        };
-
-        // Mövcud Paketin Qiymətini Yenilə (Sənin istədiyin funksiya: 0.80 -> 1 AZN)
-        window.updateExistingPrice = async (pkgName) => {
-            if(!activeGame) return;
-            // Xüsusi inputdan yeni rəqəmi çəkirik
-            const newPrice = document.getElementById(`input-${pkgName}`).value.trim();
+        window.updatePkgPrice = async (pName) => {
+            const newVal = document.getElementById(`input-${pName}`).value.trim();
+            if(!newVal) return toast("Qiymət boş ola bilməz!", "error");
             
-            if(!newPrice) return showToast("Qiymət xanası boş ola bilməz!", "error");
+            try {
+                await set(ref(db, `prices/${activeGameID}/${pName}`), newVal);
+                await writeAuditLog(`${activeGameID} oyununda "${pName}" qiymətini dəyişdi: ${newVal} AZN`);
+                toast("Qiymət uğurla yeniləndi!");
+            } catch(e) { toast(e.message, "error"); }
+        };
+
+        window.addNewPackage = async () => {
+            const name = document.getElementById('new-p-name').value.trim();
+            const val = document.getElementById('new-p-val').value.trim();
+            if(!name || !val) return toast("Məlumatları doldurun!", "error");
 
             try {
-                // Birbaşa həmin paketin yolunu yeniləyirik. Qətiyyən xəta vermir.
-                await set(ref(db, `prices/${activeGame}/${pkgName}`), newPrice);
-                await writeSystemLog(`${activeGame} oyununda "${pkgName}" qiymətini dəyişdi -> ${newPrice} AZN`);
-                
-                showToast("Qiymət yeniləndi!", "success");
-            } catch(e) {
-                showToast("Yenilənmədi: " + e.message, "error");
+                await set(ref(db, `prices/${activeGameID}/${name}`), val);
+                await writeAuditLog(`${activeGameID} oyununa yeni paket əlavə etdi: ${name} (${val} AZN)`);
+                toast("Yeni paket əlavə edildi!");
+                document.getElementById('new-p-name').value = "";
+                document.getElementById('new-p-val').value = "";
+            } catch(e) { toast(e.message, "error"); }
+        };
+
+        window.deletePkg = async (pName) => {
+            if(confirm(`"${pName}" paketini silmək istəyirsiniz?`)) {
+                await remove(ref(db, `prices/${activeGameID}/${pName}`));
+                await writeAuditLog(`${activeGameID} oyunundan paket sildi: ${pName}`);
+                toast("Paket silindi.");
             }
         };
 
-        // Paketi Sil
-        window.deleteExistingPrice = async (pkgName) => {
-            if(!activeGame) return;
-            if(confirm(`"${pkgName}" paketini silmək istəyirsiniz?`)) {
-                try {
-                    await remove(ref(db, `prices/${activeGame}/${pkgName}`));
-                    await writeSystemLog(`${activeGame} oyunundan paketi sildi: ${pkgName}`);
-                    showToast("Paket silindi!", "success");
-                } catch(e) {
-                    showToast("Silinmədi: " + e.message, "error");
-                }
+        window.saveGlobalAnn = async () => {
+            const msg = document.getElementById('ann-input').value.trim();
+            await set(ref(db, 'global_announcement/msg'), msg);
+            await writeAuditLog("Sistem duyurusunu yenilədi.");
+            toast("Duyuru yayımlandı!");
+        };
+
+        window.clearAllLogs = async () => {
+            if(confirm("Bütün audit loqları silinsin?")) {
+                await remove(ref(db, 'audit_logs_v8'));
+                toast("Loqlar təmizləndi.");
             }
         };
 
-        // ==========================================
-        // 5. ANNOUNCEMENT
-        // ==========================================
-
-        window.saveAnnouncement = async () => {
-            const text = document.getElementById('ann-text').value.trim();
-            if(!text) return showToast("Duyuru mətni daxil edin!", "error");
-
-            try {
-                await set(ref(db, 'announcement'), {
-                    text: text,
-                    updatedBy: auth.currentUser.email,
-                    time: new Date().toLocaleString('az-AZ')
-                });
-                await writeSystemLog("Sistem qlobal duyurusunu yenilədi.");
-                showToast("Duyuru uğurla yayımlandı!", "success");
-            } catch(e) {
-                showToast("Xəta: " + e.message, "error");
-            }
-        };
+        // Global Expose
+        window.switchPage = switchPage;
+        window.openEditor = openEditor;
+        window.closeEditor = closeEditor;
+        window.updatePkgPrice = updatePkgPrice;
+        window.addNewPackage = addNewPackage;
+        window.deletePkg = deletePkg;
+        window.saveGlobalAnn = saveGlobalAnn;
+        window.clearAllLogs = clearAllLogs;
+        window.handleLogout = handleLogout;
 
     </script>
 </body>
