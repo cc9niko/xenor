@@ -1,533 +1,534 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="dynamic-title">Xenor Enterprise Admin</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XERON V11 | COMMAND CENTER</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <style>
-        :root {
-            --bg-ultra: #020204; 
-            --bg-panel: #0a0a0f; 
-            --primary: #00f2ff;
-            --owner-gold: #ffaa00; 
-            --danger: #ff3e3e; 
-            --border: rgba(255, 255, 255, 0.05);
-            --sidebar-w: 260px;
-            --glass: rgba(255, 255, 255, 0.02);
-        }
+    <style>
+        :root {
+            --bg-main: #020203;
+            --bg-side: #08080a;
+            --bg-card: #0f0f13;
+            --bg-input: #15151b;
+            --primary: #2563eb;
+            --primary-glow: rgba(37, 99, 235, 0.4);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text-main: #f1f5f9;
+            --text-dim: #64748b;
+            --border: rgba(255, 255, 255, 0.04);
+            --radius-xl: 20px;
+            --radius-md: 12px;
+            --shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background: var(--bg-ultra); 
-            color: #888b94; 
-            font-family: 'Outfit', sans-serif; 
-            height: 100vh; 
-            overflow: hidden; 
-            display: flex; 
-        }
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
 
-        /* --- GİRİŞ EKRANI --- */
-        #gatekeeper { 
-            position: fixed; 
-            inset: 0; 
-            z-index: 10000; 
-            background: radial-gradient(circle at center, #0a0a1a 0%, #020204 100%); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 20px; 
-        }
+        body { background: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; }
 
-        .login-frame { 
-            background: var(--bg-panel); 
-            border: 1px solid var(--border); 
-            padding: 40px 30px; 
-            border-radius: 30px; 
-            width: 100%; 
-            max-width: 400px; 
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
+        /* TOAST NOTIFICATION */
+        #toast-container { position: fixed; top: 30px; right: 30px; z-index: 1000000; display: flex; flex-direction: column; gap: 10px; }
+        .toast {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 18px 25px; border-radius: var(--radius-md);
+            box-shadow: var(--shadow); display: flex; align-items: center; gap: 15px; min-width: 320px;
+            transform: translateX(120%); animation: slideIn 0.5s forwards; border-left: 4px solid var(--primary);
+        }
+        @keyframes slideIn { to { transform: translateX(0); } }
 
-        .f-group input { 
-            width: 100%; 
-            background: #000; 
-            border: 1px solid var(--border); 
-            padding: 16px; 
-            border-radius: 15px; 
-            color: #fff; 
-            margin-top: 12px; 
-            outline: none; 
-            font-size: 16px; 
-            transition: 0.3s;
-        }
+        /* AUTHENTICATION GATE */
+        #auth-gate {
+            position: fixed; inset: 0; background: radial-gradient(circle at center, #0f172a 0%, #000 100%);
+            z-index: 999999; display: flex; align-items: center; justify-content: center;
+        }
+        .gate-card {
+            background: rgba(15, 15, 19, 0.85); border: 1px solid var(--border); padding: 60px;
+            border-radius: 35px; width: 480px; backdrop-filter: blur(25px); text-align: center; box-shadow: 0 0 100px rgba(0,0,0,0.8);
+        }
+        .gate-card h1 { font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
 
-        .f-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.1); }
+        /* LAYOUT: SIDEBAR */
+        aside {
+            width: 320px; background: var(--bg-side); border-right: 1px solid var(--border);
+            padding: 40px 25px; display: flex; flex-direction: column;
+        }
+        .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 50px; }
+        .brand-logo { 
+            width: 50px; height: 50px; background: var(--primary); border-radius: 15px; 
+            display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900;
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+        .nav-link {
+            width: 100%; padding: 16px 20px; border-radius: var(--radius-md); border: none;
+            background: transparent; color: var(--text-dim); font-size: 15px; font-weight: 600;
+            text-align: left; cursor: pointer; display: flex; align-items: center; gap: 15px;
+            transition: 0.3s; margin-bottom: 5px;
+        }
+        .nav-link:hover { background: rgba(255,255,255,0.03); color: #fff; }
+        .nav-link.active { background: var(--primary); color: #fff; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
 
-        /* --- STRUKTUR --- */
-        #titan-root { display: none; width: 100%; height: 100%; flex-direction: row; }
-        
-        aside { 
-            width: var(--sidebar-w); 
-            background: var(--bg-panel); 
-            border-right: 1px solid var(--border); 
-            padding: 35px 20px; 
-            display: flex; 
-            flex-direction: column; 
-            flex-shrink: 0;
-            z-index: 100;
-        }
+        /* LAYOUT: MAIN CONTENT */
+        main { flex: 1; padding: 60px; overflow-y: auto; position: relative; }
+        .view-panel { display: none; }
+        .view-panel.active { display: block; animation: viewFade 0.6s ease; }
+        @keyframes viewFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        main { flex: 1; overflow-y: auto; padding: 40px; position: relative; scroll-behavior: smooth; }
+        /* DASHBOARD STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 50px; }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius-xl);
+            position: relative; overflow: hidden;
+        }
+        .stat-card h3 { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; }
+        .stat-card .val { font-size: 38px; font-weight: 800; margin-top: 10px; font-family: 'JetBrains Mono'; }
 
-        /* --- NAVİQASİYA --- */
-        .nav-link { 
-            padding: 16px 20px; 
-            border-radius: 15px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            font-weight: 600; 
-            margin-bottom: 8px; 
-            transition: 0.3s; 
-            font-size: 15px;
-            color: #555;
-        }
+        /* GAME GRID */
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .game-box {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius-md);
+            cursor: pointer; transition: 0.4s; display: flex; flex-direction: column; gap: 15px;
+        }
+        .game-box:hover { border-color: var(--primary); transform: translateY(-8px); background: #16161d; }
+        .game-box i { font-size: 28px; color: var(--primary); }
 
-        .nav-link i { font-size: 18px; }
-        .nav-link:hover { background: rgba(255,255,255,0.03); color: #fff; }
-        .nav-link.active { background: var(--primary); color: #000; box-shadow: 0 10px 20px rgba(0, 242, 255, 0.2); }
-        
-        /* --- PANEL ELEMENTLƏRİ --- */
-        .glass-panel { 
-            background: var(--bg-panel); 
-            border: 1px solid var(--border); 
-            border-radius: 30px; 
-            padding: 25px; 
-            margin-bottom: 30px; 
-            position: relative;
-            overflow: hidden;
-        }
+        /* EDITOR OVERLAY */
+        #editor-pane {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 25px;
+            padding: 40px; margin-top: 40px; display: none; box-shadow: var(--shadow);
+        }
+        .price-item {
+            display: grid; grid-template-columns: 2.5fr 1fr 150px 60px; gap: 15px;
+            padding: 15px 20px; background: var(--bg-input); border-radius: 12px; margin-bottom: 10px;
+            align-items: center; border: 1px solid transparent; transition: 0.2s;
+        }
+        .price-item:hover { border-color: var(--primary); }
 
-        input, select, textarea { 
-            width: 100%; 
-            background: #000; 
-            border: 1px solid #1a1a1a; 
-            color: #fff; 
-            padding: 14px; 
-            border-radius: 12px; 
-            margin-bottom: 12px; 
-            outline: none; 
-            font-family: inherit; 
-            font-size: 15px;
-            transition: 0.3s;
-        }
+        /* INPUTS & BUTTONS */
+        .field {
+            width: 100%; background: var(--bg-main); border: 1px solid var(--border);
+            padding: 15px 20px; border-radius: 10px; color: #fff; outline: none; transition: 0.3s;
+        }
+        .field:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(37, 99, 235, 0.1); }
+        
+        .btn {
+            padding: 15px 30px; border-radius: 10px; border: none; font-weight: 700;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 12px; transition: 0.3s;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--primary-glow); }
+        .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .btn-danger:hover { background: var(--danger); color: #fff; }
+        .btn-success { background: var(--success); color: #000; }
 
-        .price-box { 
-            background: var(--glass); 
-            padding: 12px; 
-            border-radius: 18px; 
-            margin-bottom: 10px; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            border: 1px solid var(--border);
-            animation: slideIn 0.3s ease-out;
-        }
+        /* BLACKLIST & LOGS TABLE */
+        .data-table {
+            width: 100%; background: var(--bg-card); border-radius: var(--radius-xl); overflow: hidden;
+            border: 1px solid var(--border); border-collapse: collapse;
+        }
+        .data-table th { background: rgba(255,255,255,0.02); padding: 20px; text-align: left; color: var(--text-dim); font-size: 13px; }
+        .data-table td { padding: 18px 20px; border-top: 1px solid var(--border); font-size: 14px; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        /* LOG TERMINAL */
+        .terminal {
+            background: #000; border: 1px solid var(--border); border-radius: 15px; padding: 25px;
+            height: 550px; overflow-y: auto; font-family: 'JetBrains Mono', monospace;
+        }
+        .log-row { padding: 10px 0; border-bottom: 1px solid #111; font-size: 13px; display: flex; gap: 20px; }
+        .log-ts { color: var(--text-dim); }
+        .log-who { color: var(--warning); font-weight: 600; }
+        .log-ip { color: var(--primary); }
+        .log-txt { color: #e2e8f0; }
 
-        .p-key { flex: 2; color: var(--primary); font-weight: bold; background: #050505 !important; border: none !important; margin-bottom: 0 !important; }
-        .p-val { flex: 1; text-align: center; margin-bottom: 0 !important; border-color: #222 !important; }
-        
-        .btn-del { 
-            background: rgba(255, 62, 62, 0.1); 
-            border: none; 
-            color: var(--danger); 
-            cursor: pointer; 
-            width: 40px; 
-            height: 40px; 
-            border-radius: 10px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            transition: 0.2s;
-        }
-        .btn-del:hover { background: var(--danger); color: #fff; }
-
-        .btn-main { 
-            width: 100%; 
-            padding: 18px; 
-            border-radius: 15px; 
-            border: none; 
-            background: var(--primary); 
-            color: #000; 
-            font-weight: 900; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
-
-        .btn-clear-logs { 
-            background: var(--danger); 
-            color: white; 
-            padding: 10px 20px; 
-            border-radius: 10px; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 13px;
-            transition: 0.3s;
-        }
-
-        /* --- MOBİL --- */
-        @media (max-width: 768px) {
-            #titan-root { flex-direction: column; }
-            aside { 
-                width: 100%; 
-                height: auto; 
-                border-right: none; 
-                border-bottom: 1px solid var(--border); 
-                position: sticky; 
-                top: 0; 
-                z-index: 1000; 
-                flex-direction: row; 
-                overflow-x: auto; 
-                padding: 12px; 
-                gap: 8px;
-            }
-            aside h3 { display: none; }
-            .nav-link { padding: 12px 18px; font-size: 13px; margin-bottom: 0; white-space: nowrap; border-radius: 10px; }
-            main { padding: 20px; }
-            .price-box { flex-direction: column; gap: 8px; }
-            .p-key, .p-val { width: 100%; text-align: left; }
-            .btn-del { width: 100%; height: 45px; }
-        }
-
-        .view { display: none; } 
-        .view.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        #logs-container::-webkit-scrollbar { width: 5px; }
-        #logs-container::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-    </style>
+    </style>
 </head>
 <body>
 
-    <div id="gatekeeper">
-        <div class="login-frame">
-            <i class="fa-solid fa-shield-halved" style="font-size: 40px; color: var(--primary); margin-bottom: 20px;"></i>
-            <h2 style="color:#fff; font-weight:900; letter-spacing: 2px;">GLIDOX ADMIN</h2>
-            <p style="font-size: 12px; margin-bottom: 25px; color: #555;">Sistemə daxil olmaq üçün məlumatları daxil edin</p>
-            <div class="f-group">
-                <input type="email" id="f-email" placeholder="E-poçt ünvanı">
-                <input type="password" id="f-pass" placeholder="Şifrə">
-            </div>
-            <button class="btn-main" id="btn-login-trigger" style="margin-top:25px;">GİRİŞ ET</button>
-            <p id="auth-err" style="color:var(--danger); font-size:12px; margin-top:15px; font-weight: bold;"></p>
-        </div>
-    </div>
+    <div id="toast-container"></div>
 
-    <div id="titan-root">
-        <aside>
-            <h3 style="color:#fff; margin-bottom:30px; font-weight: 900;"><i class="fa-solid fa-bolt" style="color:var(--primary)"></i> GLIDOX</h3>
-            <div class="nav-link active" data-target="pg-dash"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
-            <div class="nav-link" data-target="pg-prices"><i class="fa-solid fa-tags"></i> Qiymətlər</div>
-            <div class="nav-link" data-target="pg-ann"><i class="fa-solid fa-bullhorn"></i> Duyurular</div>
-            <div class="nav-link" data-target="pg-blist"><i class="fa-solid fa-user-lock"></i> Blacklist</div>
-            <div id="owner-link-container" style="display: none;">
-                <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold)"><i class="fa-solid fa-fingerprint"></i> Sistem Loqları</div>
-            </div>
-            <button id="btn-logout" style="background:rgba(255,62,62,0.05); border:1px solid var(--danger); color:var(--danger); padding:12px; border-radius:12px; cursor:pointer; margin-top:auto; font-weight: bold;">SİSTEMDƏN ÇIXIŞ</button>
-        </aside>
+    <div id="auth-gate">
+        <div class="gate-card">
+            <div class="brand-logo" style="margin: 0 auto 30px; width: 70px; height: 70px; font-size: 35px;">X</div>
+            <h1>XERON V11 ADMIN</h1>
+            <p style="color: var(--text-dim); margin-bottom: 40px;">Sistemə daxil olmaq üçün kimliyinizi təsdiqləyin.</p>
+            
+            <input type="email" id="auth-email" class="field" placeholder="Admin E-poçt" style="margin-bottom: 15px;">
+            <input type="password" id="auth-pass" class="field" placeholder="Şifrə" style="margin-bottom: 30px;">
+            
+            <button id="auth-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                SİSTEMƏ DAXİL OL <i class="fa-solid fa-shield-check"></i>
+            </button>
+        </div>
+    </div>
 
-        <main>
-            <div id="pg-dash" class="view active">
-                <div class="glass-panel">
-                    <h2 id="panel-welcome-title" style="color: #fff; font-size: 28px;">Xoş Gəldiniz</h2>
-                    <p id="role-text" style="font-weight:900; margin-top: 10px; letter-spacing: 1px;"></p>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <div class="glass-panel" style="text-align: center;">
-                        <i class="fa-solid fa-clock" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
-                        <h4 style="color:#fff">Server Vaxtı</h4>
-                        <p id="server-clock" style="font-size: 20px; color: #fff; font-weight: bold;">--:--:--</p>
-                    </div>
-                </div>
-            </div>
+    <div id="xeron-main" style="display: none; width: 100%; height: 100%;">
+        <aside>
+            <div class="brand">
+                <div class="brand-logo">X</div>
+                <div>
+                    <h3 style="letter-spacing: -0.5px;">XERON CORE</h3>
+                    <span style="font-size: 10px; color: var(--success); font-weight: 800; text-transform: uppercase;">Cloud Matrix Active</span>
+                </div>
+            </div>
 
-            <div id="pg-prices" class="view">
-                <div class="glass-panel">
-                    <h3 style="color:#fff; margin-bottom:20px;">Oyun Qiymətlərini İdarə Et</h3>
-                    <select id="game-select">
-                        <option value="">-- Oyun Seçin --</option>
-                        <option value="roblox">1. Roblox</option>
-                        <option value="pubg">2. PUBG Mobile</option>
-                        <option value="steambalans">3. Steam Balans</option>
-                        <option value="mlbb">4. Mobile Legends</option>
-                        <option value="valorant">5. Valorant</option>
-                        <option value="freefire">6. Free Fire</option>
-                        <option value="brawlstars">7. Brawl Stars</option>
-                        <option value="clashofclans">8. Clash of Clans</option>
-                        <option value="genshin">9. Genshin Impact</option>
-                        <option value="efootball">10. eFootball PES</option>
-                        <option value="codm">11. COD Mobile</option>
-                        <option value="leagueoflegends">12. League of Legends</option>
-                    </select>
-                    
-                    <div id="price-fields-container" style="margin-top: 20px;"></div>
-                    
-                    <div id="new-package-area" style="display:none; margin-top:30px; padding-top:20px; border-top: 1px dashed #222;">
-                        <p style="font-size:13px; color:var(--primary); margin-bottom:15px; font-weight: bold;">+ YENİ PAKET ƏLAVƏ ET</p>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" id="new-p-key" placeholder="Paket adı (məs: 1000 UC)">
-                            <input type="text" id="new-p-val" placeholder="Qiymət (məs: 15.50)">
-                        </div>
-                    </div>
-                    
-                    <button class="btn-main" id="btn-save-prices" style="display:none; margin-top:20px;">DƏYİŞİKLİKLƏRİ YADDA SAXLA</button>
-                </div>
-            </div>
+            <nav style="flex: 1;">
+                <button class="nav-link active" onclick="showP('dash', this)"><i class="fa-solid fa-layer-group"></i> Dashboard</button>
+                <button class="nav-link" onclick="showP('prices', this)"><i class="fa-solid fa-tag"></i> Qiymət Masası</button>
+                <button class="nav-link" onclick="showP('ann', this)"><i class="fa-solid fa-bullhorn"></i> Duyuru Sistemi</button>
+                <button class="nav-link" onclick="showP('black', this)"><i class="fa-solid fa-user-slash"></i> Blacklist</button>
+                <div style="height: 1px; background: var(--border); margin: 30px 0;"></div>
+                <button class="nav-link" onclick="showP('logs', this)" style="color: var(--warning);"><i class="fa-solid fa-microchip"></i> Sistem Audit</button>
+            </nav>
 
-            <div id="pg-ann" class="view">
-                <div class="glass-panel">
-                    <h3 style="color:#fff; margin-bottom:15px;">Duyuru Mesajı</h3>
-                    <p style="font-size: 12px; margin-bottom: 15px;">Ana səhifədə görünəcək vacib bildiriş.</p>
-                    <textarea id="ann-text" rows="6" placeholder="Bura yazın..."></textarea>
-                    <button class="btn-main" id="btn-save-ann">YAYIMLA</button>
-                </div>
-            </div>
+            <button class="btn btn-danger" onclick="logoutAdmin()" style="width: 100%; justify-content: center;">
+                SİSTEMİ BAĞLA
+            </button>
+        </aside>
 
-            <div id="pg-blist" class="view">
-                <div class="glass-panel">
-                    <h3 style="color:#fff; margin-bottom:20px;">Qara Siyahı (Blacklist)</h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                        <input type="text" id="bl-user-input" placeholder="İstifadəçi ID və ya Email" style="margin-bottom:0">
-                        <button class="btn-main" id="btn-add-bl" style="width: auto; padding: 0 30px;">BLOKLA</button>
-                    </div>
-                    <div id="bl-list-container"></div>
-                </div>
-            </div>
+        <main>
+            <div id="p-dash" class="view-panel active">
+                <h1 style="font-size: 36px; font-weight: 800; margin-bottom: 40px;">Xoş gəldin, <span id="admin-name" style="color: var(--primary);">Admin</span></h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Server Vaxtı</h3>
+                        <div class="val" id="timer">00:00:00</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Aktiv Oyunlar</h3>
+                        <div class="val" style="color: var(--primary);">12 List</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Baza Vəziyyəti</h3>
+                        <div class="val" style="color: var(--success);">Online</div>
+                    </div>
+                </div>
 
-            <div id="pg-logs" class="view">
-                <div class="glass-panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-                        <h3 style="color:#fff;">Təhlükəsizlik Jurnalı</h3>
-                        <button class="btn-clear-logs" id="btn-clear-logs"><i class="fa-solid fa-trash-can"></i> Loqları Təmizlə</button>
-                    </div>
-                    <div id="logs-container" style="height:500px; overflow-y:auto; background:#000; padding:15px; border-radius:15px; border: 1px solid #111;"></div>
-                </div>
-            </div>
-        </main>
-    </div>
+                <div style="background: var(--bg-card); padding: 40px; border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                    <h2 style="margin-bottom: 20px;">Sürətli Məlumat</h2>
+                    <p style="color: var(--text-dim); line-height: 1.8;">XERON V11 sistemi hazırda bütün API qovşaqları ilə sinxron vəziyyətdədir. Bu sistemdə edilən hər bir qiymət dəyişikliyi 0.2 saniyə ərzində bazaya və müştəri panelinə ötürülür. Bütün giriş və IP hərəkətləri Audit Loqlarında saxlanılır.</p>
+                </div>
+            </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, get, set, push, update, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+            <div id="p-prices" class="view-panel">
+                <h2 style="margin-bottom: 30px;">Oyun Qiymətlərini İdarə Et</h2>
+                <div class="game-grid" id="game-list">
+                    </div>
 
-        const firebaseConfig = { 
-            apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8", 
-            databaseURL: "https://glidoxshop-default-rtdb.europe-west1.firebasedatabase.app", 
-            projectId: "glidoxshop" 
-        };
+                <div id="editor-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
+                        <div>
+                            <h2 id="active-game-name" style="font-size: 28px; color: var(--primary);">Oyun Seçilməyib</h2>
+                            <p id="path-indicator" style="font-size: 12px; color: var(--text-dim); font-family: 'JetBrains Mono'; margin-top: 5px;"></p>
+                        </div>
+                        <button class="btn btn-danger" onclick="closeEditor()" style="padding: 10px 20px;">Bağla</button>
+                    </div>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
+                    <div style="background: rgba(37, 99, 235, 0.03); border: 1px dashed var(--primary); padding: 25px; border-radius: 15px; margin-bottom: 35px; display: grid; grid-template-columns: 2fr 1fr auto; gap: 15px;">
+                        <input type="text" id="add-n" class="field" placeholder="Paket Adı (məs: 1000 VP)">
+                        <input type="text" id="add-v" class="field" placeholder="Qiymət (məs: 12.50)">
+                        <button class="btn btn-primary" onclick="forceAddPkg()">ƏLAVƏ ET</button>
+                    </div>
 
-        // Sessiyanı yaddaşda saxla (Reload edəndə çıxmasın deyə)
-        setPersistence(auth, browserLocalPersistence);
+                    <div id="price-rows">
+                        <p style="text-align: center; color: var(--warning);">Məlumatlar yüklənir...</p>
+                    </div>
+                </div>
+            </div>
 
-        const OWNER_UID = "dXDTZPPuVKaO1ecsO7UbCOXr15i1";
-        const ADMINS = ["tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
-        let userIp = "0.0.0.0";
+            <div id="p-ann" class="view-panel">
+                <h2 style="margin-bottom: 30px;">Qlobal Duyuru Paneli</h2>
+                <div style="max-width: 800px; background: var(--bg-card); padding: 40px; border-radius: var(--radius-xl); border: 1px solid var(--border);">
+                    <label style="display: block; color: var(--text-dim); margin-bottom: 15px; font-weight: 700;">DUYURU MƏTNİ</label>
+                    <textarea id="ann-text" style="width: 100%; height: 250px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 15px; color: #fff; padding: 25px; outline: none; font-size: 16px; margin-bottom: 30px; resize: none;"></textarea>
+                    <button class="btn btn-primary" onclick="saveGlobalAnn()" style="width: 100%; justify-content: center; padding: 18px;">DUYURUNU AKTİVLƏŞDİR</button>
+                </div>
+            </div>
 
-        // IP Əldə et
-        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => userIp = d.ip);
+            <div id="p-black" class="view-panel">
+                <h2 style="margin-bottom: 30px;">Blacklist İdarəsi</h2>
+                <div style="background: var(--bg-card); padding: 30px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 30px; display: flex; gap: 15px;">
+                    <input type="text" id="bl-uid" class="field" placeholder="İstifadəçi ID və ya Gmail">
+                    <input type="text" id="bl-reason" class="field" placeholder="Blok Səbəbi">
+                    <button class="btn btn-danger" onclick="addToBlacklist()">BLOKLA</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>İSTİFADƏÇİ</th>
+                            <th>SƏBƏB</th>
+                            <th>TARİX</th>
+                            <th>HƏRƏKƏT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bl-body"></tbody>
+                </table>
+            </div>
 
-        // Saat funksiyası
-        setInterval(() => {
-            document.getElementById('server-clock').innerText = new Date().toLocaleTimeString('az-AZ');
-        }, 1000);
+            <div id="p-logs" class="view-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2>Audit & Sistem Girişləri</h2>
+                    <button class="btn btn-danger" onclick="clearAllSystemLogs()">Terminalı Təmizlə</button>
+                </div>
+                <div class="terminal" id="audit-terminal"></div>
+            </div>
+        </main>
+    </div>
 
-        async function createLog(action) {
-            const user = auth.currentUser;
-            if(!user) return;
-            try {
-                await push(ref(db, 'logs'), {
-                    user: user.email,
-                    action: action,
-                    ip: userIp,
-                    time: new Date().toLocaleString('az-AZ')
-                });
-            } catch(e) { console.error("Log error", e); }
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, set, push, onValue, remove, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        onAuthStateChanged(auth, (user) => {
-            if(user && (user.uid === OWNER_UID || ADMINS.includes(user.uid))) {
-                document.getElementById('gatekeeper').style.display = 'none';
-                document.getElementById('titan-root').style.display = 'flex';
-                
-                const isOwner = user.uid === OWNER_UID;
-                document.getElementById('panel-welcome-title').innerText = isOwner ? "Owner Kontrol Paneli" : "Admin Kontrol Paneli";
-                const roleText = document.getElementById('role-text');
-                roleText.innerText = isOwner ? "YETKİ: TAM (OWNER)" : "YETKİ: MƏHDUD (ADMIN)";
-                roleText.style.color = isOwner ? "var(--owner-gold)" : "var(--primary)";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8",
+            databaseURL: "https://xeronshop-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "xeronshop"
+        };
 
-                if(isOwner) {
-                    document.getElementById('owner-link-container').style.display = 'block';
-                    loadLogs();
-                }
-                
-                setupPanelActions(user, isOwner);
-            } else if(user) {
-                signOut(auth);
-            }
-        });
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
 
-        function setupPanelActions(user, isOwner) {
-            const priceFields = document.getElementById('price-fields-container');
+        // CONFIG & STATE
+        const ADMINS = ["dXDTZPPuVKaO1ecsO7UbCOXr15i1", "tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
+        const MASTER_12 = [
+            { id: "steam", name: "Steam Wallet" }, { id: "pubg", name: "PUBG Mobile" },
+            { id: "mlbb", name: "Mobile Legends" }, { id: "val_tr", name: "Valorant TR" },
+            { id: "val_eu", name: "Valorant EU" }, { id: "apple", name: "Apple Balans" },
+            { id: "freefire", name: "Free Fire" }, { id: "roblox", name: "Roblox" },
+            { id: "delta", name: "Delta Force" }, { id: "standoff", name: "Standoff 2" },
+            { id: "weplay", name: "WePlay" }, { id: "discord", name: "Discord Nitro" }
+        ];
 
-            // --- Qiymətləri Yüklə ---
-            document.getElementById('game-select').addEventListener('change', (e) => {
-                const game = e.target.value;
-                if(!game) {
-                    priceFields.innerHTML = "";
-                    document.getElementById('btn-save-prices').style.display = "none";
-                    document.getElementById('new-package-area').style.display = "none";
-                    return;
-                }
+        let activeGameID = null;
+        let userIP = "Yüklənir...";
 
-                document.getElementById('btn-save-prices').style.display = "block";
-                document.getElementById('new-package-area').style.display = "block";
+        // FETCH IP
+        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => userIP = d.ip);
 
-                onValue(ref(db, `prices/${game}`), (snap) => {
-                    priceFields.innerHTML = "";
-                    const data = snap.val();
-                    if(data) {
-                        Object.keys(data).sort().forEach(key => {
-                            const div = document.createElement('div');
-                            div.className = 'price-box';
-                            div.innerHTML = `
-                                <input type="text" class="p-key" value="${key}" readonly>
-                                <input type="text" class="p-val" value="${data[key]}">
-                                <button class="btn-del" title="Sil"><i class="fa-solid fa-xmark"></i></button>
-                            `;
-                            div.querySelector('.btn-del').onclick = () => div.remove();
-                            priceFields.appendChild(div);
-                        });
-                    }
-                }, { onlyOnce: true });
-            });
+        // UI HELPERS
+        window.showP = (v, b) => {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById('p-'+v).classList.add('active');
+            b.classList.add('active');
+        };
 
-            // --- Qiymətləri Saxla (Reload-suz) ---
-            document.getElementById('btn-save-prices').onclick = async () => {
-                const game = document.getElementById('game-select').value;
-                const rows = priceFields.querySelectorAll('.price-box');
-                const nK = document.getElementById('new-p-key').value.trim();
-                const nV = document.getElementById('new-p-val').value.trim();
-                
-                let upData = {};
-                rows.forEach(r => {
-                    const k = r.querySelector('.p-key').value;
-                    const v = r.querySelector('.p-val').value;
-                    upData[k] = v;
-                });
-                
-                if(nK && nV) upData[nK] = nV;
+        window.toast = (m, type="success") => {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.style.borderLeftColor = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-triangle-exclamation'}"></i> ${m}`;
+            container.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3500);
+        };
 
-                try {
-                    await set(ref(db, `prices/${game}`), upData);
-                    await createLog(`${game} oyun qiymətlərini yenilədi`);
-                    
-                    document.getElementById('new-p-key').value = "";
-                    document.getElementById('new-p-val').value = "";
-                    
-                    alert("Uğurla yadda saxlanıldı!");
-                } catch(e) { alert("Xəta baş verdi!"); }
-            };
+        setInterval(() => document.getElementById('timer').innerText = new Date().toLocaleTimeString(), 1000);
 
-            // --- Duyuru ---
-            document.getElementById('btn-save-ann').onclick = async () => {
-                const msg = document.getElementById('ann-text').value;
-                await update(ref(db, 'announcement'), { 
-                    message: msg,
-                    date: new Date().toLocaleString()
-                });
-                await createLog("Duyuru mesajını yenilədi");
-                alert("Duyuru yayımlandı!");
-            };
+        // AUDIT SYSTEM
+        async function logSystem(action) {
+            if(!auth.currentUser) return;
+            await push(ref(db, 'xeron_v11_audit'), {
+                u: auth.currentUser.email,
+                ip: userIP,
+                a: action,
+                t: new Date().toLocaleString('az-AZ'),
+                ts: Date.now()
+            });
+        }
 
-            // --- Loqların Təmizlənməsi ---
-            if(isOwner) {
-                document.getElementById('btn-clear-logs').onclick = async () => {
-                    if(confirm("DİQQƏT: Bütün fəaliyyət tarixçəsi silinsin?")) {
-                        await remove(ref(db, 'logs'));
-                        await createLog("SİSTEM LOQLARINI TƏMİZLƏDİ");
-                        alert("Tarixçə təmizləndi.");
-                    }
-                };
-            }
-        }
+        // AUTH CORE
+        onAuthStateChanged(auth, (u) => {
+            if(u && ADMINS.includes(u.uid)) {
+                document.getElementById('auth-gate').style.display = 'none';
+                document.getElementById('xeron-main').style.display = 'flex';
+                document.getElementById('admin-name').innerText = u.email.split('@')[0];
+                initXeron();
+                logSystem("Sistemə giriş etdi");
+            } else {
+                document.getElementById('auth-gate').style.display = 'flex';
+                document.getElementById('xeron-main').style.display = 'none';
+                if(u) signOut(auth);
+            }
+        });
 
-        function loadLogs() {
-            onValue(ref(db, 'logs'), (snap) => {
-                const lBox = document.getElementById('logs-container');
-                lBox.innerHTML = "";
-                let logData = [];
-                snap.forEach(c => { logData.push(c.val()); });
-                logData.reverse().forEach(l => {
-                    const d = document.createElement('div');
-                    d.style.cssText = "padding:10px; border-bottom:1px solid #111; font-family:monospace;";
-                    d.innerHTML = `
-                        <span style="color:#555">[${l.time}]</span> 
-                        <b style="color:var(--primary)">${l.user}</b> 
-                        <span style="color:#333">(${l.ip})</span>: 
-                        <span style="color:#eee">${l.action}</span>
-                    `;
-                    lBox.appendChild(d);
-                });
-            });
-        }
+        document.getElementById('auth-btn').onclick = () => {
+            const e = document.getElementById('auth-email').value;
+            const p = document.getElementById('auth-pass').value;
+            signInWithEmailAndPassword(auth, e, p).catch(() => toast("Giriş qadağandır!", "error"));
+        };
 
-        // Giriş Prosesi
-        document.getElementById('btn-login-trigger').onclick = () => {
-            const e = document.getElementById('f-email').value;
-            const p = document.getElementById('f-pass').value;
-            if(!e || !p) return;
-            
-            signInWithEmailAndPassword(auth, e, p).catch(err => {
-                document.getElementById('auth-err').innerText = "Giriş rədd edildi: Email və ya Şifrə yanlışdır.";
-            });
-        };
+        window.logoutAdmin = async () => {
+            await logSystem("Sistemdən çıxış etdi");
+            signOut(auth);
+        };
 
-        // Çıxış
-        document.getElementById('btn-logout').onclick = async () => {
-            if(confirm("Çıxış etmək istədiyinizə əminsiniz?")) {
-                await createLog("Sistemdən çıxış etdi");
-                signOut(auth).then(() => {
-                    location.reload();
-                });
-            }
-        };
+        // PRICE ENGINE
+        function initXeron() {
+            const grid = document.getElementById('game-list');
+            grid.innerHTML = "";
+            MASTER_12.forEach(g => {
+                grid.innerHTML += `
+                    <div class="game-box" onclick="openEngine('${g.id}', '${g.name}')">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <b style="font-size:18px;">${g.name}</b>
+                        <span style="font-size:11px; color:var(--text-dim);">Dəyişmək üçün kliklə</span>
+                    </div>`;
+            });
 
-        // Tab keçidləri
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.onclick = () => {
-                document.querySelectorAll('.nav-link, .view').forEach(el => el.classList.remove('active'));
-                link.classList.add('active');
-                document.getElementById(link.dataset.target).classList.add('active');
-            };
-        });
-    </script>
+            // Sync Ann
+            onValue(ref(db, 'xeron_ann/msg'), (s) => document.getElementById('ann-text').value = s.val() || "");
+
+            // Sync Blacklist
+            onValue(ref(db, 'xeron_blacklist'), (s) => {
+                const b = document.getElementById('bl-body');
+                b.innerHTML = "";
+                s.forEach(c => {
+                    const d = c.val();
+                    b.innerHTML += `<tr>
+                        <td>${d.u}</td>
+                        <td><span style="color:var(--danger)">${d.r}</span></td>
+                        <td>${d.t}</td>
+                        <td><button class="btn btn-danger" style="padding:5px 10px;" onclick="removeFromBL('${c.key}')">Aç</button></td>
+                    </tr>`;
+                });
+            });
+
+            // Sync Audit
+            onValue(ref(db, 'xeron_v11_audit'), (s) => {
+                const term = document.getElementById('audit-terminal');
+                term.innerHTML = "";
+                let logs = [];
+                s.forEach(c => logs.push(c.val()));
+                logs.reverse().forEach(l => {
+                    term.innerHTML += `<div class="log-row">
+                        <span class="log-ts">[${l.t}]</span>
+                        <span class="log-who">@${l.u.split('@')[0]}</span>
+                        <span class="log-ip">${l.ip}</span>
+                        <span class="log-txt">${l.a}</span>
+                    </div>`;
+                });
+            });
+        }
+
+        window.openEngine = async (id, name) => {
+            activeGameID = id;
+            document.getElementById('active-game-name').innerText = name;
+            document.getElementById('editor-pane').style.display = 'block';
+            
+            // FAIL-SAFE PATH FINDER
+            const paths = [`prices/${id}`, id, `Games/${id}`];
+            let foundPath = `prices/${id}`;
+
+            for(let p of paths) {
+                const snap = await get(ref(db, p));
+                if(snap.exists()) { foundPath = p; break; }
+            }
+
+            document.getElementById('path-indicator').innerText = "PATH: db/" + foundPath;
+
+            onValue(ref(db, foundPath), (snap) => {
+                const rows = document.getElementById('price-rows');
+                rows.innerHTML = "";
+                if(!snap.exists()) {
+                    rows.innerHTML = `<p style="text-align:center; padding:20px; color:var(--text-dim);">Bazada məlumat yoxdur. Yeni paket əlavə edin.</p>`;
+                    return;
+                }
+                snap.forEach(child => {
+                    const k = child.key;
+                    const v = child.val();
+                    rows.innerHTML += `
+                        <div class="price-item">
+                            <b style="color:#fff;">${k}</b>
+                            <input type="text" class="field" id="val-${k}" value="${v}" style="padding:10px;">
+                            <button class="btn btn-success" onclick="updateBruteForce('${foundPath}/${k}', '${k}')">YENİLƏ</button>
+                            <button class="btn btn-danger" style="padding:10px;" onclick="deleteBruteForce('${foundPath}/${k}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>`;
+                });
+            });
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        };
+
+        window.updateBruteForce = async (path, key) => {
+            const v = document.getElementById('val-'+key).value;
+            await set(ref(db, path), v);
+            await logSystem(`Qiymət Dəyişdi: ${path} -> ${v}`);
+            toast("Qiymət Sinxronizasiya Olundu!");
+        };
+
+        window.forceAddPkg = async () => {
+            const n = document.getElementById('add-n').value.trim();
+            const v = document.getElementById('add-v').value.trim();
+            if(!n || !v) return toast("Məlumatları doldurun!", "error");
+            await set(ref(db, `prices/${activeGameID}/${n}`), v);
+            await logSystem(`Yeni Paket: ${activeGameID}/${n} (${v})`);
+            toast("Paket əlavə edildi");
+            document.getElementById('add-n').value = "";
+            document.getElementById('add-v').value = "";
+        };
+
+        window.deleteBruteForce = async (path) => {
+            if(confirm("Bu paketi silmək istəyirsiniz?")) {
+                await remove(ref(db, path));
+                await logSystem(`Silindi: ${path}`);
+                toast("Paket silindi");
+            }
+        };
+
+        window.saveGlobalAnn = async () => {
+            const msg = document.getElementById('ann-text').value;
+            await set(ref(db, 'xeron_ann/msg'), msg);
+            await logSystem("Qlobal Duyuru Yeniləndi");
+            toast("Duyuru bütün sistemdə yayımlandı!");
+        };
+
+        window.addToBlacklist = async () => {
+            const u = document.getElementById('bl-uid').value;
+            const r = document.getElementById('bl-reason').value;
+            if(!u) return;
+            await push(ref(db, 'xeron_blacklist'), { u, r, t: new Date().toLocaleDateString() });
+            await logSystem(`Blacklist: ${u} bloklandı`);
+            document.getElementById('bl-uid').value = "";
+            document.getElementById('bl-reason').value = "";
+            toast("İstifadəçi bloklandı!");
+        };
+
+        window.removeFromBL = async (key) => {
+            await remove(ref(db, `xeron_blacklist/${key}`));
+            await logSystem(`Blacklist: ${key} blokdan çıxarıldı`);
+            toast("Blok ləğv edildi");
+        };
+
+        window.clearAllSystemLogs = async () => {
+            if(confirm("Bütün loqlar silinsin?")) {
+                await remove(ref(db, 'xeron_v11_audit'));
+                toast("Terminal təmizləndi");
+            }
+        };
+
+        window.closeEditor = () => document.getElementById('editor-pane').style.display = 'none';
+
+        // GLOBAL EXPOSE
+        window.showP = showP;
+        window.openEngine = openEngine;
+        window.updateBruteForce = updateBruteForce;
+        window.forceAddPkg = forceAddPkg;
+        window.deleteBruteForce = deleteBruteForce;
+        window.saveGlobalAnn = saveGlobalAnn;
+        window.addToBlacklist = addToBlacklist;
+        window.removeFromBL = removeFromBL;
+        window.clearAllSystemLogs = clearAllSystemLogs;
+        window.logoutAdmin = logoutAdmin;
+
+    </script>
 </body>
 </html>
