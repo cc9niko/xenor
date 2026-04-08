@@ -3,339 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="dynamic-title">Xeron Enterprise High-End Admin</title>
+    <title>XERON ENTERPRISE | ULTIMATE ADMIN CONTROL</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
-            --bg-ultra: #020204; 
-            --bg-panel: #0a0a0f; 
-            --bg-sidebar: #06060a;
+            --bg-body: #010103;
+            --bg-card: #08080c;
+            --bg-input: #000000;
             --primary: #00f2ff;
-            --primary-glow: rgba(0, 242, 255, 0.15);
-            --owner-gold: #ffaa00; 
-            --owner-glow: rgba(255, 170, 0, 0.1);
-            --danger: #ff3e3e; 
+            --primary-rgb: 0, 242, 255;
+            --accent: #7000ff;
+            --owner: #ffaa00;
+            --danger: #ff2d55;
             --success: #00ff88;
-            --border: rgba(255, 255, 255, 0.05);
-            --sidebar-w: 280px;
-            --glass: rgba(255, 255, 255, 0.02);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-main: #e0e0e0;
+            --text-dim: #666;
+            --border: rgba(255, 255, 255, 0.04);
+            --sidebar-width: 300px;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-ultra); }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #222; }
-
+        /* --- GLOBAL RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background: var(--bg-ultra); 
-            color: #888b94; 
-            font-family: 'Outfit', sans-serif; 
-            height: 100vh; 
-            overflow: hidden; 
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-body); }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            letter-spacing: -0.2px;
         }
 
-        /* --- LOADING OVERLAY --- */
-        #master-loader {
-            position: fixed; inset: 0; background: var(--bg-ultra);
-            display: flex; align-items: center; justify-content: center; z-index: 20000;
-            transition: opacity 0.5s ease;
-        }
-        .spinner { width: 50px; height: 50px; border: 3px solid var(--glass); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* --- ANIMATIONS --- */
+        @keyframes scanline { 0% { bottom: 100%; } 100% { bottom: 0%; } }
+        @keyframes pulse-glow { 0% { box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.2); } 50% { box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.5); } 100% { box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.2); } }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         /* --- GATEKEEPER (LOGIN) --- */
-        #gatekeeper { 
-            position: fixed; inset: 0; z-index: 10000; 
-            background: radial-gradient(circle at center, #0a0a1a 0%, #020204 100%); 
-            display: flex; align-items: center; justify-content: center; padding: 20px; 
+        #gatekeeper {
+            position: fixed; inset: 0; z-index: 99999;
+            background: radial-gradient(circle at center, #0a0a1a 0%, #000 100%);
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .login-frame { 
-            background: var(--bg-panel); border: 1px solid var(--border); 
-            padding: 50px 40px; border-radius: 35px; width: 100%; max-width: 420px; 
-            text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            position: relative; overflow: hidden;
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 60px 45px;
+            border-radius: 40px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            position: relative;
         }
 
-        .login-frame::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, transparent, transparent, var(--primary));
-            animation: rotate-border 4s linear infinite; opacity: 0.1;
+        .auth-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: scanline 3s linear infinite;
         }
-        @keyframes rotate-border { to { transform: rotate(360deg); } }
 
-        .f-group { position: relative; margin-top: 15px; }
-        .f-group input { 
-            width: 100%; background: #000; border: 1px solid var(--border); 
-            padding: 18px 20px; border-radius: 18px; color: #fff; 
+        .auth-input-group { margin-top: 25px; text-align: left; }
+        .auth-input-group label { font-size: 12px; color: var(--text-dim); margin-left: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .auth-input-group input {
+            width: 100%; background: var(--bg-input); border: 1px solid var(--border);
+            padding: 18px 25px; border-radius: 20px; color: #fff; margin-top: 8px;
             outline: none; font-size: 16px; transition: var(--transition);
         }
-        .f-group input:focus { border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .auth-input-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        /* --- MAIN STRUCTURE --- */
-        #titan-root { display: none; width: 100%; height: 100%; flex-direction: row; }
+        /* --- LAYOUT --- */
+        #titan-engine { display: none; width: 100%; height: 100%; flex-direction: row; }
+
+        aside {
+            width: var(--sidebar-width);
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            padding: 40px 25px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 50px;
+            padding-left: 10px;
+        }
+
+        .brand-logo {
+            width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            color: #000; font-weight: 900; font-size: 22px;
+        }
+
+        .nav-menu { flex: 1; }
+        .nav-item {
+            padding: 18px 22px; border-radius: 20px; cursor: pointer;
+            display: flex; align-items: center; gap: 18px; color: var(--text-dim);
+            font-weight: 600; margin-bottom: 8px; transition: var(--transition);
+        }
+        .nav-item i { font-size: 20px; width: 25px; text-align: center; }
+        .nav-item:hover { background: rgba(255,255,255,0.03); color: #fff; transform: translateX(5px); }
+        .nav-item.active { background: var(--primary); color: #000; box-shadow: 0 15px 30px rgba(0, 242, 255, 0.2); }
+
+        /* --- CONTENT AREA --- */
+        main {
+            flex: 1; overflow-y: auto; padding: 50px;
+            background: radial-gradient(circle at top right, rgba(112, 0, 255, 0.03), transparent 40%);
+        }
+
+        .content-header {
+            margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;
+        }
+
+        .view-panel { display: none; animation: slideIn 0.5s ease forwards; }
+        .view-panel.active { display: block; }
+
+        .glass-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 35px; padding: 40px; margin-bottom: 30px;
+        }
+
+        /* --- PRICE GRID --- */
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .game-card {
+            background: #0d0d14; border: 1px solid var(--border); border-radius: 25px;
+            padding: 25px; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; gap: 15px;
+        }
+        .game-card:hover { border-color: var(--primary); background: #11111a; transform: translateY(-5px); }
+        .game-card i { font-size: 24px; color: var(--primary); }
+
+        .price-editor-box {
+            background: #000; border: 1px solid var(--border); border-radius: 25px;
+            padding: 25px; margin-top: 20px;
+        }
+
+        .price-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; border-bottom: 1px solid #111;
+        }
+        .price-row:last-child { border: none; }
         
-        aside { 
-            width: var(--sidebar-w); background: var(--bg-sidebar); 
-            border-right: 1px solid var(--border); padding: 40px 25px; 
-            display: flex; flex-direction: column; flex-shrink: 0; z-index: 100;
+        /* --- LOGS --- */
+        .log-terminal {
+            background: #000; border-radius: 20px; padding: 25px;
+            height: 550px; overflow-y: auto; font-family: 'JetBrains Mono', monospace;
+            border: 1px solid #111; font-size: 13px;
         }
+        .log-line { margin-bottom: 8px; border-left: 2px solid var(--primary); padding-left: 12px; }
+        .log-time { color: var(--text-dim); margin-right: 10px; }
+        .log-user { color: var(--primary); font-weight: 700; margin-right: 10px; }
+        .log-msg { color: #ccc; }
 
-        .logo-area { display: flex; align-items: center; gap: 15px; margin-bottom: 50px; }
-        .logo-icon { width: 45px; height: 45px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 20px; box-shadow: 0 0 20px var(--primary-glow); }
-
-        main { flex: 1; overflow-y: auto; padding: 50px; position: relative; background-image: radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.02) 0%, transparent 40%); }
-
-        /* --- NAVIGATION --- */
-        .nav-link { 
-            padding: 16px 20px; border-radius: 18px; cursor: pointer; 
-            display: flex; align-items: center; gap: 15px; font-weight: 600; 
-            margin-bottom: 10px; transition: var(--transition); color: #555;
+        /* --- BUTTONS --- */
+        .btn-action {
+            width: 100%; padding: 20px; border-radius: 22px; border: none;
+            background: var(--primary); color: #000; font-weight: 800;
+            cursor: pointer; transition: var(--transition); text-transform: uppercase;
+            letter-spacing: 1px; font-size: 14px;
         }
-        .nav-link i { font-size: 20px; width: 25px; }
-        .nav-link:hover { background: var(--glass); color: #ccc; transform: translateX(5px); }
-        .nav-link.active { background: var(--primary); color: #000; box-shadow: 0 10px 25px var(--primary-glow); }
-        
-        /* --- GLASS PANELS & CARDS --- */
-        .glass-panel { 
-            background: var(--bg-panel); border: 1px solid var(--border); 
-            border-radius: 35px; padding: 35px; margin-bottom: 35px; 
-            position: relative; animation: slideUp 0.6s ease;
-        }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 242, 255, 0.2); }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-danger { background: rgba(255, 45, 85, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-danger:hover { background: var(--danger); color: #fff; }
 
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 40px; }
-        .stat-card { 
-            background: var(--glass); border: 1px solid var(--border); 
-            padding: 30px; border-radius: 25px; transition: var(--transition);
-        }
-        .stat-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-
-        /* --- FORMS & INPUTS --- */
-        input, select, textarea { 
-            width: 100%; background: #000; border: 1px solid #1a1a1a; 
-            color: #fff; padding: 16px; border-radius: 15px; margin-bottom: 15px; 
-            outline: none; font-family: inherit; transition: var(--transition);
+        /* --- FORMS --- */
+        input, select, textarea {
+            width: 100%; background: #0a0a0f; border: 1px solid #1a1a25;
+            padding: 16px 20px; border-radius: 15px; color: #fff; font-family: inherit;
+            outline: none; transition: var(--transition);
         }
         input:focus { border-color: var(--primary); }
 
-        /* --- PRICE MANAGEMENT --- */
-        .price-item { 
-            background: rgba(255,255,255,0.01); padding: 15px 25px; 
-            border-radius: 20px; border: 1px solid var(--border); 
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 12px; transition: var(--transition);
-        }
-        .price-item:hover { background: var(--glass); border-color: #333; }
-        .price-item span { font-weight: 600; color: #eee; }
-        .price-item b { color: var(--primary); font-size: 18px; }
+        /* --- BADGES --- */
+        .badge { padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .badge-owner { background: var(--owner); color: #000; }
+        .badge-admin { background: var(--primary); color: #000; }
 
-        /* --- BUTTONS --- */
-        .btn-main { 
-            width: 100%; padding: 20px; border-radius: 18px; border: none; 
-            background: var(--primary); color: #000; font-weight: 800; 
-            cursor: pointer; transition: var(--transition); text-transform: uppercase;
-            letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-main:hover { filter: brightness(1.1); transform: scale(1.02); }
-        .btn-main:active { transform: scale(0.98); }
-
-        .btn-logout { 
-            margin-top: auto; background: rgba(255, 62, 62, 0.05); 
-            border: 1px solid rgba(255, 62, 62, 0.2); color: var(--danger);
-            padding: 16px; border-radius: 15px; font-weight: 700; cursor: pointer;
-            transition: var(--transition);
-        }
-        .btn-logout:hover { background: var(--danger); color: #fff; }
-
-        /* --- LOGS --- */
-        .log-entry { 
-            padding: 12px; border-bottom: 1px solid #111; 
-            font-size: 13px; animation: fadeIn 0.3s ease; 
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- VIEWS --- */
-        .view { display: none; }
-        .view.active { display: block; }
-
-        /* --- MOBILE --- */
-        @media (max-width: 992px) {
-            #titan-root { flex-direction: column; }
-            aside { width: 100%; flex-direction: row; overflow-x: auto; padding: 15px; height: auto; }
-            .logo-area, .btn-logout { display: none; }
-            main { padding: 20px; }
-            .nav-link { margin-bottom: 0; white-space: nowrap; }
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 1100px) {
+            aside { width: 90px; padding: 30px 15px; }
+            .sidebar-brand span, .nav-item span { display: none; }
+            .nav-item i { margin: 0; font-size: 24px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="master-loader"><div class="spinner"></div></div>
-
     <div id="gatekeeper">
-        <div class="login-frame">
-            <div class="logo-icon" style="margin: 0 auto 25px;">X</div>
-            <h2 style="color:#fff; font-size: 28px; font-weight: 900; margin-bottom: 10px;">XERON ADMIN</h2>
-            <p style="color: #555; font-size: 14px; margin-bottom: 30px;">Təhlükəsiz keçid üçün məlumatları daxil edin</p>
-            
-            <div class="f-group">
-                <input type="email" id="f-email" placeholder="Admin E-poçt">
+        <div class="auth-card">
+            <div class="brand-logo" style="margin: 0 auto 30px;">X</div>
+            <h2 style="font-weight: 900; font-size: 24px; letter-spacing: -1px;">SİSTEMƏ GİRİŞ</h2>
+            <p style="color: var(--text-dim); font-size: 14px; margin-top: 5px;">Xeron Enterprise Bulut İdarəetmə</p>
+
+            <div class="auth-input-group">
+                <label>Admin Email</label>
+                <input type="email" id="login-email" placeholder="admin@xeron.com">
             </div>
-            <div class="f-group">
-                <input type="password" id="f-pass" placeholder="Şifrə">
+            <div class="auth-input-group">
+                <label>Şifrə</label>
+                <input type="password" id="login-pass" placeholder="••••••••">
             </div>
-            
-            <button class="btn-main" id="btn-login-trigger" style="margin-top:35px;">
-                <i class="fa-solid fa-unlock-keyhole"></i> SİSTEMƏ DAXİL OL
+
+            <button class="btn-action" id="btn-do-login" style="margin-top: 40px;">
+                Təsdiqlə və Daxil Ol
             </button>
-            <p id="auth-err" style="color:var(--danger); font-size:13px; margin-top:20px; font-weight: 600;"></p>
+            <p id="error-msg" style="color: var(--danger); font-size: 12px; margin-top: 20px; font-weight: 600;"></p>
         </div>
     </div>
 
-    <div id="titan-root">
+    <div id="titan-engine">
         <aside>
-            <div class="logo-area">
-                <div class="logo-icon">X</div>
-                <div>
-                    <h3 style="color:#fff; font-weight:900;">XERON</h3>
-                    <p style="font-size: 10px; color: var(--primary);">VERSION 4.0.2</p>
+            <div class="sidebar-brand">
+                <div class="brand-logo">X</div>
+                <span style="font-weight: 900; font-size: 20px; color: #fff;">XERON</span>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item active" data-view="dash"><i class="fa-solid fa-house-chimney"></i> <span>Dashboard</span></div>
+                <div class="nav-item" data-view="prices"><i class="fa-solid fa-tag"></i> <span>Qiymət Paneli</span></div>
+                <div class="nav-item" data-view="announcement"><i class="fa-solid fa-bullhorn"></i> <span>Duyurular</span></div>
+                <div class="nav-item" data-view="users"><i class="fa-solid fa-user-gear"></i> <span>İstifadəçilər</span></div>
+                
+                <div id="security-menu" style="display:none; margin-top: 30px; border-top: 1px solid #111; padding-top: 20px;">
+                    <p style="font-size: 10px; color: var(--text-dim); margin-bottom: 15px; padding-left: 20px;">SECURITY CENTER</p>
+                    <div class="nav-item" data-view="logs" style="color: var(--owner);"><i class="fa-solid fa-ghost"></i> <span>Sistem Loqları</span></div>
                 </div>
-            </div>
+            </nav>
 
-            <div class="nav-link active" data-target="pg-dash"><i class="fa-solid fa-grid-2"></i> Dashboard</div>
-            <div class="nav-link" data-target="pg-prices"><i class="fa-solid fa-gem"></i> Qiymət İdarəsi</div>
-            <div class="nav-link" data-target="pg-ann"><i class="fa-solid fa-bullhorn"></i> Duyurular</div>
-            <div class="nav-link" data-target="pg-users"><i class="fa-solid fa-users-gear"></i> İstifadəçilər</div>
-            
-            <div id="owner-link-container" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #111;">
-                <p style="font-size: 10px; margin-bottom: 10px; color: #444;">SECURITY ZONE</p>
-                <div class="nav-link" data-target="pg-logs" style="color:var(--owner-gold)"><i class="fa-solid fa-shield-halved"></i> Sistem Loqları</div>
-            </div>
-
-            <button class="btn-logout" id="btn-logout">ÇIXIŞ EDİN</button>
+            <button class="btn-action btn-danger" id="btn-logout" style="margin-top: auto; padding: 15px;">
+                <i class="fa-solid fa-power-off"></i> <span>Çıxış</span>
+            </button>
         </aside>
 
         <main>
-            <div id="pg-dash" class="view active">
-                <div class="glass-panel">
-                    <h1 id="welcome-msg" style="color:#fff; font-size: 32px; font-weight: 900;">Xoş Gəldiniz</h1>
-                    <p id="role-badge" style="display:inline-block; margin-top:15px; padding:6px 15px; border-radius:10px; font-weight:900; font-size:12px;"></p>
+            <div id="view-dash" class="view-panel active">
+                <div class="content-header">
+                    <div>
+                        <h1 style="font-size: 36px; font-weight: 900; color: #fff;">İdarəetmə Paneli</h1>
+                        <p id="user-welcome" style="color: var(--text-dim); margin-top: 5px;"></p>
+                    </div>
+                    <div id="role-container"></div>
                 </div>
 
-                <div class="stat-grid">
-                    <div class="stat-card">
-                        <i class="fa-solid fa-clock" style="color:var(--primary); font-size:24px; margin-bottom:15px;"></i>
-                        <p style="font-size:13px;">Server Vaxtı</p>
-                        <h2 id="server-clock" style="color:#fff; margin-top:5px;">--:--:--</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px;">
+                    <div class="glass-card" style="margin:0; padding: 30px; text-align: center; animation-delay: 0.1s;">
+                        <i class="fa-solid fa-bolt" style="color: var(--primary); font-size: 30px; margin-bottom: 15px;"></i>
+                        <h4 style="color: var(--text-dim); font-size: 12px; text-transform: uppercase;">Sistem Vaxtı</h4>
+                        <h2 id="live-clock" style="color: #fff; font-size: 32px; font-weight: 900; margin-top: 5px;">--:--:--</h2>
                     </div>
-                    <div class="stat-card">
-                        <i class="fa-solid fa-database" style="color:var(--success); font-size:24px; margin-bottom:15px;"></i>
-                        <p style="font-size:13px;">Sistem Statusu</p>
-                        <h2 style="color:#fff; margin-top:5px;">AKTİV</h2>
+                    <div class="glass-card" style="margin:0; padding: 30px; text-align: center; animation-delay: 0.2s;">
+                        <i class="fa-solid fa-server" style="color: var(--success); font-size: 30px; margin-bottom: 15px;"></i>
+                        <h4 style="color: var(--text-dim); font-size: 12px; text-transform: uppercase;">Verilənlər Bazası</h4>
+                        <h2 style="color: #fff; font-size: 32px; font-weight: 900; margin-top: 5px;">ON-LINE</h2>
                     </div>
-                    <div class="stat-card">
-                        <i class="fa-solid fa-globe" style="color:var(--owner-gold); font-size:24px; margin-bottom:15px;"></i>
-                        <p style="font-size:13px;">Region</p>
-                        <h2 style="color:#fff; margin-top:5px;">AZERBAIJAN</h2>
+                    <div class="glass-card" style="margin:0; padding: 30px; text-align: center; animation-delay: 0.3s;">
+                        <i class="fa-solid fa-shield-check" style="color: var(--accent); font-size: 30px; margin-bottom: 15px;"></i>
+                        <h4 style="color: var(--text-dim); font-size: 12px; text-transform: uppercase;">Firewall</h4>
+                        <h2 style="color: #fff; font-size: 32px; font-weight: 900; margin-top: 5px;">AKTİV</h2>
                     </div>
-                </div>
-
-                <div class="glass-panel">
-                    <h3>Sürətli Məlumat</h3>
-                    <p style="margin-top:15px; font-size:14px; line-height:1.6;">Bu panel Xeron Enterprise sisteminin bütün funksiyalarını idarə etmək üçün nəzərdə tutulub. Qiymətlər real-vaxt rejimində sinxronizasiya olunur.</p>
                 </div>
             </div>
 
-            <div id="pg-prices" class="view">
-                <div class="glass-panel">
-                    <h2 style="color:#fff; margin-bottom:25px;"><i class="fa-solid fa-tags"></i> Qiymətləri Yenilə</h2>
+            <div id="view-prices" class="view-panel">
+                <h1 style="font-size: 32px; font-weight: 900; color: #fff; margin-bottom: 30px;">Oyun Qiymətləri</h1>
+                
+                <div class="game-grid">
+                    <div class="game-card" onclick="selectGame('roblox')"><i class="fa-solid fa-cube"></i> 1. Roblox</div>
+                    <div class="game-card" onclick="selectGame('pubg')"><i class="fa-solid fa-gun"></i> 2. PUBG Mobile</div>
+                    <div class="game-card" onclick="selectGame('steambalans')"><i class="fa-solid fa-wallet"></i> 3. Steam Balans</div>
+                    <div class="game-card" onclick="selectGame('mlbb')"><i class="fa-solid fa-sword"></i> 4. Mobile Legends</div>
+                    <div class="game-card" onclick="selectGame('valorant')"><i class="fa-solid fa-crosshairs"></i> 5. Valorant</div>
+                    <div class="game-card" onclick="selectGame('freefire')"><i class="fa-solid fa-fire"></i> 6. Free Fire</div>
+                    <div class="game-card" onclick="selectGame('brawlstars')"><i class="fa-solid fa-star"></i> 7. Brawl Stars</div>
+                    <div class="game-card" onclick="selectGame('clashofclans')"><i class="fa-solid fa-chess-rook"></i> 8. Clash of Clans</div>
+                    <div class="game-card" onclick="selectGame('genshin')"><i class="fa-solid fa-wand-sparkles"></i> 9. Genshin Impact</div>
+                    <div class="game-card" onclick="selectGame('efootball')"><i class="fa-solid fa-futbol"></i> 10. eFootball</div>
+                    <div class="game-card" onclick="selectGame('codm')"><i class="fa-solid fa-person-rifle"></i> 11. COD Mobile</div>
+                    <div class="game-card" onclick="selectGame('leagueoflegends')"><i class="fa-solid fa-hat-wizard"></i> 12. League of Legends</div>
+                </div>
+
+                <div id="price-editor-section" style="display:none; margin-top: 40px;">
+                    <div class="glass-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+                            <h2 id="selected-game-name" style="color: var(--primary);">Oyun Seçilməyib</h2>
+                            <button class="btn-action" style="width: auto; padding: 10px 20px; font-size: 12px;" onclick="closeEditor()">Bağla</button>
+                        </div>
+                        
+                        <div id="current-prices-list"></div>
+
+                        <div class="price-editor-box">
+                            <h4 style="margin-bottom: 15px; color: #fff;">Yeni Paket Əlavə Et</h4>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr 150px; gap: 15px;">
+                                <input type="text" id="inp-p-name" placeholder="Məhsul adı (məs: 660 UC)">
+                                <input type="text" id="inp-p-price" placeholder="Qiymət (məs: 15.00)">
+                                <button class="btn-action" onclick="saveGamePrice()">Yadda Saxla</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-announcement" class="view-panel">
+                <div class="glass-card">
+                    <h2 style="color: #fff; margin-bottom: 25px;">Duyuru Mesajı Redaktoru</h2>
+                    <textarea id="ann-textarea" rows="10" placeholder="Müştəri ekranında görünəcək mətni daxil edin..."></textarea>
                     
-                    <select id="game-select" style="padding: 20px; font-size: 16px; border-color: #222;">
-                        <option value="">-- Məhsul/Oyun Seçin --</option>
-                        <option value="roblox">1. Roblox (Robux)</option>
-                        <option value="pubg">2. PUBG Mobile (UC)</option>
-                        <option value="steambalans">3. Steam Balans (TL/USD)</option>
-                        <option value="mlbb">4. Mobile Legends (Diamonds)</option>
-                        <option value="valorant">5. Valorant (VP)</option>
-                        <option value="freefire">6. Free Fire (Diamonds)</option>
-                        <option value="brawlstars">7. Brawl Stars (Gems)</option>
-                        <option value="clashofclans">8. Clash of Clans (Gems)</option>
-                        <option value="genshin">9. Genshin Impact (Crystal)</option>
-                        <option value="efootball">10. eFootball PES (Coins)</option>
-                        <option value="codm">11. COD Mobile (CP)</option>
-                        <option value="leagueoflegends">12. League of Legends (RP)</option>
-                    </select>
-
-                    <div id="price-list-display" style="margin-top: 20px;">
-                        </div>
-
-                    <div id="price-edit-form" style="display:none; margin-top: 40px; padding-top: 30px; border-top: 1px solid #111;">
-                        <h4 style="color:var(--primary); margin-bottom:20px;">+ Yeni Paket/Qiymət Əlavə Et</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <input type="text" id="new-p-name" placeholder="Paket adı (Məs: 1000 UC)">
-                            <input type="text" id="new-p-price" placeholder="Qiymət (Məs: 12.50)">
-                        </div>
-                        <button class="btn-main" id="btn-save-price-data">
-                            <i class="fa-solid fa-save"></i> DƏYİŞİKLİKLƏRİ TƏSDİQLƏ
+                    <div style="margin-top: 25px; display: flex; gap: 15px;">
+                        <button class="btn-action" id="btn-save-announcement">
+                            <i class="fa-solid fa-paper-plane"></i> Duyurunu Canlıya Göndər
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div id="pg-ann" class="view">
-                <div class="glass-panel">
-                    <h2 style="color:#fff; margin-bottom:10px;">Duyuru İdarəetməsi</h2>
-                    <p style="font-size:13px; margin-bottom:25px;">Müştəri tətbiqində görünəcək ana mesajı buradan dəyişin.</p>
-                    
-                    <textarea id="ann-content" rows="8" placeholder="Bura vacib bildirişləri yazın..."></textarea>
-                    
-                    <div style="background: rgba(0,242,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed var(--primary);">
-                        <p style="font-size: 12px; color: var(--primary); font-weight: 700;">PRO-TİP:</p>
-                        <p style="font-size: 13px;">Mesajda endirim kodları və ya texniki fasilələr haqqında məlumat verə bilərsiniz.</p>
+            <div id="view-logs" class="view-panel">
+                <div class="glass-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                        <h2 style="color: var(--owner);">Sistem Loqları (Real-Time)</h2>
+                        <button class="btn-danger" style="padding: 10px 20px; border-radius: 12px; cursor: pointer;" onclick="clearAllLogs()">Təmizlə</button>
                     </div>
-
-                    <button class="btn-main" id="btn-publish-ann">
-                        <i class="fa-solid fa-paper-plane"></i> DUYURUNU YAYIMLA
-                    </button>
+                    <div class="log-terminal" id="log-display"></div>
                 </div>
             </div>
 
-            <div id="pg-users" class="view">
-                <div class="glass-panel">
-                    <h2 style="color:#fff; margin-bottom:25px;">İstifadəçi Tənzimləmələri</h2>
-                    <div style="display: flex; gap: 10px; margin-bottom: 30px;">
-                        <input type="text" id="user-search" placeholder="İstifadəçi ID-si ilə axtar..." style="margin-bottom:0;">
-                        <button class="btn-main" style="width:auto; padding:0 30px;">AXTAR</button>
+            <div id="view-users" class="view-panel">
+                <div class="glass-card">
+                    <h2 style="color: #fff; margin-bottom: 25px;">İstifadəçi İdarəsi</h2>
+                    <div style="text-align: center; padding: 50px;">
+                        <i class="fa-solid fa-users-slash" style="font-size: 50px; color: #111;"></i>
+                        <p style="color: #333; margin-top: 15px;">İstifadəçi siyahısı tezliklə əlavə olunacaq.</p>
                     </div>
-                    
-                    <div style="background:#000; border-radius:20px; padding:30px; text-align:center; border:1px solid #111;">
-                        <i class="fa-solid fa-user-shield" style="font-size:40px; color:#222; margin-bottom:20px;"></i>
-                        <p style="color:#444;">İstifadəçi siyahısı yüklənir...</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="pg-logs" class="view">
-                <div class="glass-panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-                        <h2 style="color:#fff;">Təhlükəsizlik Loqları</h2>
-                        <button id="btn-clear-logs" style="background:var(--danger); border:none; color:white; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:700;">
-                            <i class="fa-solid fa-trash"></i> SİL
-                        </button>
-                    </div>
-                    <div id="logs-list-wrapper" style="background:#000; border-radius:20px; height:600px; overflow-y:auto; border:1px solid #111; padding:10px;">
-                        </div>
                 </div>
             </div>
         </main>
@@ -346,7 +351,7 @@
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, set, push, update, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Firebase Configuration
+        // Firebase Configuration (Təsdiqləndi)
         const firebaseConfig = { 
             apiKey: "AIzaSyCGsCjbwh6P7fHepdHrSyykpSAEmg0RmO8", 
             databaseURL: "https://xeronshop-default-rtdb.europe-west1.firebasedatabase.app", 
@@ -357,218 +362,193 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // Security Constants
         const OWNER_UID = "dXDTZPPuVKaO1ecsO7UbCOXr15i1";
         const ADMINS = ["tMaqCC1AdoWUYgGTuay2eFKYMOF2", "NaH17on6YEO3bJzWXY16SZ02xtJ2", "Yr5c1JF2Z3T3amIoV3OJanFnFCR2"];
 
+        let currentSelectedGame = "";
+
         // --- CORE FUNCTIONS ---
 
-        // Log System
-        async function createSystemLog(action) {
-            const user = auth.currentUser;
-            if(!user) return;
-            try {
-                await push(ref(db, 'logs'), {
-                    admin: user.email,
-                    action: action,
-                    timestamp: new Date().toISOString(),
-                    readable_time: new Date().toLocaleString('az-AZ')
-                });
-            } catch(error) {
-                console.error("Critical Log Error:", error);
-            }
-        }
+        // Clock
+        setInterval(() => {
+            const clockEl = document.getElementById('live-clock');
+            if(clockEl) clockEl.innerText = new Date().toLocaleTimeString('az-AZ');
+        }, 1000);
 
-        // Clock Update
-        function startClock() {
-            setInterval(() => {
-                const now = new Date();
-                const clockEl = document.getElementById('server-clock');
-                if(clockEl) clockEl.innerText = now.toLocaleTimeString('az-AZ');
-            }, 1000);
-        }
-
-        // View Switching
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                const target = link.getAttribute('data-target');
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                
-                link.classList.add('active');
-                document.getElementById(target).classList.add('active');
-            });
+        // Sidebar Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.onclick = () => {
+                const target = item.dataset.view;
+                document.querySelectorAll('.nav-item, .view-panel').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById(`view-${target}`).classList.add('active');
+            };
         });
 
-        // --- FIREBASE AUTH LOGIC ---
+        // --- AUTH ENGINE ---
 
-        onAuthStateChanged(auth, (user) => {
-            const loader = document.getElementById('master-loader');
+        onAuthStateChanged(auth, async (user) => {
             if(user && (user.uid === OWNER_UID || ADMINS.includes(user.uid))) {
-                // Access Granted
                 document.getElementById('gatekeeper').style.display = 'none';
-                document.getElementById('titan-root').style.display = 'flex';
+                document.getElementById('titan-engine').style.display = 'flex';
                 
                 const isOwner = user.uid === OWNER_UID;
-                const roleBadge = document.getElementById('role-badge');
+                const roleCont = document.getElementById('role-container');
+                roleCont.innerHTML = isOwner ? '<span class="badge badge-owner">OWNER LEVEL</span>' : '<span class="badge badge-admin">ADMIN ACCESS</span>';
                 
-                roleBadge.innerText = isOwner ? "YETKİ: SİSTEM SAHİBİ (OWNER)" : "YETKİ: ADMİNİSTRATOR";
-                roleBadge.style.background = isOwner ? "var(--owner-glow)" : "var(--primary-glow)";
-                roleBadge.style.color = isOwner ? "var(--owner-gold)" : "var(--primary)";
-                
-                document.getElementById('welcome-msg').innerText = `Xoş Gəldiniz, ${user.email.split('@')[0]}`;
+                document.getElementById('user-welcome').innerText = `Admin: ${user.email}`;
                 
                 if(isOwner) {
-                    document.getElementById('owner-link-container').style.display = 'block';
-                    loadSystemLogs();
+                    document.getElementById('security-menu').style.display = 'block';
+                    listenLogs();
                 }
 
-                initializePanelFunctions();
-                startClock();
+                // Initial Load
+                await pushLog(`Sistemə giriş etdi.`);
             } else {
-                // Access Denied
                 document.getElementById('gatekeeper').style.display = 'flex';
-                document.getElementById('titan-root').style.display = 'none';
+                document.getElementById('titan-engine').style.display = 'none';
                 if(user) signOut(auth);
             }
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.display = 'none', 500);
         });
 
-        // --- PANEL LOGIC ---
-
-        function initializePanelFunctions() {
-            // Price Management Select
-            const gSelect = document.getElementById('game-select');
-            const pList = document.getElementById('price-list-display');
-            const pForm = document.getElementById('price-edit-form');
-
-            gSelect.addEventListener('change', (e) => {
-                const selectedGame = e.target.value;
-                if(!selectedGame) {
-                    pList.innerHTML = "";
-                    pForm.style.display = "none";
-                    return;
-                }
-                
-                pForm.style.display = "block";
-                onValue(ref(db, `prices/${selectedGame}`), (snapshot) => {
-                    pList.innerHTML = "";
-                    const data = snapshot.val();
-                    if(data) {
-                        Object.keys(data).forEach(key => {
-                            const item = document.createElement('div');
-                            item.className = 'price-item';
-                            item.innerHTML = `
-                                <span>${key}</span>
-                                <div>
-                                    <b>${data[key]} AZN</b>
-                                    <i class="fa-solid fa-trash-can" style="color:var(--danger); margin-left:15px; cursor:pointer;" onclick="deletePackage('${selectedGame}', '${key}')"></i>
-                                </div>
-                            `;
-                            pList.appendChild(item);
-                        });
-                    } else {
-                        pList.innerHTML = "<p style='text-align:center; padding:20px; color:#444;'>Hələ ki paket yoxdur.</p>";
-                    }
-                });
-            });
-
-            // Save Price
-            document.getElementById('btn-save-price-data').onclick = async () => {
-                const game = gSelect.value;
-                const name = document.getElementById('new-p-name').value.trim();
-                const price = document.getElementById('new-p-price').value.trim();
-
-                if(!name || !price) return alert("Bütün xanaları doldurun!");
-
-                try {
-                    await update(ref(db, `prices/${game}`), { [name]: price });
-                    await createSystemLog(`${game} oyununa paket əlavə etdi: ${name} (${price} AZN)`);
-                    document.getElementById('new-p-name').value = "";
-                    document.getElementById('new-p-price').value = "";
-                    alert("Uğurla yadda saxlanıldı!");
-                } catch(err) {
-                    alert("Xəta baş verdi!");
-                }
-            };
-
-            // Announcement Publish
-            document.getElementById('btn-publish-ann').onclick = async () => {
-                const content = document.getElementById('ann-content').value.trim();
-                if(!content) return alert("Duyuru mətni boş ola bilməz!");
-
-                try {
-                    await set(ref(db, 'announcement'), {
-                        message: content,
-                        updated_at: new Date().toLocaleString('az-AZ'),
-                        status: "active"
-                    });
-                    await createSystemLog("Sistem duyurusunu yenilədi.");
-                    alert("Duyuru yayımlandı!");
-                } catch(e) {
-                    alert("Duyuru xətası!");
-                }
-            };
-        }
-
-        // Delete Package Helper (Globalized)
-        window.deletePackage = async (game, key) => {
-            if(confirm(`${key} paketini silmək istədiyinizə əminsiniz?`)) {
-                try {
-                    await remove(ref(db, `prices/${game}/${key}`));
-                    await createSystemLog(`${game} oyunundan paket sildi: ${key}`);
-                } catch(e) { alert("Silinmə zamanı xəta!"); }
-            }
-        };
-
-        // Load Logs
-        function loadSystemLogs() {
-            onValue(ref(db, 'logs'), (snapshot) => {
-                const logWrapper = document.getElementById('logs-list-wrapper');
-                logWrapper.innerHTML = "";
-                const logs = [];
-                snapshot.forEach(child => {
-                    logs.push(child.val());
-                });
-                
-                logs.reverse().forEach(log => {
-                    const el = document.createElement('div');
-                    el.className = 'log-entry';
-                    el.innerHTML = `
-                        <span style="color:var(--primary)">[${log.readable_time}]</span> 
-                        <span style="color:var(--owner-gold)">${log.admin}</span>: 
-                        <span style="color:#eee">${log.action}</span>
-                    `;
-                    logWrapper.appendChild(el);
-                });
-            });
-        }
-
-        // Auth Actions
-        document.getElementById('btn-login-trigger').onclick = () => {
-            const email = document.getElementById('f-email').value;
-            const pass = document.getElementById('f-pass').value;
-            if(!email || !pass) return;
+        // Login Action
+        document.getElementById('btn-do-login').onclick = () => {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            if(!email || !pass) return alert("Boş buraxmayın!");
             
             signInWithEmailAndPassword(auth, email, pass).catch(err => {
-                document.getElementById('auth-err').innerText = "Məlumatlar yanlışdır və ya yetkiniz yoxdur!";
+                document.getElementById('error-msg').innerText = "Giriş rədd edildi! Yetki və ya şifrə xətası.";
             });
         };
 
+        // Logout
         document.getElementById('btn-logout').onclick = async () => {
-            if(confirm("Sistemdən çıxış edirsiniz?")) {
-                await createSystemLog("Sistemdən çıxış etdi.");
+            if(confirm("Çıxış edilsin?")) {
+                await pushLog("Sistemdən çıxış etdi.");
                 signOut(auth).then(() => location.reload());
             }
         };
 
-        document.getElementById('btn-clear-logs').onclick = async () => {
-            if(confirm("DİQQƏT: Bütün loqlar birdəfəlik silinəcək!")) {
+        // --- BUSINESS LOGIC ---
+
+        // Log Function (Kritik: İşləməmə ehtimalı aradan qaldırıldı)
+        async function pushLog(msg) {
+            const user = auth.currentUser;
+            if(!user) return;
+            try {
+                const logRef = ref(db, 'logs');
+                await push(logRef, {
+                    email: user.email,
+                    action: msg,
+                    time: new Date().toLocaleString('az-AZ'),
+                    timestamp: Date.now()
+                });
+            } catch(e) { console.error("Log error:", e); }
+        }
+
+        function listenLogs() {
+            onValue(ref(db, 'logs'), (snap) => {
+                const display = document.getElementById('log-display');
+                display.innerHTML = "";
+                const data = [];
+                snap.forEach(child => { data.push(child.val()); });
+                data.reverse().forEach(l => {
+                    display.innerHTML += `
+                        <div class="log-line">
+                            <span class="log-time">[${l.time}]</span>
+                            <span class="log-user">${l.email.split('@')[0]}</span>
+                            <span class="log-msg">${l.action}</span>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        window.clearAllLogs = async () => {
+            if(confirm("Bütün loqlar silinsin?")) {
                 await remove(ref(db, 'logs'));
-                await createSystemLog("BÜTÜN SİSTEM LOQLARINI TƏMİZLƏDİ.");
+                await pushLog("SİSTEM LOQLARI TƏMİZLƏNDİ.");
+            }
+        }
+
+        // Price Management
+        window.selectGame = (gameId) => {
+            currentSelectedGame = gameId;
+            document.getElementById('selected-game-name').innerText = gameId.toUpperCase() + " QİYMƏTLƏRİ";
+            document.getElementById('price-editor-section').style.display = 'block';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+            onValue(ref(db, `prices/${gameId}`), (snap) => {
+                const list = document.getElementById('current-prices-list');
+                list.innerHTML = "";
+                const data = snap.val();
+                if(data) {
+                    Object.keys(data).forEach(key => {
+                        list.innerHTML += `
+                            <div class="price-row">
+                                <span style="font-weight:600;">${key}</span>
+                                <div style="display:flex; align-items:center; gap:20px;">
+                                    <span style="color:var(--primary); font-weight:800;">${data[key]} AZN</span>
+                                    <i class="fa-solid fa-trash" style="color:var(--danger); cursor:pointer;" onclick="deletePrice('${gameId}', '${key}')"></i>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    list.innerHTML = "<p style='color:#333; padding:20px;'>Hələ qiymət yoxdur.</p>";
+                }
+            });
+        }
+
+        window.saveGamePrice = async () => {
+            const name = document.getElementById('inp-p-name').value.trim();
+            const price = document.getElementById('inp-p-price').value.trim();
+            if(!name || !price || !currentSelectedGame) return alert("Məlumatları doldurun!");
+
+            try {
+                await update(ref(db, `prices/${currentSelectedGame}`), { [name]: price });
+                await pushLog(`${currentSelectedGame} üçün qiymət yenilədi: ${name} = ${price} AZN`);
+                document.getElementById('inp-p-name').value = "";
+                document.getElementById('inp-p-price').value = "";
+                alert("Yadda saxlanıldı!");
+            } catch(e) { alert("Xəta!"); }
+        };
+
+        window.deletePrice = async (game, key) => {
+            if(confirm("Silsin?")) {
+                await remove(ref(db, `prices/${game}/${key}`));
+                await pushLog(`${game} oyunundan paket sildi: ${key}`);
             }
         };
+
+        window.closeEditor = () => {
+            document.getElementById('price-editor-section').style.display = 'none';
+        };
+
+        // Announcement
+        document.getElementById('btn-save-announcement').onclick = async () => {
+            const text = document.getElementById('ann-textarea').value.trim();
+            if(!text) return alert("Mətn daxil edin!");
+
+            try {
+                await set(ref(db, 'announcement'), {
+                    msg: text,
+                    last_update: new Date().toLocaleString('az-AZ'),
+                    admin: auth.currentUser.email
+                });
+                await pushLog("Sistem duyurusunu yenilədi.");
+                alert("Duyuru uğurla yayımlandı!");
+            } catch(e) { alert("Xəta baş verdi!"); }
+        };
+
+        // Load Initial Announcement
+        onValue(ref(db, 'announcement'), (snap) => {
+            const data = snap.val();
+            if(data) document.getElementById('ann-textarea').value = data.msg;
+        });
+
     </script>
 </body>
 </html>
